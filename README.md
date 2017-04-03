@@ -1,1 +1,1 @@
-# Snippets to practice advanced ruby.
+Snippets to practice advanced ruby.
