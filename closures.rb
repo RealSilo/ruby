@@ -10,9 +10,14 @@ end
 number_lambda.call(2,4,6)
 # number_lambda.call(2) => this throws wrong arg number error
 
+def closing_text
+  'Last line of block'
+end
+
 number_proc = proc do |a,b,c|
   puts "c class: #{c.class}"
   puts "The proc numbers are #{a}, #{b} and #{c}"
+  puts closing_text
 end
 
 number_proc.call(3,5,7)
@@ -55,4 +60,66 @@ end
 #closure are bound to local vars around them
 #methods are always bound to objects they are sent to
 
+#ruby enumerable implementations
 
+my_array = [2,3,4,5,88,99]
+
+class Array
+  def my_each(&block)
+    i = 0
+    while i < size
+      block.call(self[i])
+      i += 1
+    end
+  end
+end
+
+p my_array.my_each { |x| p "This is #{x}" }
+
+class Array
+  def my_map(&block)
+    array = []
+    i = 0
+    while i < size
+       array << block.call(self[i])
+       i += 1
+    end
+    array
+  end
+end
+
+p my_array.my_map { |x| x * 2 }
+
+class Array
+  def advanced_my_map(&block)
+    array = []
+    my_each { |x| array << block.call(x) }
+    array
+  end
+end
+
+p my_array.advanced_my_map { |x| x * 3 }
+
+def my_select(array, &block)
+  array.reduce([]) do |selected, val|
+    selected << val if block.call(val)
+    selected
+  end
+end
+
+def random_limit
+  rand(100)
+end
+
+p my_select(my_array) {|x| x < random_limit }
+
+# bc = [1,2,3].reduce([]) { |sum,val| sum << val }
+class Array
+  def my_select_on_array(&block)
+    reduce([]) do |selected, val|
+      block.call(val) ? selected << val : selected
+    end
+  end
+end
+
+p my_array.my_select_on_array {|x| x > random_limit }

@@ -75,11 +75,7 @@ module M
     base.extend ClassMethods
 
     base.class_eval do
-      scope :disabled, -> { where(disabled: true) }
-    end
-
-    base.instance_eval do
-      invoke_some_class_methods
+      attr_accessor :foo
     end
   end
 
@@ -101,11 +97,71 @@ require 'active_support/concern'
 module M
   extend ActiveSupport::Concern
 
+  def some_instance_method
+  end
+
   included do
     scope :disabled, -> { where(disabled: true) }
+    attr_accessor :foo
   end
 
   class_methods do
+    def some_class_method
+    end
+  end
+end
+
+# real active support
+# EXTRAS
+# module dependency (u can include one concern into another one and it would extend
+#                    only the top level class)
+
+module MyModule
+  include Custom::Concern
+
+  def instance_method
+    "instance_method"
+  end
+
+  in_class do # name must be changed
+    attr_accessor :foo
+  end
+
+  class_methods do
+    def class_method
+      "class_method"
+    end
+  end
+end
+
+class MyClass
+  include MyModule
+end
+
+# custom active support
+module Custom
+  module Concern
+    def self.included(base)
+      base.extend ClaassMethods
+    end
+
+    module Classmethods
+      def in_class(&block)
+        @included_block = block
+      end
+
+      def included(base)
+        base.class_eval &@included_block
+
+        const_set :ClassMethods, Module.new
+        const_get(:ClassMethods).module_eval &@class_methods_block
+        base.extend const_get :ClassMethods
+      end
+
+      def class_methods(&block)
+        @class_methods_block = block
+      end
+    end
   end
 end
 
@@ -141,6 +197,20 @@ end
 add_method_to(String)
 "abc".greet #=> "hi"
 
+# You can use class_eval on any variable that references the class,
+# while class requires a constant. Also, class opens a new scope,
+# losing sight of the current bindings
+
+# you use instance_eval to open an object that is not a class,
+# and class_eval to open a class definition and define methods with def.
+# But what if you want to open an object that happens to be a class (or module)
+# to do something other than using def? Should you use instance_eval or
+# class_eval then? If all you want is to change self, then both instance_eval
+# and class_eval will do the job nicely. However, you should pick the method
+#that best communicates your intentions. If you’re thinking,
+#“I want to open this object, and I don’t particularly care that it’s a class,”
+# then instance_eval is fine. If you’re thinking, “I want an Open Class”
+# then class_eval is almost certainly a better match.
 
 # attr accessor implementation
 
@@ -214,7 +284,7 @@ def refresh(options={})
                  :prompt, :memory_size, :extra_sticky_locals ]
   
   attributes.each do |attribute|
-    defaults[attribute] = Pry.send(attribute)
+    defaults[attribute] = Pry.public_send(attribute)
   end
 
   defaults.merge!(options).each do |key, value|
@@ -256,7 +326,7 @@ class Computer
     @id = computer_id
     @data_source = data_source
     #with the following line the invocations can be done during initialization
-    # data_source.methods.grep(/^get_(.*)_info$/) { Computer.define_component $1 }
+    data_source.methods.grep(/^get_(.*)_info$/) { Computer.define_component $1 }
   end
 
   def self.define_component(name)
@@ -270,9 +340,9 @@ class Computer
   end
 
   #the following method calls can be removed if are invoked during initialization
-  define_component :mouse
-  define_component :cpu
-  define_component :keyboard
+  # define_component :mouse
+  # define_component :cpu
+  # define_component :keyboard
 end
 
 
