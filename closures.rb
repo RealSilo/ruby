@@ -123,3 +123,7 @@ class Array
 end
 
 p my_array.my_select_on_array {|x| x > random_limit }
+
+greater_proc = Proc.new { |x,y| x > y }
+
+p my_array.my_select_on_array { |x| greater_proc.call(x, random_limit) }
