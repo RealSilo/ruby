@@ -1,3 +1,21 @@
+# closures
+
+# Closures are functions that are bound to the environment that they were defined in.
+# They retain access to variables that were in scope when they were created,
+# but that might no longer be in scope when the closure is called.
+
+# A closure is a first-class function that has lexical scope
+
+# Advantages over methods:
+
+# If you want to return more than one variables, you fail with methods,
+# while you can easily yield multiple variables to a block.
+
+# The methods dont’t have access to the surrounding variables
+# at the point of its definition (scope gate).
+
+# In practice closures may create elegant designs,
+# allowing customization of various calculations
 
 #procs/lambdas ===========================
 
@@ -9,6 +27,10 @@ end
 
 number_lambda.call(2,4,6)
 # number_lambda.call(2) => this throws wrong arg number error
+
+letter_lambda = -> (a,b,c) { puts "The lambda letters are #{a}, #{b} and #{c}" }
+
+letter_lambda.call('d', 'e', 'f')
 
 def closing_text
   'Last line of block'
@@ -127,3 +149,17 @@ p my_array.my_select_on_array {|x| x > random_limit }
 greater_proc = Proc.new { |x,y| x > y }
 
 p my_array.my_select_on_array { |x| greater_proc.call(x, random_limit) }
+
+# This is like IIFE in JS
+
+lambda {
+  letters = %w(a b)
+
+  def print_letters(letters)
+    p letters
+  end
+
+  print_letters(letters)
+}.call
+
+letters
