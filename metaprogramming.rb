@@ -46,11 +46,10 @@ class String
   end
 end
 
-
 my_world = "world"
 
 String.class_eval do
-  define_method(hello) do
+  define_method(:hello) do
     my_world
   end
 end
@@ -69,6 +68,7 @@ String.class_eval "def #{met} ; 'world' ; end" #=> nil
 #pure ruby module implementation
 module M
   def some_instance_method
+    "haha"
   end
 
   def self.included(base)
@@ -88,33 +88,61 @@ end
 class P
   include M
 
-  some_instance_method
+  self.new.some_instance_method
   self.some_class_method
 end
 
 #same with active support
-require 'active_support/concern'
-module M
-  extend ActiveSupport::Concern
+# require 'active_support/concern'
+# module M
+#   extend ActiveSupport::Concern
 
-  def some_instance_method
-  end
+#   def some_instance_method
+#   end
 
-  included do
-    scope :disabled, -> { where(disabled: true) }
-    attr_accessor :foo
-  end
+#   included do
+#     scope :disabled, -> { where(disabled: true) }
+#     attr_accessor :foo
+#   end
 
-  class_methods do
-    def some_class_method
-    end
-  end
-end
+#   class_methods do
+#     def some_class_method
+#     end
+#   end
+# end
 
 # real active support
 # EXTRAS
 # module dependency (u can include one concern into another one and it would extend
 #                    only the top level class)
+
+
+# custom active support
+module Custom
+  module Concern
+    def self.included(base)
+      base.extend ClassMethods
+    end
+
+    module ClassMethods
+      def in_class(&block)
+        @included_block = block
+      end
+
+      def included(base)
+        base.class_eval &@included_block
+
+        const_set :ClassMethods, Module.new
+        const_get(:ClassMethods).module_eval &@class_methods_block
+        base.extend const_get :ClassMethods
+      end
+
+      def class_methods(&block)
+        @class_methods_block = block
+      end
+    end
+  end
+end
 
 module MyModule
   include Custom::Concern
@@ -136,33 +164,6 @@ end
 
 class MyClass
   include MyModule
-end
-
-# custom active support
-module Custom
-  module Concern
-    def self.included(base)
-      base.extend ClaassMethods
-    end
-
-    module Classmethods
-      def in_class(&block)
-        @included_block = block
-      end
-
-      def included(base)
-        base.class_eval &@included_block
-
-        const_set :ClassMethods, Module.new
-        const_get(:ClassMethods).module_eval &@class_methods_block
-        base.extend const_get :ClassMethods
-      end
-
-      def class_methods(&block)
-        @class_methods_block = block
-      end
-    end
-  end
 end
 
 # instance_eval
@@ -236,63 +237,66 @@ class Class
   end
 end
 
-
-
 #dynamic methods
 
 #FIRST EXAMPLE
 #pry implementation
 
 #setup
-pry = Pry.new
-pry.memory_size = 101
-pry.memory_size # => 101
-pry.quiet = true
+class Pry
+end
+
+# pry = Pry.new
+# pry.memory_size = 101
+# pry.memory_size # => 101
+# pry.quiet = true
 
 #For each instance method like Pry#memory_size, there is a corresponding 
 #class method (Pry.memory_size) that returns the default value of the attribute
-Pry.memory_size # => 100
+# Pry.memory_size # => 100
 
 
 #To configure a Pry instance, you can call a method named Pry#refresh. 
 #This method takes a hash that maps attribute names to their new values:
-pry.refresh(:memory_size => 99, :quiet => false)
-pry.memory_size # => 99
-pry.quiet # => false
+
+# pry.refresh(:memory_size => 99, :quiet => false)
+# pry.memory_size # => 99
+# pry.quiet # => false
 
 #Pry#refresh has a lot of work to do: it needs to go through each attribute (such as self.memory_size);
 #initialize the attribute with its default value (such as Pry.memory_size); 
 #and finally check whether the hash argument contains a new value for the same attribute, and if it does, set the new value.
 
 #Pry#refresh could do all of those steps with code like this:
-def refresh(options={})
-  defaults[:memory_size] = Pry.memory_size
-  self.memory_size = options[:memory_size] if options[:memory_size]
 
-  defaults[:quiet] = Pry.quiet
-  self.quiet = options[:quiet] if options[:quiet]
+# def refresh(options={})
+#   defaults[:memory_size] = Pry.memory_size
+#   self.memory_size = options[:memory_size] if options[:memory_size]
 
-  # same for all the other attributes...
-end
+#   defaults[:quiet] = Pry.quiet
+#   self.quiet = options[:quiet] if options[:quiet]
+
+#   # same for all the other attributes...
+# end
 
 #with DYNAMIC methods
 
-def refresh(options={})
-  defaults = {}
-  attributes = [ :input, :output, :commands, :print, :quiet,
-                 :exception_handler, :hooks, :custom_completions,
-                 :prompt, :memory_size, :extra_sticky_locals ]
+# def refresh(options={})
+#   defaults = {}
+#   attributes = [ :input, :output, :commands, :print, :quiet,
+#                  :exception_handler, :hooks, :custom_completions,
+#                  :prompt, :memory_size, :extra_sticky_locals ]
   
-  attributes.each do |attribute|
-    defaults[attribute] = Pry.public_send(attribute)
-  end
+#   attributes.each do |attribute|
+#     defaults[attribute] = Pry.public_send(attribute)
+#   end
 
-  defaults.merge!(options).each do |key, value|
-    send("#{key}=", value) if respond_to?("#{key}=")
-  end
+#   defaults.merge!(options).each do |key, value|
+#     send("#{key}=", value) if respond_to?("#{key}=")
+#   end
   
-  true
-end
+#   true
+# end
 
 class Computer
   def initialize(computer_id, data_source)
@@ -369,6 +373,14 @@ end
 # FIRST STEP: Flat scope
 # To be able to use the local vars everywhere we have to create
 # flat scope by removing scope gates
+
+#redflag.rb
+
+def event(description)
+  puts "ALERT: #{description}" if yield
+end
+# load 'events.rb'
+
 #events.rb
 
 def monthly_sales
@@ -387,14 +399,28 @@ end
 
 # NOW we have a flat scope => both events have access to the same local variable
 
+#IMPROVED DSL with setup
+
 #redflag.rb
 
-def event(description)
-  puts "ALERT: #{description}" if yield
+def setup(&block)
+  @setups << block
 end
-load 'events.rb'
 
-#IMPROVED DSL with setup
+def event(description, &block)
+  @events << { description: description, condition: block }
+end
+
+@setups = []
+@events = [] #top level instance variable
+# load 'events.rb'
+
+@events.each do |event|
+  @setups.each do |setup|
+    setup.call
+  end
+  puts "ALERT: #{event[:description]}" if event[:condition].call
+end
 
 #events.rb
 
@@ -418,28 +444,6 @@ end
 
 event "whoops... too late" do
   @sky_height < 0
-end
-
-
-#redflag.rb
-
-def setup(&block)
-  @setups << block
-end
-
-def event(description, &block)
-  @events << { description: description, condition: block }
-end
-
-@setups = []
-@events = [] #top level instance variable
-load 'events.rb'
-
-@events.each do |event|
-  @setups.each do |setup|
-    setup.call
-  end
-  puts "ALERT: #{event[:description]}" if event[:condition].call
 end
 
 #NEXT STEP: getting rid of top level ivars
@@ -512,21 +516,4 @@ each_event do |event|
   puts "ALERT: #{event[:description]}" if env.instance_eval(&(event[:condition]))
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#HTML DSL in other file
