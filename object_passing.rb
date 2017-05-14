@@ -55,10 +55,22 @@ puts "Outside method object id #{g.object_id}"
 change_string_with_id(g)
 puts g
 
+def zero(x)
+  x = 0
+end
+
+def set_number
+  x = 5
+  zero(x)
+  puts x
+end
+
+set_number
+
 # RUBY VARIABLES AND CONSTANTS AREN’T OBJECTS, BUT ARE REFERENCES TO OBJECTS.
 # Assignment merely changes which object is bound to a particular variable.
 
-# Ruby is pass by reference value, pass by reference of the value, or pass by value of the reference.
+# RUBY IS PASS BY REFERENCE VALUE, pass by reference of the value, or pass by value of the reference.
 # It’s a little muddy, but the 3 terms mean the same thing: RUBY PASSES AROUND COPIES OF THE REFERENCES.
 # In short, ruby is neither pass by value nor pass by reference,
 # but instead employs a third strategy that blends the two strategies.
