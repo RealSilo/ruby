@@ -67,3 +67,16 @@ end
 compressed = compress("AAABBCCCCCCC")
 puts compressed
 
+def unique(string)
+  coll = {}
+
+  string.chars.each do |char|
+    return false if coll[char]
+    coll[char] = 1
+  end
+
+  true
+end
+
+puts unique("fasdf")
+
