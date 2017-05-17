@@ -5,6 +5,14 @@ b += 1
 puts a
 puts b
 
+def foo(bar)
+  bar = 'reference'
+end
+
+baz = 'value'
+foo(baz)
+puts baz
+
 def increment(int)
   int += 1
 end
@@ -75,7 +83,17 @@ set_number
 # In short, ruby is neither pass by value nor pass by reference,
 # but instead employs a third strategy that blends the two strategies.
 
-# The method can use the references to modify the referenced object (if mutable),
+# THE METHOD CAN USE THE REFERENCES TO MODIFY THE REFERENCED OBJECT (if mutable),
 # but since the reference itself is a copy, the original reference cannot be changed.
+
+a = [1,2]
+
+def change(a)
+  a[0] = 3 # not reassigned
+  a = 4 # reassigned
+end
+
+change(a)
+p a
 
 
