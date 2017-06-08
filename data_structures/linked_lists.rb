@@ -50,6 +50,24 @@ d4.prev_node = d3
 # puts [d1.inspect, d2.inspect, d3.inspect, d4.inspect]
 # puts d3.prev_node.value
 
+class LinkedLists
+  attr_accessor :head
+
+  def initialize(value)
+    @head = SinglyLinkedNode.new(value)
+  end
+
+  def add(value) # adding element to the end
+    current = head
+
+    while current.next_node
+      current =  current.next_node
+    end
+
+    current.next_node = SinglyLinkedNode.new(value)
+  end
+end
+
 
 # PROBLEM1: Check if there is a "cycle" in the singly linked list
 # cycle could be anywhere like 1 => 2 => 3 => 4 = > 5 => 2 (5th element points at the 2nd one)
