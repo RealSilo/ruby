@@ -11,8 +11,8 @@ describe Search do
     end
 
     it 'returns the error message if value not in array' do
-      expect(search_instance.binary_search([10, 20, 30, 40, 50], 60)).to eq("Value not in array")
-      expect(search_instance.binary_search([10, 20, 30, 40, 50], -5)).to eq("Value not in array")
+      expect(search_instance.binary_search([10, 20, 30, 40, 50], 60)).to eq('Value not in array')
+      expect(search_instance.binary_search([10, 20, 30, 40, 50], -5)).to eq('Value not in array')
     end
   end
 end

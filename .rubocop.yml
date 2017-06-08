@@ -1,0 +1,38 @@
+AllCops:
+  TargetRubyVersion: 2.4
+  Exclude:
+    - config/*.rb
+    - 'lib/language/*.rb'
+
+Metrics/LineLength:
+  Max: 120
+Metrics/BlockLength:
+  CountComments: false
+  Max: 25
+  Exclude:
+    - 'spec/**/*.rb'
+    - 'spec/**/**/*.rb'
+    - 'Gemfile'
+Metrics/MethodLength:
+  Max: 20
+Style/AsciiComments:
+  Enabled: false
+Style/NumericPredicate:
+  EnforcedStyle: comparison
+Style/PredicateName:
+  Enabled: false
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: aligned
+  Enabled: false
+Style/SpaceAroundOperators:
+  Enabled: false
+Style/ExtraSpacing:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
+Documentation:
+  Enabled: false
+Metrics/ClassLength:
+  Max: 300

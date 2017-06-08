@@ -1,9 +1,9 @@
 class Search
-  #binary_serch with recursion
+  # binary_serch with recursion
   def binary_search(array, value, from = 0, to = nil)
     to = array.count - 1 unless to
 
-    return "Value not in array" if from > to
+    return 'Value not in array' if from > to
 
     mid = (from + to) / 2
 
@@ -16,12 +16,12 @@ class Search
     end
   end
 
-  #binary search without recursion
+  # binary search without recursion
   def binary_search_with_while(array, value)
     from = 0
     to = array.count - 1
 
-    while from <= to do
+    while from <= to
       mid = (from + to) / 2
 
       if value < array[mid]
@@ -33,7 +33,7 @@ class Search
       end
     end
 
-    return "Value not in array"
+    'Value not in array'
   end
 end
 

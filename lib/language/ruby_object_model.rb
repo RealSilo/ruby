@@ -11,13 +11,12 @@ class B < A
   # end
 end
 
-def B.baz
-end
+def B.baz;end
 
-b = B.new
+# b = B.new
 
 def haha
-  puts "hihi"
+  puts 'hihi'
 end
 
 # BasicObject.send(:haha)

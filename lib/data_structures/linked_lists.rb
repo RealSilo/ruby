@@ -4,7 +4,7 @@
 # good to use them for stack for instance where always the first element is accessed/written
 
 # ruby specs:
-  # there is no linked list in ruby => either use array or implement your own to avoid dynamic array resizing
+# there is no linked list in ruby => either use array or implement your own to avoid dynamic array resizing
 
 class SinglyLinkedNode
   attr_accessor :value, :next_node
@@ -43,8 +43,10 @@ d3 = DoublyLinkedNode.new(3)
 d4 = DoublyLinkedNode.new(4)
 
 d1.next_node = d2
-d2.prev_node, d2.next_node = d1, d3
-d3.prev_node, d3.next_node, = d2, d4 
+d2.prev_node = d1
+d2.next_node = d3
+d3.prev_node = d2
+d3.next_node = d4
 d4.prev_node = d3
 
 # puts [d1.inspect, d2.inspect, d3.inspect, d4.inspect]
@@ -60,14 +62,11 @@ class LinkedLists
   def add(value) # adding element to the end
     current = head
 
-    while current.next_node
-      current =  current.next_node
-    end
+    current =  current.next_node while current.next_node
 
     current.next_node = SinglyLinkedNode.new(value)
   end
 end
-
 
 # PROBLEM1: Check if there is a "cycle" in the singly linked list
 # cycle could be anywhere like 1 => 2 => 3 => 4 = > 5 => 2 (5th element points at the 2nd one)
@@ -76,7 +75,7 @@ def cycle_in_linked_list?(node)
   marker1 = node
   marker2 = node
 
-  until marker2 == nil || marker2.next_node == nil
+  until marker2.nil? || marker2.next_node.nil?
 
     # if there is a cycle marker2 will catch up with marker 1
     marker1 = marker1.next_node
@@ -97,14 +96,14 @@ def reverse_linked_list(head)
 
   current = head
   prevnode = nil
-  nextnode = nil
+  # nextnode = nil
 
   while current
     nextnode = current.next_node # first define the nextnode for the iteration with the old pointer
     current.next_node = prevnode # change the pointer to point to the prev element
     prevnode = current # change the current node to prev node for the iteration
     current = nextnode # change the nextnode to current for the iteration
-  end 
+  end
 end
 
 # reverse_linked_list(s1)
@@ -117,7 +116,7 @@ end
 def nth_to_the_last(head, n)
   current = head
   elements = []
-  
+
   loop do
     elements << current
     break unless current.next_node
@@ -133,7 +132,7 @@ end
 def nth_to_the_last_improved(head, n)
   left_pointer = head
   right_pointer = head
-  
+
   n.times do
     raise "Less elements in linked list than #{n}" unless right_pointer.next_node
     right_pointer = right_pointer.next_node

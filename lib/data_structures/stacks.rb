@@ -8,7 +8,4 @@
 #                clicking on back button wil move in reverse order
 #                through the pages
 
-
-class Stack
-  
-end
+class Stack; end

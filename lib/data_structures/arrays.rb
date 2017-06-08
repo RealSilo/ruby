@@ -1,10 +1,9 @@
-# array
-
 # static arrays
 
 # each member of an array must use the same number of bytes (or
 # same number of memory addresses) so the element can be accessed as
-# start + cellsize * index with O(1) where cellsize is the number of 
+# start + cellsize * index with O(1) where cellsize is the number of
+
 # memory addresses used => to make this happen array implementations
 # only store just references to objects
 
@@ -42,68 +41,66 @@
 # accessing an element has a worst-case time complexity of O(1)
 # iterating over all elements has a worst-case time complexity of O(n)
 
-class DynamicArray
-  attr_accessor :capacity, :number, :array
+class Arrays
+  class DynamicArray
+    attr_accessor :capacity, :number, :array
 
-  def initialize(capacity = 1)
-    @capacity = capacity
-    @number = 0
-    @array = Array.new(@capacity)
-  end
-
-  def length
-    number
-  end
-
-  def [](i)
-    raise 'IndexError' unless 0 <= i && i < number
-    array[i]
-  end
-
-  def []=(i, val)
-    raise 'IndexError' unless 0 <= i && i <= number
-    array[i] = val
-  end
-
-  def push(element)
-    if number == capacity
-      resize
-    end
-    
-    self[number] = element
-    self.number += 1
-  end
-
-  alias_method :<<, :push
-
-  private
-
-  def resize
-    doubled_capacity = 2 * capacity
-    puts doubled_capacity
-
-    doubled_array = Array.new(doubled_capacity)
-
-    length.times do |i|
-      doubled_array[i] = array[i]
+    def initialize(capacity = 1)
+      @capacity = capacity
+      @number = 0
+      @array = Array.new(@capacity)
     end
 
-    self.array = doubled_array
-    self.capacity = doubled_capacity
+    def length
+      number
+    end
+
+    def [](i)
+      raise 'IndexError' unless 0 <= i && i < number
+      array[i]
+    end
+
+    def []=(i, val)
+      raise 'IndexError' unless 0 <= i && i <= number
+      array[i] = val
+    end
+
+    def push(element)
+      resize if number == capacity
+
+      self[number] = element
+      self.number += 1
+    end
+
+    private
+
+    def resize
+      doubled_capacity = 2 * capacity
+      puts doubled_capacity
+
+      doubled_array = Array.new(doubled_capacity)
+
+      length.times do |i|
+        doubled_array[i] = array[i]
+      end
+
+      self.array = doubled_array
+      self.capacity = doubled_capacity
+    end
   end
+
+  # dynamic_array = DynamicArray.new
+  # puts dynamic_array.capacity
+  # dynamic_array.push(1)
+  # puts dynamic_array.inspect
+  # puts dynamic_array.capacity
+  # dynamic_array.push(1)
+  # puts dynamic_array.inspect
+  # dynamic_array.push(1)
+  # puts dynamic_array.inspect
+  # dynamic_array.push(1)
+  # dynamic_array << 1
+  # puts dynamic_array.length
+  # puts dynamic_array
+  # print dynamic_array.array
 end
-
-# dynamic_array = DynamicArray.new
-# puts dynamic_array.capacity
-# dynamic_array.push(1)
-# puts dynamic_array.inspect
-# puts dynamic_array.capacity
-# dynamic_array.push(1)
-# puts dynamic_array.inspect
-# dynamic_array.push(1)
-# puts dynamic_array.inspect
-# dynamic_array.push(1)
-# dynamic_array << 1
-# puts dynamic_array.length
-# puts dynamic_array
-# print dynamic_array.array
