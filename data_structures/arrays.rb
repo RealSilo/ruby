@@ -22,7 +22,15 @@
 # 2. the references from array(a) get stored in array(B)
 # 3. reassign the reference A to array(B) -> from now on it is array(A)
 
-# 
+# array insertion at the end time complexity: O(n)
+# dynamic insertion at the end amortized time complexity: O(1)
+# when we append m elements:
+# doubling cost (1+2+4+8+...+m/2+m) + appending cost (m) => O(3m) => O(1)
+# any array deletion at the end time complexity: O(1)
+# any array insertion at the beginning time complexity: O(n)
+# any array deletion at the beginning time complexity: O(n)
+# any array index lookup: O(1)
+# any array basic search: O(n)
 
 # Ruby Array class
 # stack/queue/dequeue all in one thanks to LIFO/FIFO methods
@@ -66,33 +74,36 @@ class DynamicArray
     self.number += 1
   end
 
+  alias_method :<<, :push
+
   private
 
   def resize
     doubled_capacity = 2 * capacity
+    puts doubled_capacity
 
     doubled_array = Array.new(doubled_capacity)
 
-    doubled_capacity.times do |i|
+    length.times do |i|
       doubled_array[i] = array[i]
     end
 
-    array = doubled_array
-    capacity = doubled_capacity
+    self.array = doubled_array
+    self.capacity = doubled_capacity
   end
 end
 
 dynamic_array = DynamicArray.new
-puts dynamic_array.capacity
-dynamic_array.push(1)
-puts dynamic_array.inspect
-puts dynamic_array.capacity
-dynamic_array.push(1)
-puts dynamic_array.inspect
-dynamic_array.push(1)
-puts dynamic_array.inspect
-dynamic_array.push(1)
-puts dynamic_array.inspect
 # puts dynamic_array.capacity
-
-
+dynamic_array.push(1)
+# puts dynamic_array.inspect
+# puts dynamic_array.capacity
+dynamic_array.push(1)
+# puts dynamic_array.inspect
+dynamic_array.push(1)
+# puts dynamic_array.inspect
+dynamic_array.push(1)
+dynamic_array << 1
+puts dynamic_array.length
+puts dynamic_array
+print dynamic_array.array
