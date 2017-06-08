@@ -1,4 +1,4 @@
-class BinarySearch
+class Search
   #binary_serch with recursion
   def binary_search(array, value, from = 0, to = nil)
     to = array.count - 1 unless to
@@ -37,4 +37,4 @@ class BinarySearch
   end
 end
 
-puts BinarySearch.new.binary_search([10, 20, 30, 40, 50], 60)
+# puts Search.new.binary_search([10, 20, 30, 40, 50], 60)

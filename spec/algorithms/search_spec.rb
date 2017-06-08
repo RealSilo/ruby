@@ -1,8 +1,8 @@
-require 'binary_search'
+require_relative '../../lib/algorithms/search'
 require 'byebug'
 
-describe BinarySearch do
-  let(:search_instance) { BinarySearch.new }
+describe Search do
+  let(:search_instance) { Search.new }
 
   context '#binary_search' do
     it 'returns the index if can be found' do
