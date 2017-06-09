@@ -32,6 +32,8 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 Style/GuardClause:
   Enabled: false
+Style/ConditionalAssignment:
+  Enabled: false
 Documentation:
   Enabled: false
 Metrics/ClassLength:
