@@ -164,17 +164,47 @@ class StacksQueues
     end
   end
 
-  qwts = QueueWithTwoStacks.new
-  qwts.enqueue(1)
-  qwts.enqueue(2)
-  qwts.enqueue(3)
-  qwts.dequeue
-  qwts.dequeue
-  qwts.enqueue(4)
-  qwts.dequeue
-  puts qwts.inspect
-  qwts.dequeue
-  puts qwts.inspect
+  # qwts = QueueWithTwoStacks.new
+  # qwts.enqueue(1)
+  # qwts.enqueue(2)
+  # qwts.enqueue(3)
+  # qwts.dequeue
+  # qwts.dequeue
+  # qwts.enqueue(4)
+  # qwts.dequeue
+  # puts qwts.inspect
+  # qwts.dequeue
+  # puts qwts.inspect
 
+  
   # PROBLEM 3: Implement a Stack with a LinkedList
+  module LinkedList
+    class Node
+      def initialize(value, next_node = nil)
+        @value = value
+        @next_node = next_node
+      end
+    end
+
+    class Stack
+      def initialize
+        @first = nil
+      end
+
+      def push(value)
+        @first = Node.new(value, @first)
+      end
+
+      def pop
+        raise 'Stack is empty' if empty?
+        value = @first.value
+        @first = @first.next_node
+        value
+      end
+
+      def empty?
+        @first.nil?
+      end
+    end
+  end
 end
