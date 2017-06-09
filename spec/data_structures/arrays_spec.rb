@@ -169,4 +169,48 @@ describe Arrays do
       end
     end
   end
+
+  describe '#sentence_reversal' do
+    context 'without leading and trailing whitespaces' do
+      let(:string) { 'Haha hihi huhu5' }
+
+      subject { described_class.new }
+
+      it 'returns the reversed sentence' do
+        expect(subject.sentence_reversal(string)).to eq 'huhu5 hihi Haha'
+      end
+    end
+
+    context 'with leading and trailing whitespaces' do
+      let(:string) { '  Haha hihi huhu5  ' }
+
+      subject { described_class.new }
+
+      it 'returns the reversed sentence' do
+        expect(subject.sentence_reversal(string)).to eq 'huhu5 hihi Haha'
+      end
+    end
+  end
+
+  describe '#string_compression' do
+    context 'with non-repeating char at the beginning and the end' do
+      let(:string) { 'gAABBccccd' }
+
+      subject { described_class.new }
+
+      it 'returns the compressed string' do
+        expect(subject.string_compression(string)).to eq 'g1A2B2c4d1'
+      end
+    end
+
+    context 'with repeating char at the beginning and the end' do
+      let(:string) { 'AABBcccc' }
+
+      subject { described_class.new }
+
+      it 'returns the compressed string' do
+        expect(subject.string_compression(string)).to eq 'A2B2c4'
+      end
+    end
+  end
 end

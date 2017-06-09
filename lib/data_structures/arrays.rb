@@ -178,11 +178,11 @@ class Arrays
   end
 
   # PROBLEM 3: There is a sorted array of non-negativ integers and another array
-  # that is formed by shuffling the elements of the first array and delete a 
+  # that is formed by shuffling the elements of the first array and delete a
   # random one. Find the missing element!
 
   def find_missing(array1, array2)
-    raise 'Wrong args' unless array1.length == array2.length + 1 || array1.length > 0
+    raise 'Wrong args' unless array1.length == array2.length + 1 && array1.length > 0
 
     store = {}
 
@@ -206,7 +206,7 @@ class Arrays
   # [1, 2, -1, 3, 4, 10, 10, -10, -1] would return 29
 
   def largest_cont_sum(array)
-    return 0 if array.length == 0
+    return 0 if array.empty?
     return array[0] if array.length == 1
 
     max_sum = 0
@@ -219,5 +219,63 @@ class Arrays
     end
 
     max_sum
+  end
+
+  # PROBLEM 5: Sentence reversal
+  # There is string that includes words.
+  # 'This is the best' would be 'best the is This'
+  # All leading or trailing whitespaces should be removed.
+  # ' haha hihi ' will be 'hihi haha'
+
+  # quick ruby solution
+  # def sentence_reversal(sentence)
+  #   sentence.split(" ").reverse.join(" ")
+  # end
+
+  # O(N) solution
+  def sentence_reversal(sentence)
+    return '' if sentence.empty?
+
+    words = []
+    word = []
+
+    sentence.each_char do |char|
+      if char.strip.empty?
+        words.unshift(word.join('')) unless word.join('') == ''
+        word = []
+      else
+        word << char
+      end
+    end
+    words.unshift(word.join('')) unless word.join('') == ''
+
+    words.join(' ')
+  end
+
+  # PROBLEM 6: String compression
+  # Case sensitive, no problem if compressed string in longer than original, no spaces
+
+  # gAAaacBBBBBBh will be g1A2a2c1B6h1
+  def string_compression(string)
+    return '' if string.empty?
+
+    compressed_string = ''
+    coded_char = ''
+    repetition = 1
+
+    string.each_char.with_index do |char, i|
+      coded_char = char
+      if char == string[i + 1]
+        coded_char = char
+        repetition += 1
+      else
+        coded_char << repetition.to_s
+        compressed_string << coded_char
+        coded_char = string[i+1]
+        repetition = 1
+      end
+    end
+
+    compressed_string
   end
 end
