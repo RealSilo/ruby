@@ -13,7 +13,7 @@ class StacksQueues
     #                through the pages
 
     def initialize
-      @store = Array.new
+      @store = []
     end
 
     def pop
@@ -54,7 +54,7 @@ class StacksQueues
     # message queue
 
     def initialize
-      @store = Array.new
+      @store = []
     end
 
     def enqueue(element)
@@ -84,7 +84,7 @@ class StacksQueues
 
   class Deque
     def intialize
-      @store = Array.new
+      @store = []
     end
 
     def add_front(element)
@@ -176,7 +176,6 @@ class StacksQueues
   # qwts.dequeue
   # puts qwts.inspect
 
-  
   # PROBLEM 3: Implement a Stack with a LinkedList
   module LinkedList
     class Node
