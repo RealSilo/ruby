@@ -14,4 +14,26 @@ class Dynamic
 # most expensive one...
 
   def min_coin_number; end
+
+
+  def possible_set_of_coins_for_sum(amount, coins)
+    arr = [1] + [0] * amount
+
+    # Number of ways you can get amount is the sum of numbers you can get
+    # (amount - coin)
+    # In case of 'A', 'B', 'C'
+    # ways[i] => ways[i - 'A'] + ways[i - 'B'] + ways[i - 'C']
+
+    # basic solution would be to find all the sets of coin combinations (2^N)
+    # where N is the number of amount
+
+    # O(k * n) time complexity where k is coin number and n is the amount
+    coins.each do |coin|
+      for i in (coin..n + 1)
+        ways[i] += ways[i - coin]
+      end
+    end
+
+    arr[n]
+  end
 end

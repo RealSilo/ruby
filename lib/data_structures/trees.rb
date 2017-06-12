@@ -37,11 +37,11 @@ class Trees
     end
   end
 
-  bt = BinaryTree.new('20')
-  bt.insert_left('10')
-  bt.insert_right('30')
-  bt.left_child.insert_left('5')
-  bt.left_child.insert_right('15')
+  bt = BinaryTree.new(20)
+  bt.insert_left(10)
+  bt.insert_right(30)
+  bt.left_child.insert_left(5)
+  bt.left_child.insert_right(15)
 
   # traversal:
   # Starting from the root node we always try to find the left child, so
@@ -216,16 +216,18 @@ class Trees
 
   TREE_VALS = []
 
+  # Traversal is O(n) complexity
   def self.inorder_for_check(tree)
     if tree
-      inorder(tree.left_child)
+      inorder_for_check(tree.left_child)
       TREE_VALS << tree.root
-      inorder(tree.right_child)
+      inorder_for_check(tree.right_child)
     end
   end
 
   def self.sort_check
     debugger
+    # could be made faster if just checking the next and prev value O(N)
     TREE_VALS == TREE_VALS.sort
   end
 
@@ -234,12 +236,12 @@ class Trees
 
   # PROBLEM 2
   # Trim a binary search tree based on min and max values:
-  gt = BinarySearchTree.new
-  gt.insert('10', 10)
-  gt.insert('30', 30)
-  gt.insert('5', 5)
-  gt.insert('15', 15)
-  p gt
+  # gt = BinarySearchTree.new
+  # gt.insert('10', 10)
+  # gt.insert('30', 30)
+  # gt.insert('5', 5)
+  # gt.insert('15', 15)
+  # p gt
 
   def self.trim_tree(tree, min, max)
     return nil unless tree

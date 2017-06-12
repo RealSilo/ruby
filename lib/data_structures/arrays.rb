@@ -279,3 +279,4 @@ class Arrays
     compressed_string
   end
 end
+
