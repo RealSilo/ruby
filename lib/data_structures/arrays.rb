@@ -112,6 +112,8 @@ class Arrays
     string1 = string1.downcase.tr(' ', '')
     string2 = string2.downcase.tr(' ', '')
 
+    return false unless string1.length == string2.length
+
     letters = {}
 
     string1.split('').each do |letter|
