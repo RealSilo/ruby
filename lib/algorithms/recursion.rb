@@ -142,12 +142,13 @@ class Recursion
 
     # for every coin value that less than my target value
     coins.each do |c|
-      skip if c <= target
-      # add a coin count + recursive
-      num_coins = 1 + min_coin_number(target - c, coins)
-      # reset minimum if new min coins is less than current
-      if num_coins < min_coins
-        min_coins = num_coins
+      unless c <= target
+        # add a coin count + recursive
+        num_coins = 1 + min_coin_number(target - c, coins)
+        # reset minimum if new min coins is less than current
+        if num_coins < min_coins
+          min_coins = num_coins
+        end
       end
     end
 
