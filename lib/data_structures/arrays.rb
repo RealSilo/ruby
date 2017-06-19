@@ -280,5 +280,26 @@ class Arrays
 
     compressed_string
   end
-end
 
+  # PROBLEM 7: Check if string is a palindrome (space can be removed)
+
+  def palindrome_without_recursion?(string)
+    string = string.downcase.tr(' ', '')
+    return true if string.length <= 1
+    reversed_string = ''
+
+    (string.length - 1).downto(0) { |i| reversed_string << string[i] }
+
+    (string.length - 1).times { |i| return false unless string[i] == reversed_string[i] }
+
+    true
+  end
+
+  def palindrome?(string)
+    string = string.downcase.tr(' ', '')
+
+    return true if string.empty?
+    
+    string[0] == string[-1] && palindrome?(string[1..-2])
+  end
+end
