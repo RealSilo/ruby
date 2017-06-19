@@ -245,4 +245,68 @@ describe Arrays do
       end
     end
   end
+  
+  describe '#palindrome_without_recursion?' do
+    context 'when the string is empty' do
+      let(:string) { '' }
+
+      subject { described_class.new }
+
+      it 'returns true' do
+        expect(subject.palindrome_without_recursion?(string)).to be_truthy
+      end
+    end
+
+    context 'when the string is a palindrome' do
+      let(:string) { ' abcd dcb a' }
+
+      subject { described_class.new }
+
+      it 'returns true' do
+        expect(subject.palindrome_without_recursion?(string)).to be_truthy
+      end
+    end
+
+    context 'when the string is NOT a palindrome' do
+      let(:string) { 'e abceed dcb a' }
+
+      subject { described_class.new }
+
+      it 'returns false' do
+        expect(subject.palindrome_without_recursion?(string)).to be_falsey
+      end
+    end
+  end
+
+  describe '#palindrome?' do
+    context 'when the string is empty' do
+      let(:string) { '' }
+
+      subject { described_class.new }
+
+      it 'returns true' do
+        expect(subject.palindrome?(string)).to be_truthy
+      end
+    end
+
+    context 'when the string is a palindrome' do
+      let(:string) { ' abcd dcb a' }
+
+      subject { described_class.new }
+
+      it 'returns true' do
+        expect(subject.palindrome?(string)).to be_truthy
+      end
+    end
+
+    context 'when the string is NOT a palindrome' do
+      let(:string) { 'e abceed dcb a' }
+
+      subject { described_class.new }
+
+      it 'returns false' do
+        expect(subject.palindrome?(string)).to be_falsey
+      end
+    end
+  end
 end
