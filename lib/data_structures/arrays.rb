@@ -280,5 +280,39 @@ class Arrays
 
     compressed_string
   end
-end
 
+  # PROBLEM 7: Parse the strings at spaces
+  # "12 3 + 4 + 55" -> [12, 3, +, 4, 55]
+
+  def parse_string(string)
+    parsed_array = []
+    coded_char = ''
+
+    string.each_char.with_index do |char, i|
+      if string[i + 1] == ' '
+        coded_char << char
+        parsed_array << coded_char unless coded_char == ''
+        coded_char = ''
+      else
+        coded_char << char unless char == ' '    
+      end
+    end
+
+    parsed_array << coded_char unless coded_char == ''
+
+    parsed_array
+  end
+
+  def number_of_trailing_zeros_of_factorial(n)
+    factorial = (1..n).inject(:*) || 1
+    
+    string = factorial.to_s
+    
+    counter = 0
+    
+    (string.length - 1).downto(0) do |i|
+      return counter unless string[i] == '0'
+      counter += 1
+    end
+  end
+end

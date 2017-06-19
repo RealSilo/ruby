@@ -48,13 +48,14 @@ class Sort
   end
 
   def merge(left, right)
+    # left and right are already sorted they just have to be merged
     return right if left.empty?
     return left if right.empty?
 
     if left.first < right.first
-      [left.first] + merge(left[1..left.length], right)
+      [left.first] + merge(left[1..left.length - 1], right)
     else
-      [right.first] + merge(left, right[1..right.length])
+      [right.first] + merge(left, right[1..right.length - 1])
     end
   end
 

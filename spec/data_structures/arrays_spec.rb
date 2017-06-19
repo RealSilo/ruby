@@ -213,4 +213,36 @@ describe Arrays do
       end
     end
   end
+
+  describe '#parse_string' do
+    let(:string) { ' 12 + 5 6 + 77' }
+
+    subject { described_class.new }
+
+    it 'returns the parsed string' do
+      expect(subject.parse_string(string)).to eq ['12', '+', '5', '6', '+', '77']
+    end
+  end
+
+  describe '#number_of_trailing_zeros_of_factorial' do
+    context 'when number is less than 1' do
+      let(:number) { 0 }
+
+      subject { described_class.new }
+
+      it 'returns 0' do
+        expect(subject.number_of_trailing_zeros_of_factorial(number)).to eq 0
+      end
+    end
+
+    context 'when number is more than 1' do
+      let(:number) { 5 }
+
+      subject { described_class.new }
+
+      it 'returns the number of 0-s at the end of the factorial' do
+        expect(subject.number_of_trailing_zeros_of_factorial(number)).to eq 1
+      end
+    end
+  end
 end
