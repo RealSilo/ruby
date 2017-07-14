@@ -1,3 +1,4 @@
+require 'byebug'
 # reading element O(N) worst case, O(k) average (k-th element)
 # insertion, deletion O(1)
 # linked lists can continue to expand without having to specify their size ahead of time
@@ -53,20 +54,100 @@ d4.prev_node = d3
 # puts d3.prev_node.value
 
 class LinkedLists
-  attr_accessor :head
+  attr_accessor :head, :size
 
   def initialize(value)
     @head = SinglyLinkedNode.new(value)
+    @size = 1
   end
 
   def add(value) # adding element to the end
+    node = SinglyLinkedNode.new(value)
+    current = head
+    current = current.next_node while current.next_node
+    current.next_node = node
+
+    self.size += 1
+    node
+  end
+
+  def remove(value) # removing element
     current = head
 
-    current =  current.next_node while current.next_node
+    if current.value == value
+      self.head = head.next_node 
+    else
+      until current.value == value
+        return 'No such element' if current.next_node == nil
+        previous_node = current
+        current = current.next_node
+      end
 
-    current.next_node = SinglyLinkedNode.new(value)
+      previous_node.next_node = current.next_node
+    end
+
+    self.size -= 1
+    current
+  end
+
+  def add_at(index, value)
+    return false if index > size || index < 0
+
+    node = SinglyLinkedNode.new(value)
+    current = head
+    current_index = 0
+
+    if index == 0
+      node.next_node = current
+      self.head = node
+    else
+      until index == current_index
+        previous_node = current
+        current = current.next_node
+        current_index += 1
+      end
+
+      node.next_node = current
+      previous_node.next_node = node
+    end
+
+    self.size += 1
+    node
+  end
+
+  def remove_at(index)
+    return nil if index < 0 || index >= size
+
+    current = head
+    current_index = 0
+
+    if index == 0
+      self.head = current.next_node
+    else
+      until index == current_index
+        previous_node = current
+        current = current.next_node
+        current_index += 1
+      end
+    end
+
+    previous_node.next_node = current.next_node
+    self.size -= 1
+    current
   end
 end
+
+list = LinkedLists.new('dog')
+list.add('cat')
+list.add('horse')
+puts list.head.inspect
+list.remove('cat')
+puts list.head.inspect
+list.add_at(1, 'mouse');
+puts list.head.inspect;
+list.add('parrot');
+list.remove_at(1);
+puts list.head.inspect;
 
 # PROBLEM1: Check if there is a "cycle" in the singly linked list
 # cycle could be anywhere like 1 => 2 => 3 => 4 = > 5 => 2 (5th element points at the 2nd one)
