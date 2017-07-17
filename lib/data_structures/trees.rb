@@ -110,7 +110,7 @@ class Trees
         if @heap_list[i] < @heap_list[i / 2]
           @heap_list[i], @heap_list[i / 2] = @heap_list[i / 2], @heap_list
         end
-        i = i / 2
+        i /= 2
       end
     end
 
@@ -146,7 +146,7 @@ class Trees
 
     def get(key)
       return nil unless @root
-      response = find_item(key, @root) if response.val
+      return find_item(key, @root) if response.val
       nil
     end
 
@@ -226,7 +226,6 @@ class Trees
   end
 
   def self.sort_check
-    debugger
     # could be made faster if just checking the next and prev value O(N)
     TREE_VALS == TREE_VALS.sort
   end

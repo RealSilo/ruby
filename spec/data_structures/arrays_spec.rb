@@ -245,7 +245,7 @@ describe Arrays do
       end
     end
   end
-  
+
   describe '#palindrome_without_recursion?' do
     context 'when the string is empty' do
       let(:string) { '' }

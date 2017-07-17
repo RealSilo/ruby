@@ -5,50 +5,75 @@ require 'byebug'
 # good hash function is easy to compute and evenly distributes the items in the table
 
 class Hashes
-#   class Node
-#     def initialize(value, next_node)
-#       @value = value
-#       @next_node = next_node
-#       @first = nil
-#     end
-#   end
+  attr_accessor :storage
+  attr_reader :storage_limit
 
-#   class MyHash
-#     def initialize(length = 11)
-#       @length = length
-#       @store = Array.new(@length, [])
-#       @store.first << nil
-#     end
+  def initialize(storage_limit = 10)
+    @storage = []
+    @storage_limit = storage_limit
+  end
 
-#     def [](key)
-#       get(key)
-#     end
+  def hash(key)
+    hash_value = 0
 
-#     def []=(key, value)
-#       set(key, value)
-#     end
+    key.each_char do |char|
+      hash_value += char.ord
+    end
 
-#     def get(key)
-#       hash_value = hash_function(key)
-#       my_cell = @store[hash_value].select { |cell| cell[0] == key }
-#       debugger
-#       my_cell[0][-1]
-#     end
+    hash_value % storage_limit
+  end
 
-#     def set(key, value)
-#       debugger
-#       hash_value = hash_function(key)
-#       # ins_arr_length = @store[hash_value].length
-#       @store[hash_value] << Node.new([key, value], @first)
-#     end
+  def add(key, value)
+    index = hash(key)
 
-#     def hash_function(key)
-#       key.object_id % @length
-#     end
+    if storage[index]
+      inserted = false
 
-#     hsh = MyHash.new
-#     hsh[1] = 'haha'
-#     puts hsh[1]
-#     debugger
-#   end
+      storage[index].each do |element|
+        if element[0] == key
+          element[1] = value
+          inserted = true
+        end
+      end
+
+      storage[index].push([key, value]) if inserted == false
+    else
+      storage[index] = [[key, value]]
+    end
+  end
+
+  def remove(key)
+    index = hash(key)
+
+    return nil unless storage[index]
+
+    if storage[index].length == 1 && storage[index][0][0] == key
+      storage[index].shift
+    else
+      storage[index].each_with_index do |element, i|
+        storage[index].delete_at(i) if element[0] == key
+      end
+    end
+  end
+
+  def find(key)
+    index = hash(key)
+
+    return nil unless storage[index]
+
+    storage[index].each do |element|
+      return element[1] if element[0] == key
+    end
+  end
 end
+
+h = Hashes.new
+h.add('Eterp', 4)
+h.add('Peter', 5)
+h.add('Retep', 3)
+h.add('John', 2)
+h.remove('John')
+h.add('John', 1)
+puts h.find('Peter')
+h.remove('Peter')
+print h.storage

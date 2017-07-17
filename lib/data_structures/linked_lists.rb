@@ -75,10 +75,10 @@ class LinkedLists
     current = head
 
     if current.value == value
-      self.head = head.next_node 
+      self.head = head.next_node
     else
       until current.value == value
-        return 'No such element' if current.next_node == nil
+        return 'No such element' if current.next_node.nil?
         previous_node = current
         current = current.next_node
       end
@@ -143,11 +143,11 @@ list.add('horse')
 puts list.head.inspect
 list.remove('cat')
 puts list.head.inspect
-list.add_at(1, 'mouse');
-puts list.head.inspect;
-list.add('parrot');
-list.remove_at(1);
-puts list.head.inspect;
+list.add_at(1, 'mouse')
+puts list.head.inspect
+list.add('parrot')
+list.remove_at(1)
+puts list.head.inspect
 
 # PROBLEM1: Check if there is a "cycle" in the singly linked list
 # cycle could be anywhere like 1 => 2 => 3 => 4 = > 5 => 2 (5th element points at the 2nd one)

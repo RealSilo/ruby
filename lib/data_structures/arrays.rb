@@ -294,7 +294,7 @@ class Arrays
         parsed_array << coded_char unless coded_char == ''
         coded_char = ''
       else
-        coded_char << char unless char == ' '    
+        coded_char << char unless char == ' '
       end
     end
 
@@ -305,11 +305,11 @@ class Arrays
 
   def number_of_trailing_zeros_of_factorial(n)
     factorial = (1..n).inject(:*) || 1
-    
+
     string = factorial.to_s
-    
+
     counter = 0
-    
+
     (string.length - 1).downto(0) do |i|
       return counter unless string[i] == '0'
       counter += 1
@@ -334,7 +334,7 @@ class Arrays
     string = string.downcase.tr(' ', '')
 
     return true if string.empty?
-    
+
     string[0] == string[-1] && palindrome?(string[1..-2])
   end
 end

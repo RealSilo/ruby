@@ -2,14 +2,14 @@ class Backtracking
 # Backtracking works best in problems where the solution is
 # a sequence of choices and making a choice restrains subsequent
 # choices. It identifies as soon as possible the choices you’ve
-# made cannot give you the solution you want, so you can sooner 
+# made cannot give you the solution you want, so you can sooner
 # step back and try something else.
 
 # PROBLEM 1
 # How do you place eight queens on the board such that no queens
 # attack each other?
-
 # over 4 billion possible options and 92 different solutions
+
   class EightQueens
     class Queen
       attr_accessor :column, :row
@@ -29,9 +29,9 @@ class Backtracking
 
     class Board
       DEFAULT_SIZE = 8
-      HORIZONTAL_EDGE = '='
-      VERTICAL_EDGE = '|'
-      EMPTY_FIELD = '-'
+      HORIZONTAL_EDGE = '='.freeze
+      VERTICAL_EDGE = '|'.freeze
+      EMPTY_FIELD = '-'.freeze
 
       attr_accessor :queens
       attr_reader :size
@@ -103,8 +103,6 @@ class Backtracking
         puts
       end
 
-      
-
       def find_queen(column, row)
         @queens.find { |q| q.location?(column, row) }
       end
@@ -132,7 +130,6 @@ class Backtracking
     @solution_found = false
 
     def self.queens_with_loop
-      
       column = 0
 
       while column < @board.columns
@@ -171,7 +168,7 @@ class Backtracking
           # if it is not a safe place
           else
             # if there is more rows in the col the row number is increased
-            if row < @board.ending_row 
+            if row < @board.ending_row
               row += 1
             # if no more rows in col then col number is decreased
             # and the previous queen is removed
@@ -216,7 +213,7 @@ class Backtracking
     end
 
     @boards = []
-    self.queens_with_recursion
+    queens_with_recursion
     @board.display if @solution_found
     @boards.each(&:display)
   end

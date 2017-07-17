@@ -8,7 +8,6 @@ class DivideConquer
 
   # Examples: binary search, mergesort (divide and conquer often uses recursion)
 
-
   # Problem 1
   # You have the daily prices of gold for a interval of time. You want
   # to find two days in this interval such that if you had bought then

@@ -146,9 +146,7 @@ class Recursion
         # add a coin count + recursive
         num_coins = 1 + min_coin_number(target - c, coins)
         # reset minimum if new min coins is less than current
-        if num_coins < min_coins
-          min_coins = num_coins
-        end
+        min_coins = num_coins if num_coins < min_coins
       end
     end
 
