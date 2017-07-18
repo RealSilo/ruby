@@ -1,81 +1,75 @@
 require 'byebug'
 
 class Trees
-  class BinaryTree # list of lists would be the easiest implementation
-    # value of root node is the first element of the lsit
-    # second element represents the left subtree
-    # third element represents the right subtree
-    # binary tree -> nodes can only have 2 children
-    attr_accessor :left, :right, :root
+  class BinaryTree
+    attr_accessor :root
 
     def initialize(root)
       @root = root
-      @left = nil
-      @right = nil
+      @inorder_result = []
+      @preorder_result = []
+      @postorder_result = []
     end
 
-    def insert_left(node)
-      new_node = BinaryTree.new(node)
+    def insert_left(node, data)
+      new_node = TreeNode.new(data)
 
-      if @left
-        new_node.left, @left = @left, new_node.left
-        left
+      if node.left
+        new_node.left, node.left = node.left, new_node
+        node.left
       else
-        @left = new_node
+        node.left = new_node
       end
     end
 
-    def insert_right(node)
-      new_node = BinaryTree.new(node)
+    def insert_right(node, data)
+      new_node = TreeNode.new(data)
 
-      if @right
-        new_node.right, @right = @right, new_node.right
-        right
+      if node.right
+        new_node.right, node.right = node.right, new_node
+        node.right
       else
-        @right = new_node
+        node.right = new_node
       end
     end
-  end
 
-  bt = BinaryTree.new(20)
-  bt.insert_left(10)
-  bt.insert_right(30)
-  bt.left.insert_left(5)
-  bt.left.insert_right(15)
+    def inorder(node = @root)
+      inorder(node.left) if node.left
+      @inorder_result << node.data
+      inorder(node.right) if node.right
+    end
 
-  # traversal:
-  # Starting from the root node we always try to find the left child, so
-  # we call recursively call preorder on the left child.
+    def preorder(node = @root)
+      @preorder_result << node.data
+      preorder(node.left) if node.left
+      preorder(node.right) if node.right
+    end
 
-  def self.preorder(tree)
-    if tree
-      puts tree.root
-      preorder(tree.left)
-      preorder(tree.right)
+    def postorder(node = @root)
+      postorder(node.left) if node.left
+      postorder(node.right) if node.right
+      @postorder_result << node.data
+    end
+
+    def levelorder(start_node = @root)
+      return nil if start_node.nil?
+
+      result = []
+      queue = []
+
+      queue << start_node
+
+      until queue.empty?
+        node = queue.shift
+        result << node.data
+
+        queue << node.left if node.left
+        queue << node.right if node.right
+      end
+
+      result
     end
   end
-
-  # preorder(bt)
-
-  def self.postorder(tree)
-    if tree
-      postorder(tree.left)
-      postorder(tree.right)
-      puts tree.root
-    end
-  end
-
-  # postorder(bt)
-
-  def self.inorder(tree)
-    if tree
-      inorder(tree.left)
-      puts tree.root
-      inorder(tree.right)
-    end
-  end
-
-  inorder(bt)
 
   class BinaryHeap
     # like binary search tree except:
@@ -144,9 +138,9 @@ class Trees
       @size += 1
     end
 
-    def get(data)
+    def find(data)
       return nil unless @root
-      return find_item(data, @root) if response.val
+      return find_place(data, @root) if response.val
       nil
     end
 
@@ -174,9 +168,58 @@ class Trees
       current.data
     end
 
+    def min_height(node = @root)
+      return -1 if node.nil?
+
+      left = min_height(node.left)
+      right = min_height(node.right)
+
+      if left < right
+        left + 1
+      else
+        right + 1
+      end
+    end
+
+    def max_height(node = @root)
+      return -1 if node.nil?
+
+      left = max_height(node.left)
+      right = max_height(node.right)
+
+      if left < right
+        right + 1
+      else
+        left + 1
+      end
+    end
+
+    def balanced?
+      min_height >= max_height - 1
+    end
+
+    def levelorder(start_node = @root)
+      return nil if start_node.nil?
+
+      result = []
+      queue = []
+
+      queue << start_node
+
+      until queue.empty?
+        node = queue.shift
+        result << node.data
+
+        queue << node.left if node.left
+        queue << node.right if node.right
+      end
+
+      result
+    end
+
     private
 
-    def find_item(data, node)
+    def find_place(data, node)
       return nil unless node
 
       if node.data == data
@@ -213,16 +256,26 @@ class Trees
         node.right = delete_place(data, node.right)
       elsif data == node.data
         if node.left && node.right
+          # if there are both left and right children the data is replaced with the
+          # min value of the right branch then the node with that value is deleted
           node.data = find_min(data, node.right)
           node.right = delete_place(node.data, node.right)
         else
+          # if there is only left child => node removed and replaced with node.left
+          # if there is only right child => node removed and replaced with node.right
+          # it's good because the reference to the parent is untouched
+          # if there is no left/right child it's simply set to null
           node = node.left || node.right
           @size -= 1
         end
       else
+        # if the value is not found in the tree we null is returned
         return nil
       end
-
+      # We have to return the node to be able to handle the references.
+      # When calling the function recursively the last call (which doesn't call
+      # the function again) will set node to node.left || node.right then sends
+      # back that node to the last recursive call so the reference is still working.
       node
     end
   end
@@ -249,16 +302,33 @@ class Trees
     end
   end
 
+  btn = BinaryTree.new(TreeNode.new(20))
+  ln = btn.insert_left(btn.root, 10)
+  rn = btn.insert_right(btn.root, 30)
+  puts ln
+  puts rn
+  btn.insert_left(ln, 5)
+  btn.insert_right(rn, 40)
+  btn.inorder
+  btn.preorder
+  btn.postorder
+  print btn.levelorder
+  puts btn.inspect
+
   bst = BinarySearchTree.new
   bst.insert(20)
   bst.insert(10)
   bst.insert(30)
   bst.insert(25)
+  bst.insert(40)
   bst.insert(35)
   bst.insert(50)
   bst.delete(30)
   puts bst.inspect
-
+  puts bst.min_height
+  puts bst.max_height
+  puts bst.balanced?
+  print bst.levelorder
 
   # PROBLEM 1:
   # Given a binary tree check if it's binary search tree
@@ -280,9 +350,7 @@ class Trees
     # could be made faster if just checking the next and prev value O(N)
     TREE_VALS == TREE_VALS.sort
   end
-
-  inorder_for_check(bt)
-  p sort_check == true
+  # p sort_check == true
 
   # PROBLEM 2
   # Trim a binary search tree based on min and max values:
