@@ -6,33 +6,33 @@ class Trees
     # second element represents the left subtree
     # third element represents the right subtree
     # binary tree -> nodes can only have 2 children
-    attr_accessor :left_child, :right_child, :root
+    attr_accessor :left, :right, :root
 
     def initialize(root)
       @root = root
-      @left_child = nil
-      @right_child = nil
+      @left = nil
+      @right = nil
     end
 
     def insert_left(node)
       new_node = BinaryTree.new(node)
 
-      if @left_child
-        new_node.left_child, @left_child = @left_child, new_node.left_child
-        left_child
+      if @left
+        new_node.left, @left = @left, new_node.left
+        left
       else
-        @left_child = new_node
+        @left = new_node
       end
     end
 
     def insert_right(node)
       new_node = BinaryTree.new(node)
 
-      if @right_child
-        new_node.right_child, @right_child = @right_child, new_node.right_child
-        right_child
+      if @right
+        new_node.right, @right = @right, new_node.right
+        right
       else
-        @right_child = new_node
+        @right = new_node
       end
     end
   end
@@ -40,8 +40,8 @@ class Trees
   bt = BinaryTree.new(20)
   bt.insert_left(10)
   bt.insert_right(30)
-  bt.left_child.insert_left(5)
-  bt.left_child.insert_right(15)
+  bt.left.insert_left(5)
+  bt.left.insert_right(15)
 
   # traversal:
   # Starting from the root node we always try to find the left child, so
@@ -50,8 +50,8 @@ class Trees
   def self.preorder(tree)
     if tree
       puts tree.root
-      preorder(tree.left_child)
-      preorder(tree.right_child)
+      preorder(tree.left)
+      preorder(tree.right)
     end
   end
 
@@ -59,8 +59,8 @@ class Trees
 
   def self.postorder(tree)
     if tree
-      postorder(tree.left_child)
-      postorder(tree.right_child)
+      postorder(tree.left)
+      postorder(tree.right)
       puts tree.root
     end
   end
@@ -69,9 +69,9 @@ class Trees
 
   def self.inorder(tree)
     if tree
-      inorder(tree.left_child)
+      inorder(tree.left)
       puts tree.root
-      inorder(tree.right_child)
+      inorder(tree.right)
     end
   end
 
@@ -134,80 +134,131 @@ class Trees
       @size = 0
     end
 
-    def insert(key, val)
+    def insert(data)
       if @root
-        insert_place(key, val, @root)
+        insert_place(data, @root)
       else
-        @root = TreeNode.new(key, val)
+        @root = TreeNode.new(data)
       end
 
       @size += 1
     end
 
-    def get(key)
+    def get(data)
       return nil unless @root
-      return find_item(key, @root) if response.val
+      return find_item(data, @root) if response.val
       nil
+    end
+
+    def delete(data)
+      delete_place(data, @root)
+    end
+
+    def find_min(data, node)
+      current = node
+
+      while current.left
+        current = current.left
+      end
+
+      current.data
+    end
+
+    def find_max(data, node)
+      current = node
+
+      while current.right
+        current = current.right
+      end
+
+      current.data
     end
 
     private
 
-    def find_item(key, current_node)
-      return nil unless current_node
+    def find_item(data, node)
+      return nil unless node
 
-      if current_node.key == key
-        current_node
-      elsif current_node.key > key
-        find_item(key, current_node.left_child)
-      elsif current_node.key < key
-        find_item(key, current_node.right_child)
+      if node.data == data
+        node
+      elsif current_node.key > data
+        find_item(data, node.left)
+      elsif current_node.data < data
+        find_item(data, node.right)
       end
     end
 
-    def insert_place(key, val, current_node)
-      if key < current_node.key
-        if current_node.left_child
-          insert_place(key, val, current_node.left_child)
+    def insert_place(data, node)
+      if data < node.data
+        if node.left
+          insert_place(data, node.left)
         else
-          current_node.left_child = TreeNode.new(key, val, current_node)
+          node.left = TreeNode.new(data)
         end
       else
-        if current_node.right_child
-          insert_place(key, val, current_node.right_child)
+        if node.right
+          insert_place(data, node.right)
         else
-          current_node.right_child = TreeNode.new(key, val, current_node)
+          node.right = TreeNode.new(data)
         end
       end
+    end
+
+    def delete_place(data, node)
+      return nil if node.nil?
+
+      if data < node.data && node.left
+        node.left = delete_place(data, node.left)
+      elsif data > node.data && node.right
+        node.right = delete_place(data, node.right)
+      elsif data == node.data
+        if node.left && node.right
+          node.data = find_min(data, node.right)
+          node.right = delete_place(node.data, node.right)
+        else
+          node = node.left || node.right
+          @size -= 1
+        end
+      else
+        return nil
+      end
+
+      node
     end
   end
 
   class TreeNode
-    attr_accessor :parent, :left_child, :right_child, :key
+    attr_accessor :data, :left, :right
 
-    def initialize(key, val, parent = nil, left = nil, right = nil)
-      @key = key
-      @val = val
-      @parent = parent
-      @left_child = left
-      @right_child = right
-    end
-
-    def root?
-      parent.nil?
+    def initialize(data, left = nil, right = nil)
+      @data = data
+      @left = left
+      @right = right
     end
 
     def leaf?
-      left_child.nil? && right_child.nil?
+      left.nil? && right.nil?
     end
 
     def has_both_children?
-      left_child.present? && right_child.present?
+      left.present? && right.present?
     end
 
     def has_any_children?
-      left_child.present? || right_child.present?
+      left.present? || right.present?
     end
   end
+
+  bst = BinarySearchTree.new
+  bst.insert(20)
+  bst.insert(10)
+  bst.insert(30)
+  bst.insert(25)
+  bst.insert(35)
+  bst.insert(50)
+  bst.delete(30)
+  puts bst.inspect
+
 
   # PROBLEM 1:
   # Given a binary tree check if it's binary search tree
@@ -219,9 +270,9 @@ class Trees
   # Traversal is O(n) complexity
   def self.inorder_for_check(tree)
     if tree
-      inorder_for_check(tree.left_child)
+      inorder_for_check(tree.left)
       TREE_VALS << tree.root
-      inorder_for_check(tree.right_child)
+      inorder_for_check(tree.right)
     end
   end
 
@@ -245,11 +296,11 @@ class Trees
   def self.trim_tree(tree, min, max)
     return nil unless tree
 
-    tree.left_child = trim_tree(tree.left_child, min, max)
-    tree.right_child = trim_tree(tree.right_child, min, max)
+    tree.left = trim_tree(tree.left, min, max)
+    tree.right = trim_tree(tree.right, min, max)
 
     return true if min <= tree.val && tree.val <= max
-    return tree.right_child if tree.val < min
-    return tree.left_child if tree.val > max
+    return tree.right if tree.val < min
+    return tree.left if tree.val > max
   end
 end
