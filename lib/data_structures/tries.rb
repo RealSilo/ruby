@@ -15,6 +15,8 @@ end
 class Trie
   def initialize
     @root = Node.new
+    @words = []
+    @string = ''
   end
 
   def add(input, data, node = @root)
@@ -51,6 +53,26 @@ class Trie
     return true if node.hash.keys.include?(input[0]) && node.hash[input[0]].end_node?
     false
   end
+
+  def print(node = @root)
+    collect(node, '')
+    @words
+  end
+
+  private
+
+  def collect(node, string)
+    if node.hash.size > 0
+      for letter in node.hash.keys
+        string = string.concat(letter)
+        collect(node.hash[letter], string.clone)
+      end
+
+      @words << string if node.end_node?
+    else
+      string.length > 0 ? @words << string : nil
+    end 
+  end
 end
 
 trie = Trie.new
@@ -60,5 +82,4 @@ trie.add('danny', date: '1998-04-21')
 trie.add('jane', date: '1985-05-08')
 trie.add('jack', date: '1994-11-04')
 trie.add('pete', date: '1977-12-18')
-puts trie.word?('peter')
-puts trie.find('petra')
+print trie.print

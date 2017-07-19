@@ -71,46 +71,6 @@ class Trees
     end
   end
 
-  class BinaryHeap
-    # like binary search tree except:
-    # 1.
-    # if min heap:
-    # values of child nodes must be greater than parent node's value
-    # if max hep:
-    # values of child nodes must be smaller than parent node's value
-    # 2.
-    # all levels of the tree, except possibly the last one (deepest) are FULLY FILLED,
-    # and, if the last level of the tree is not complete, the nodes of that level
-    # are filled from left to right
-
-    # in order to guarantee log performance we must keep our tree balanced
-    # a balanced binary tree has roughly the same number of nodes in the
-    # left and the right subtrees of the root. (in definition -> fully filled, so this
-    # is not a problem here)
-
-    def initialize
-      @heap_list = [0]
-      @current_size = 0
-    end
-
-    def insert(k)
-      @heap_list.push(k)
-      @heap_list.current_size += 1
-      perc_up(current_size)
-    end
-
-    def perc_up(i)
-      while i / 2 > 0
-        if @heap_list[i] < @heap_list[i / 2]
-          @heap_list[i], @heap_list[i / 2] = @heap_list[i / 2], @heap_list
-        end
-        i /= 2
-      end
-    end
-
-    # ......
-  end
-
   class BinarySearchTree
     # keys that are less than the parent can be found in the left subtree, and
     # keys that are greater can be found in the right one
