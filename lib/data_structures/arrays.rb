@@ -25,7 +25,7 @@ require 'byebug'
 # array insertion at the end time complexity: O(n)
 # dynamic insertion at the end amortized time complexity: O(1)
 # when we append m elements:
-# (doubling cost (1+2+4+8+...+m/2+m) + appending cost (m)) / append times (m) => O(3m/m) => O(1)
+# (doubling cost (1+2+4+8+...+m/2+m = 2m) + appending cost (m)) / append times (m) => O(3m/m) => O(1)
 # any array deletion at the end time complexity: O(1)
 # any array insertion at the beginning time complexity: O(n)
 # any array deletion at the beginning time complexity: O(n)

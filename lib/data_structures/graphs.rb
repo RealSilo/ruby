@@ -103,7 +103,7 @@ class Graphs
 
       g = Graph.new
       g.add_edge(0, 1, 2)
-      p g.inspect
+      # p g.inspect
     end
   end
 

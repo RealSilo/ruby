@@ -144,6 +144,7 @@ class StacksQueues
   # PROBLEM 2: Implement a Queue with 2 Stacks
   class QueueWithTwoStacks
     attr_reader :stack1, :stack2
+
     def initialize
       @stack1 = []
       @stack2 = []
@@ -155,9 +156,7 @@ class StacksQueues
 
     def dequeue
       if stack2.empty?
-        until stack1.empty?
-          stack2 << @stack1.pop
-        end
+        stack2 << stack1.pop until stack1.empty?
       end
 
       stack2.pop
@@ -169,6 +168,7 @@ class StacksQueues
   # qwts.enqueue(2)
   # qwts.enqueue(3)
   # qwts.dequeue
+  # puts qwts.inspect
   # qwts.dequeue
   # qwts.enqueue(4)
   # qwts.dequeue
@@ -179,6 +179,8 @@ class StacksQueues
   # PROBLEM 3: Implement a Stack with a LinkedList
   module LinkedList
     class Node
+      attr_accessor :value, :next_node
+
       def initialize(value, next_node = nil)
         @value = value
         @next_node = next_node
@@ -186,6 +188,8 @@ class StacksQueues
     end
 
     class Stack
+      attr_reader :first
+
       def initialize
         @first = nil
       end
@@ -205,5 +209,64 @@ class StacksQueues
         @first.nil?
       end
     end
+
+    # s = Stack.new
+    # s.push(1)
+    # s.push(2)
+    # s.push(3)
+    # s.pop
+    # p s.first.inspect
+
+  # PROBLEM 4: Implement a Queue with a LinkedList
+    class Queue
+      def initialize
+        @first = nil
+        @last = nil
+      end
+
+      def enqueue(value)
+        # @first = Node.new(value, @first)
+        node = Node.new(value, nil)
+        @last.next_node = node if @last
+        @last = node
+        @first = node unless @first
+      end
+
+      def dequeue
+        raise 'Queue is empty' if empty?
+        value = @first.value
+        @last = nil unless @first.next_node
+        @first = @first.next_node
+        value
+      end
+
+      def empty?
+        @first.nil?
+      end
+
+      def iterate
+        result = []
+        current = @first
+        while current.next_node
+          result << current.value
+          current = current.next_node
+        end
+        result << current.value
+        result
+      end
+    end
+
+    q = Queue.new
+    q.enqueue(1)
+    q.enqueue(2)
+    q.enqueue(3)
+    q.enqueue(4)
+    p q.iterate
+    q.dequeue
+    q.dequeue
+    q.dequeue
+    p q.inspect
   end
 end
+
+

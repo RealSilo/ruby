@@ -44,7 +44,11 @@ class Sort
     mid = array.length / 2
     left = merge_sort(array[0..mid - 1])
     right = merge_sort(array[mid..-1])
-    merge(left, right)
+    if left.last <= right.first
+      [*left, *right]
+    else
+      merge(left, right)
+    end
   end
 
   def merge(left, right)
@@ -143,4 +147,26 @@ class Sort
   # Quicksort is fast when the data fits into memory and can be addressed directly.
   # Mergesort is faster when data won't fit into memory or when it's expensive to get
   # to an item.
+
+  # Quicksort average case is 1.39 N log(N) which is 39% more compares than in case of
+  # mergesort. Still quicksort is faster because it only moves the pointer and changes
+  # the array values in-place while mergesort moves the data to new arrays.
+
+  # Quicksort is not stable unlike mergesort.
+
+  # HEAP SORT
+  # In-place sorting algorithm with N * log(N) worst case time complexity
+  # Not really used because:
+  #  - inner loop is longer than quicksort's (more things to do)
+  #  - poor usage of cache memory (one huge array)
+  #  - not stable (stable sort preserves the relative order of items with equal keys)
+
+  # Things to consider when choosing sorting algorithm:
+  # - stability!!! is important?
+  # - are there duplicate keys?
+  # - randomly ordered array?
+  # - large or small items?
+  # - memory!!! consumption?
+  # - does it have to be parallel?
+  # - guaranteed performance is required?
 end

@@ -64,8 +64,8 @@ class Trie
   def collect(node, string)
     if node.hash.size > 0
       for letter in node.hash.keys
-        string = string.concat(letter)
-        collect(node.hash[letter], string.clone)
+        new_string = string + letter
+        collect(node.hash[letter], new_string)
       end
 
       @words << string if node.end_node?
