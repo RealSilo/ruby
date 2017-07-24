@@ -20,6 +20,14 @@ describe StacksQueues do
         expect(subject.balanced_parantheses?(string)).to be_falsey
       end
     end
+
+    context 'when the parantheses are NOT balanced' do
+      let(:string) { '((' }
+
+      it 'returns false' do
+        expect(subject.balanced_parantheses?(string)).to be_falsey
+      end
+    end
   end
 
   describe StacksQueues::QueueWithTwoStacks do

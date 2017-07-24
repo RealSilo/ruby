@@ -138,7 +138,7 @@ class StacksQueues
       end
     end
 
-    true
+    stack.empty? ? true : false
   end
 
   # PROBLEM 2: Implement a Queue with 2 Stacks

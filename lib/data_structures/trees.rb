@@ -75,6 +75,9 @@ class Trees
     # keys that are less than the parent can be found in the left subtree, and
     # keys that are greater can be found in the right one
 
+    # Worst case occurs when all the new values going to one side (values added
+    # in order)
+
     # Algorithm   Average   Worst Case
     # Space       O(n)      O(n)
     # Search      O(log n)  O(n)

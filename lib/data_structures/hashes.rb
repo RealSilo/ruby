@@ -4,6 +4,15 @@ require 'byebug'
 
 # good hash function is easy to compute and evenly distributes the items in the table
 
+# collision resolutions:
+# - separate chaining (elements are put in an array / linked list if their key are
+# mapped to the same hash key (integer))
+# - linear probing (If the hash key (n) is already taken put the element to the n+1
+# or n+2, etc. empty hash key)
+
+# Main reason to use hash tables over red-black BST is better performance
+# in practice on typical inputs.
+
 class Hashes
   attr_accessor :storage
   attr_reader :storage_limit
