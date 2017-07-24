@@ -100,8 +100,7 @@ class Trees
 
     def find(data)
       return nil unless @root
-      return find_place(data, @root) if response.val
-      nil
+      find_place(data, @root)
     end
 
     def delete(data)
@@ -184,10 +183,10 @@ class Trees
 
       if node.data == data
         node
-      elsif current_node.key > data
-        find_item(data, node.left)
-      elsif current_node.data < data
-        find_item(data, node.right)
+      elsif node.data > data
+        find_place(data, node.left)
+      elsif node.data < data
+        find_place(data, node.right)
       end
     end
 
@@ -283,6 +282,7 @@ class Trees
   bst.insert(40)
   bst.insert(35)
   bst.insert(50)
+  bst.find(50)
   bst.delete(30)
   puts bst.inspect
   puts bst.min_height
