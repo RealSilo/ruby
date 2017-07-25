@@ -1,10 +1,10 @@
 # Select the nth largest element
 
-# Quick select is an in-place algorithm with 2N = > O(N) average (if the
+# Quick select is an in-place algorithm with 2N = > O(N) best (if the
 # partition is always halfing the number of elements for next call) and
 # 1/2 N^2 => O(N^2) worst (if the array is sorted and next call will include
 # N-1 elements) complexity. Like with quick sort the worst time case occurs
-# pretty rarely and we usually can achieve linear time.
+# pretty rarely and we usually can achieve linear time ((2 + 2 log 2)N).
 
 class Quickselect
   def select(array, nth)

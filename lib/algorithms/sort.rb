@@ -80,15 +80,13 @@ class Sort
   end
 
   def quick_sort_helper(array, first, last)
-    if first < last
-      # split_point is the moved random pivot value
-      # after calling partition the smaller values are on the lef side
-      # of the split_point and the larger ones on the right
-      split_point = quick_partition(array, first, last)
-      quick_sort_helper(array, first, split_point - 1)
-      quick_sort_helper(array, split_point + 1, last)
-    end
-    array
+    return array unless first < last
+    # split_point is the moved random pivot value
+    # after calling partition the smaller values are on the lef side
+    # of the split_point and the larger ones on the right
+    split_point = quick_partition(array, first, last)
+    quick_sort_helper(array, first, split_point - 1)
+    quick_sort_helper(array, split_point + 1, last)
   end
 
   def quick_partition(array, first, last)
