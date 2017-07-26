@@ -218,6 +218,8 @@ class StacksQueues
     # p s.first.inspect
 
   # PROBLEM 4: Implement a Queue with a LinkedList
+    # we don't need doubly linked list as we always remove
+    # the first element
     class Queue
       def initialize
         @first = nil
