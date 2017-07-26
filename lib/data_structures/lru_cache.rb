@@ -1,5 +1,3 @@
-require 'byebug'
-
 class Node
   attr_accessor :data, :next_node, :prev_node
 
@@ -11,6 +9,12 @@ class Node
 end
 
 class LruCache
+  # Data structure to implement key-value caches with limited storage.
+  # When the storage is full the least recently used (hence LRU) element
+  # should be removed from the cache. We need a dobuly linked list as
+  # underlying data structure since when we use the get method the node
+  # has to be moved from the middle of the list to the end.
+
   attr_reader :store, :size, :head, :tail
 
   def initialize(max_items = 5)
