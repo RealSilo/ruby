@@ -84,6 +84,13 @@ class Trees
     # Insert      O(log n)  O(n)
     # Delete      O(log n)  O(n)
 
+    # Good choice to store and manipulate ordered data
+    # If we don’t anticipate that our list would be changing that often,
+    # an ordered array would be a suitable data structure to contain our data.
+    # If have to handle many changes in real time BSTs are better.
+    # BSTs are a powerful node-based data structure that provides order
+    # maintenance, while also offering fast search, insertion, and deletion.
+
     attr_reader :size
 
     def initialize

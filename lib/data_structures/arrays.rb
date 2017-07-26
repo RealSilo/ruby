@@ -104,6 +104,11 @@ class Arrays
   # puts dynamic_array
   # print dynamic_array.array
 
+  class CircularBufferDynamicArray
+    # great for queues
+  end
+
+
   # PROBLEM 1: Given 2 strings check if they are anagrams
   # anagram -> two strings can be written with the same exact letters
   # (capital and space inlcuded)
