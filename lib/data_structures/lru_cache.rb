@@ -1,8 +1,9 @@
 class Node
-  attr_accessor :data, :next_node, :prev_node
+  attr_accessor :data, :key, :next_node, :prev_node
 
-  def initialize(data)
+  def initialize(data, key)
     @data = data
+    @key = key
     @next_node = nil
     @prev_node = nil
   end
@@ -27,7 +28,7 @@ class LruCache
 
   def set(key, value)
     @size += 1
-    new_node = Node.new(value)
+    new_node = Node.new(value, key)
 
     if @size == 1
       @head = new_node
@@ -37,9 +38,11 @@ class LruCache
     end
 
     if @size > @max_items
-      @head.next_node.prev_node = nil
+      oldest_key = @head.key
       @head = @head.next_node
+      @head.prev_node = nil
       @size -= 1
+      @store.delete(oldest_key)
     end
 
     @tail.next_node = new_node
@@ -86,3 +89,4 @@ p lru.head.data
 p lru.head.next_node.data
 p lru.head.next_node.next_node.data
 p lru.head.next_node.next_node.next_node
+p lru.store.keys

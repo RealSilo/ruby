@@ -57,6 +57,10 @@ describe LruCache do
         expect(lru.tail.prev_node.data).to eq 1
         expect(lru.tail.prev_node.prev_node.data).to eq 3
       end
+
+      it 'contains the correct keys' do
+        expect(lru.store.keys).to eq ['a', 'c', 'd'];
+      end
     end
   end
 
