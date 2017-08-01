@@ -128,12 +128,15 @@ class Graphs
     visited = [].to_set
     stack = [start_node]
 
-    while stack.length > 0
+    while stack.any?
       vertex = stack.pop
 
       unless visited.include?(vertex)
         visited.add(vertex)
-        stack += graph[vertex].to_a.reverse - visited.to_a
+        
+        graph[vertex].each do |node|
+          stack << node unless visited.include?(node)
+        end
       end
     end
 
@@ -147,18 +150,63 @@ class Graphs
     visited = [].to_set
     queue = [start_node]
 
-    while stack.length > 0
+    while queue.any?
       vertex = queue.shift
 
       unless visited.include?(vertex)
         visited.add(vertex)
-        queue += graph[vertex].to_a.reverse - visited.to_a
+
+        graph[vertex].each do |node|
+          queue << node unless visited.include?(node)
+        end
       end
     end
 
     visited
   end
 
-  bfs_visit = Graphs.new.dfs(simple_graph, 'A')
+  bfs_visit = Graphs.new.bfs(simple_graph, 'B')
   p bfs_visit
+
+  def distance_with_bfs(graph, root)
+    node_lengths = {}
+
+    graph.each_with_index do |_val, index|
+      node_lengths[index] = nil
+    end
+
+    queue = [root]
+    node_lengths[root] = 0
+
+    while queue.any?
+      current = queue.shift
+
+      connections = graph[current]
+      connection_indexes = []
+
+      connections.each_with_index do |val, index|
+        connection_indexes << index if val == 1
+      end
+
+      connection_indexes.each do |idx|
+        if node_lengths[idx] == nil
+          node_lengths[idx] = node_lengths[current] + 1
+          queue.push(idx)
+        end
+      end
+    end
+
+    node_lengths
+  end
+
+  adjacency_matrix = [
+    [0, 1, 1, 1, 0],
+    [0, 0, 1, 0, 0],
+    [1, 1, 0, 0 ,0],
+    [0, 0, 0, 1, 0],
+    [0, 1, 0, 0, 0]
+  ]
+
+  distances = Graphs.new.distance_with_bfs(adjacency_matrix, 1)
+  p distances
 end
