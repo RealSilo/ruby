@@ -103,7 +103,7 @@ class Task
     @name = name
   end
 
-  def get_time_required
+  def time_required
     0.0
   end
 end
@@ -114,7 +114,7 @@ class AddDryIngredientsTask < Task
     super('Add dry ingredients')
   end
 
-  def get_time_required
+  def time_required
     1.0
   end
 end
@@ -124,7 +124,7 @@ class AddLiquidsTask < Task
     super('Add liquid ingredients')
   end
 
-  def get_time_required
+  def time_required
     2.0
   end
 end
@@ -132,7 +132,7 @@ end
 # composite class
 # While the MakeBatterTask class looks to the outside world
 # like any other sim- ple task—it implements the key
-# get_time_required method—it is actually built up from two
+# time_required method—it is actually built up from two
 # subtasks: AddDryIngredientsTask and AddLiquidsTask
 class MakeBatterTaskDraft < Task
   def initialize
@@ -141,7 +141,7 @@ class MakeBatterTaskDraft < Task
     add_sub_task(AddDryIngredientsTask.new)
     add_sub_task(AddLiquidsTask.new)
   end
-  
+
   def add_sub_task(task)
     @sub_tasks << task
   end
@@ -150,9 +150,9 @@ class MakeBatterTaskDraft < Task
     @sub_tasks.delete(task)
   end
 
-  def get_time_required
+  def time_required
     time = 0.0
-    @sub_tasks.each { |task| time += task.get_time_required }
+    @sub_tasks.each { |task| time += task.time_required }
     time
   end
 end
@@ -166,7 +166,7 @@ class CompositeTask < Task
     super(name)
     @sub_tasks = []
   end
-  
+
   def add_sub_task(task)
     @sub_tasks << task
   end
@@ -175,9 +175,9 @@ class CompositeTask < Task
     @sub_tasks.delete(task)
   end
 
-  def get_time_required
+  def time_required
     time = 0.0
-    @sub_tasks.each {|task| time += task.get_time_required}
+    @sub_tasks.each { |task| time += task.time_required }
     time
   end
 end
@@ -185,7 +185,7 @@ end
 class MakeBatterTask < CompositeTask
   def initialize
     super('Make batter')
-    add_sub_task(AddDryIngredientsTask.new) 
+    add_sub_task(AddDryIngredientsTask.new)
     add_sub_task(AddLiquidsTask.new)
   end
 end
@@ -195,4 +195,4 @@ add_dry_ingredients = AddDryIngredientsTask.new
 add_liquids = AddLiquidsTask.new
 make_batter.add_sub_task(add_dry_ingredients)
 make_batter.add_sub_task(add_liquids)
-p make_batter.get_time_required
+p make_batter.time_required

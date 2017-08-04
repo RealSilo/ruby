@@ -104,9 +104,7 @@ class MinHeap
   def heap_sort
     result = []
 
-    while heap.length > 1
-      result << remove
-    end
+    result << remove while heap.length > 1
 
     result
   end

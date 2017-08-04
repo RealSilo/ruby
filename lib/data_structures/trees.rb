@@ -120,9 +120,7 @@ class Trees
     def find_min(node)
       current = node
 
-      while current.left
-        current = current.left
-      end
+      current = current.left while current.left
 
       current.data
     end

@@ -103,7 +103,7 @@ module Subject
   def notify_observers
     @observers.each do |observer|
       observer.update(self)
-    end 
+    end
   end
 end
 
@@ -165,7 +165,7 @@ peter.salary = 135_000
 # the value has changed. We should not notify the observers if
 # nothing has actually changed.
 
-class Employee
+class EmployeeImproved
   include Subject
 
   attr_reader :name, :position, :salary
@@ -180,17 +180,13 @@ class Employee
   def salary=(new_salary)
     old_salary = @salary
     @salary = new_salary
-    unless old_salary == new_salary
-      notify_observers
-    end
+    notify_observers unless old_salary == new_salary
   end
 
   def position=(new_position)
     old_position = @position
     @position = new_position
-    unless old_position == new_position
-      notify_observers
-    end
+    notify_observers unless old_position == new_position
   end
 end
 
@@ -202,7 +198,7 @@ end
 # big promotion and a big raise to go along with it. We might code that
 # as:
 
-peter = Employee.new("Peter", "Operations Manager", 90_000)
+peter = Employee.new('Peter', 'Operations Manager', 90_000)
 peter.salary = 140_000
 # But here we have an inconsistent state!
 peter.position = 'COO'
@@ -212,7 +208,7 @@ peter.position = 'COO'
 # operations manager. This would not matter, except that all of our observers
 # are listening and experiencing that inconsistent state.
 
-class Employee
+class EmployeeImproved
   include Subject
 
   attr_reader :name
@@ -230,7 +226,7 @@ class Employee
   end
 end
 
-peter = Employee.new("Peter", "Operations Manager", 90_000)
+peter = EmployeeImproved.new('Peter', 'Operations Manager', 90_000)
 payroll = Payroll.new
 peter.add_observer(payroll)
 accountant = Accountant.new

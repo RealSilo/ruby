@@ -15,11 +15,11 @@ class ArrayIterator
     @array = Array.new(array)
     @index = 0
   end
-  
+
   def has_next?
     @index < @array.length
   end
-  
+
   def item
     @array[@index]
   end
@@ -31,11 +31,9 @@ class ArrayIterator
   end
 end
 
-array = ['red', 'green', 'blue']
+array = %w[red green blue]
 i = ArrayIterator.new(array)
-while i.has_next?
-  puts("item: #{i.next_item}")
-end
+puts("item: #{i.next_item}") while i.has_next?
 
 # With just a few lines of code, our ArrayIterator gives us just about
 # everything we need to iterate over any Ruby array.
@@ -76,8 +74,7 @@ def change_resistant_for_each(array)
   end
 end
 
-for_each(array) {|element| puts("item: #{element}") }
-
+for_each(array) { |element| puts("item: #{element}") }
 
 # EXTERNAL ITERATORS VS INTERNAL ITERATORS
 
@@ -97,7 +94,7 @@ def merge(arr1, arr2)
   merged = []
   iterator1 = ArrayIterator.new(arr1)
   iterator2 = ArrayIterator.new(arr2)
-  
+
   while iterator1.has_next? && iterator2.has_next?
     if iterator1.item < iterator2.item
       merged << iterator1.next_item
@@ -107,14 +104,10 @@ def merge(arr1, arr2)
   end
 
   # Pick up the leftovers from arr1
-  while iterator1.has_next?
-    merged << iterator1.next_item
-  end
+  merged << iterator1.next_item while iterator1.has_next?
 
   # Pick up the leftovers from arr2
-  while iterator2.has_next?
-    merged << iterator2.next_item
-  end
+  merged << iterator2.next_item while iterator2.has_next?
 
   merged
 end

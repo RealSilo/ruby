@@ -71,15 +71,14 @@
 # context with an object that knows how to perform some variation on an algorithm.
 # The intent of the Observer pattern is pretty different.
 
-
-# First implementation
+# FIRST IMPLEMENTATION
 class Report
   attr_reader :name, :text
   attr_accessor :formatter
 
   def initialize(formatter)
     @name = 'Weekly Report'
-    @text =  [ 'Things', 'are', 'going', 'well.' ]
+    @text = ['Things', 'are', 'going', 'well.']
     @formatter = formatter
   end
 
@@ -105,7 +104,7 @@ end
 
 class PlainTextFormatter < Formatter
   def output_report(name, text)
-    puts "#{name}"
+    puts name
     text.each do |line|
       puts line
     end
@@ -157,13 +156,13 @@ report.output_report
 # the strategy. This magnifies the danger that the context class and the strategy
 # classes will get tangled up with each other.
 
-class Report
+class ReportImproved
   attr_reader :title, :text
   attr_accessor :formatter
 
   def initialize(formatter)
     @name = 'Weekly Report'
-    @text =  [ 'Things', 'are', 'going', 'well.' ]
+    @text = ['Things', 'are', 'going', 'well.']
     @formatter = formatter
   end
 
@@ -173,18 +172,18 @@ class Report
   end
 end
 
-class HTMLFormatter
+class HTMLFormatterImproved
   def output_report(context)
-    puts "#{context.name}"
+    puts context.name
     context.text.each do |line|
       puts line
     end
   end
 end
 
-class PlainTextFormatter < Formatter
+class PlainTextFormatterImproved < Formatter
   def output_report(context)
-    puts "#{context.name}"
+    puts context.name
     context.text.each do |line|
       puts line
     end

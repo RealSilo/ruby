@@ -6,6 +6,12 @@ AllCops:
 
 Metrics/LineLength:
   Max: 120
+Metrics/PerceivedComplexity:
+  Max: 15
+Metrics/CyclomaticComplexity:
+  Max: 15
+Metrics/AbcSize:
+  Max: 25
 Metrics/BlockLength:
   CountComments: false
   Max: 25
@@ -14,12 +20,14 @@ Metrics/BlockLength:
     - 'spec/**/**/*.rb'
     - 'Gemfile'
 Metrics/MethodLength:
-  Max: 20
+  Max: 30
 Style/AsciiComments:
   Enabled: false
 Style/NumericPredicate:
   EnforcedStyle: comparison
 Style/PredicateName:
+  Enabled: false
+Style/ParallelAssignment:
   Enabled: false
 Style/MultilineMethodCallIndentation:
   EnforcedStyle: aligned
