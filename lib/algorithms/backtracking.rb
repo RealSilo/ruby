@@ -200,7 +200,7 @@ class Backtracking
           end
         end
 
-        return if @solution_found
+        next if @solution_found
         @board.remove_queen(column, row)
       end
     end

@@ -48,5 +48,5 @@ class Quickselect
   end
 end
 
-arr = [1,4,56,7,77,32,2,11,8,19,33,54,0]
+arr = [1, 4, 56, 7, 77, 32, 2, 11, 8, 19, 33, 54, 0]
 p Quickselect.new.select(arr, 13)

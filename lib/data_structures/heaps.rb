@@ -137,4 +137,3 @@ min_heap.add(40)
 min_heap.add(10)
 
 p min_heap.heap_sort
-

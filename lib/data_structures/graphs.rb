@@ -97,7 +97,7 @@ class Graphs
   # 4. Repeat the first three steps until we have visited every vertex in the graph.
   def dijkstra(root, graph)
     routes = {}
-    
+
     graph.vertices.each do |key|
       routes[key] = { weight: Float::INFINITY, parent: key }
     end
@@ -157,12 +157,12 @@ class Graphs
     while stack.any?
       vertex = stack.pop
 
-      unless visited.include?(vertex)
-        visited.add(vertex)
-        
-        graph[vertex].each do |node|
-          stack << node unless visited.include?(node)
-        end
+      next unless visited.include?(vertex)
+
+      visited.add(vertex)
+
+      graph[vertex].each do |node|
+        stack << node unless visited.include?(node)
       end
     end
 
@@ -177,7 +177,7 @@ class Graphs
 
   def dfs_helper(graph, vertex)
     @@dfs_visited.add(vertex)
-    
+
     graph[vertex].each do |node|
       dfs_helper(graph, node) unless @@dfs_visited.include?(node)
     end
@@ -226,7 +226,7 @@ class Graphs
 
   def topological_helper(graph, vertex)
     @@tvisited.add(vertex)
-    
+
     graph[vertex].each do |node|
       topological_helper(graph, node) unless @@tvisited.include?(node)
     end
@@ -239,7 +239,6 @@ class Graphs
 
   # p Graphs.new.topological_sort(simple_acyclic_graph, 'A')
   p Graphs.new.topological_sort(other_acyclic_graph, 'A')
-
 
   # Breadth-first search (BFS)
   # Questions to be answered by BFS
@@ -256,16 +255,15 @@ class Graphs
     while queue.any?
       vertex = queue.shift
 
-      unless visited.include?(vertex)
-        # an if else statement could be added here if we look
-        # for some property that should stop the algorithm e.g.
-        # shortest path to this node
+      next unless visited.include?(vertex)
+      # an if else statement could be added here if we look
+      # for some property that should stop the algorithm e.g.
+      # shortest path to this node
 
-        visited.add(vertex)
+      visited.add(vertex)
 
-        graph[vertex].each do |node|
-          queue << node unless visited.include?(node)
-        end
+      graph[vertex].each do |node|
+        queue << node unless visited.include?(node)
       end
     end
 
@@ -309,7 +307,7 @@ class Graphs
   adjacency_matrix = [
     [0, 1, 1, 1, 0],
     [0, 0, 1, 0, 0],
-    [1, 1, 0, 0 ,0],
+    [1, 1, 0, 0, 0],
     [0, 0, 0, 1, 0],
     [0, 1, 0, 0, 0]
   ]

@@ -117,7 +117,7 @@ class Trees
       delete_place(data, @root)
     end
 
-    def find_min(data, node)
+    def find_min(node)
       current = node
 
       while current.left
@@ -127,12 +127,10 @@ class Trees
       current.data
     end
 
-    def find_max(data, node)
+    def find_max(node)
       current = node
 
-      while current.right
-        current = current.right
-      end
+      current = current.right while current.right
 
       current.data
     end
@@ -227,7 +225,7 @@ class Trees
         if node.left && node.right
           # if there are both left and right children the data is replaced with the
           # min value of the right branch then the node with that value is deleted
-          node.data = find_min(data, node.right)
+          node.data = find_min(node.right)
           node.right = delete_place(node.data, node.right)
         else
           # if there is only left child => node removed and replaced with node.left

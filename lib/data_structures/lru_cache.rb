@@ -56,7 +56,7 @@ class LruCache
 
     return nil unless result
     return result unless result.next_node
-    
+
     if result.prev_node
       result.prev_node.next_node = result.next_node
       result.next_node.prev_node = result.prev_node

@@ -59,7 +59,7 @@ describe LruCache do
       end
 
       it 'contains the correct keys' do
-        expect(lru.store.keys).to eq ['a', 'c', 'd'];
+        expect(lru.store.keys).to eq %w[a c d]
       end
     end
   end

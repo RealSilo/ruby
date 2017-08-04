@@ -217,7 +217,7 @@ class StacksQueues
     # s.pop
     # p s.first.inspect
 
-  # PROBLEM 4: Implement a Queue with a LinkedList
+    # PROBLEM 4: Implement a Queue with a LinkedList
     # we don't need doubly linked list as we always remove
     # the first element
     class Queue
@@ -270,5 +270,3 @@ class StacksQueues
     p q.inspect
   end
 end
-
-

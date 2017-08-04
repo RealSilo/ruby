@@ -62,16 +62,16 @@ class Trie
   private
 
   def collect(node, string)
-    if node.hash.size > 0
-      for letter in node.hash.keys
+    if node.hash.empty?
+      string.empty? ? nil : @words << string
+    else
+      node.hash.each_value do |letter|
         new_string = string + letter
         collect(node.hash[letter], new_string)
       end
 
       @words << string if node.end_node?
-    else
-      string.length > 0 ? @words << string : nil
-    end 
+    end
   end
 end
 
