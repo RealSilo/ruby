@@ -67,6 +67,17 @@
 # problem is a solution that does not use inheritance in the same way
 # that the Template Method pattern does.
 
+# Unfortunately, the Template Method pattern has some drawbacks, most of
+# which come from the fact that this pattern is using inheritance. Basing
+# your design on inheritance has some serious disadvantages. No matter
+# how carefully you design your code, your subclasses are tangled up with
+# their superclass: It is in the nature of the relationship. Besides this,
+# inheritance-based techniques such as the Template Method pattern limit
+# our runtime flexibility. Once we have chosen a particular variation
+# of the algorithm changing our mind is hard. With the Template Method
+# pattern, if we change our mind about which subclass to use, we need to
+# create a whole new subclass object just to switch to a different solution.
+
 class ReportTemplate
   def generate_report!
     retrieve_financial_data
