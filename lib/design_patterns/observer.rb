@@ -51,6 +51,9 @@
 # track of the observers. It is also the subject that needs to inform the
 # observers when something has changed.
 
+# Observer pattern is used for lifecycle methods in Rails like ActiveRecord's
+# after_create method.
+
 # WRAP UP
 
 # The Observer pattern helps you build components that know about the
