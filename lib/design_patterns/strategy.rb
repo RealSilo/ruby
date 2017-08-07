@@ -51,7 +51,7 @@
 # little good if you couple the context and your first strategy so tightly
 # together that you cannot wedge a second or a third strategy into the design.
 
-# Wrap up
+# WRAP UP
 
 # The Strategy pattern is a delegation-based approach to solving the same problem as
 # the Template Method pattern. Instead of extracting the variable parts of your
@@ -82,8 +82,20 @@ class Report
     @formatter = formatter
   end
 
-  def output_report
+  def generate_report
+    retrieve_financial_data
     @formatter.output_report(@name, @text)
+    send_report
+  end
+
+  private
+
+  def retrieve_financial_data
+    # Grab relevant data from our database
+  end
+
+  def send_report
+    # email this report to interested parties
   end
 end
 
@@ -112,12 +124,12 @@ class PlainTextFormatter < Formatter
 end
 
 report = Report.new(HTMLFormatter.new)
-report.output_report
+report.generate_report
 # Because the Strategy pattern is based on composition and delegation,
 # rather than on inheritance, it is easy to switch strategies at runtime.
 # We simply swap out the strategy object:
 report.formatter = PlainTextFormatter.new
-report.output_report
+report.generate_report
 
 # Second implemenation
 
