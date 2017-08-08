@@ -192,7 +192,37 @@ end
 # the possibility of other kinds of engines. The Engine class itself could actually be an
 # abstract type and we might have a few types of engines, all available for use by our car.
 # On top of that, our car is not stuck with one engine implementation for its whole life.
-# We can now swap our engines at runtime.
+# We can now swap our engines at runtime. 
+
+# Another example
+
+# A is the base class
+# B inherits from A
+# C inherits from B
+# D inherits from B
+
+# C calls super, which runs code in B. B calls super which runs code in A. A and B contain
+# unrelated features needed by both C & D. D is a new use case, and needs slightly different
+# behavior in A’s init code than C needs. So the newbie dev goes and tweaks A’s init code.
+# C breaks because it depends on the existing behavior, and D starts working. What we have
+# here are features spread out between A and B that C and D need to use in various ways. C
+# and D don’t use every feature of A and B… they just want to inherit some stuff that’s
+# already defined in A and B. But by inheriting and calling super, you don’t get to be
+# selective about what you inherit. With compositon let's say you have features:
+# feat1, feat2, feat3, feat4. C needs feat1 and feat3, D needs feat1, feat2 and feat4:
+# C => compose(feat1, feat3)
+# D => compose(feat1, feat2, feat4)
+# Now, imagine you discover that D needs slightly different behavior from feat1. It doesn’t
+# actually need to change feat1, instead, you can make a customized version of feat1 and use
+# that, instead. You can still inherit the existing behaviors from feat2 and feat4 with no
+# changes:
+# D => compose(custom1, feat2, feat4)
+# And C remains unaffected. The reason this is not possible with class inheritance is because
+# when you use class inheritance, you buy into the whole existing class taxonomy. If you want
+# to adapt a little for a new use-case, you either end up duplicating parts of the existing
+# taxonomy (the duplication by necessity problem), or you refactor everything that depends on
+# the existing taxonomy to adapt the taxonomy to the new use case due to the fragile base
+# class problem. Composition is immune to both.
 
 # DELEGATE, DELEGATE, DELEGATE
 
