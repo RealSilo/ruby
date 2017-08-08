@@ -1,4 +1,0 @@
-A plain line
-A line with checksum
-2017-08-07 22:20:26 +0200: with time stamp
-1: with line number
