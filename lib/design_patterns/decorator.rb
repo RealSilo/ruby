@@ -1,3 +1,10 @@
+# GOF definition
+
+# Attach additional responsibilities to an object dynamically. Decorators provide
+# a flexible alternative to subclassing for extending functionality.
+
+# DECORATOR PATTERN
+
 # Decorator pattern enables you to easily add an enhancement to an existing
 # object. The Decorator pattern also allows you to layer features atop one
 # another so that you can construct objects that have exactly the right set
