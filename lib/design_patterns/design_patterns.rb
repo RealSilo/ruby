@@ -7,6 +7,6 @@
 # translate; it is there to control. Proxies are good for tasks such as
 # enforcing security, hiding the fact that an object really lives across the
 # network, and delaying the creation of the real object until the last possible
-# moment. 
+# moment.
 # The third is the decorator, which enables you to layer features on to a basic
 # object.

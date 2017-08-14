@@ -1,3 +1,5 @@
+require 'byebug'
+
 class HTML
   def initialize(&block)
     @rendered = ''
@@ -105,3 +107,47 @@ result2 = HTML2.new do
 end
 
 p result2.render
+
+class Expectation
+  def initialize(first)
+    @first = first
+  end
+
+  def equal(second)
+    @second = second
+    puts(@first == @second)
+  end
+
+  def greater_than(second)
+    @second = second
+    puts(@first > @second)
+  end
+end
+
+class Test
+  def initialize(&block)
+    instance_eval(&block)
+  end
+
+  def it(name)
+    yield
+  end
+
+  def expect(a)
+    Expectation.new(a)
+  end
+end
+
+a = 1
+b = 1
+
+test = Test.new do
+  it 'a is equal b' do
+    expect(a).equal(b)
+  end
+
+  it 'a is greter than b' do
+    expect(a).greater_than(b)
+  end
+end
+

@@ -24,13 +24,13 @@
 
 class MyCar
   def drive(speed)
-    "#{speed}"
+    speed
   end
 end
 
 class MyAirplane
   def fly(speed)
-    "#{speed}"
+    speed
   end
 end
 
@@ -63,13 +63,13 @@ end
 
 class CarImproved
   def travel(speed)
-    "#{speed}"
+    speed
   end
 end
 
 class AirplaneImproved
   def travel(speed)
-    "#{speed}"
+    speed
   end
 end
 
@@ -118,11 +118,11 @@ my_vehicle.travel(200)
 
 class Vehicle
   def start_engine
-    "Engine started"
+    'Engine started'
   end
 
   def stop_engine
-    "Engine stopped"
+    'Engine stopped'
   end
 end
 
@@ -151,11 +151,11 @@ end
 
 class Engine
   def start
-    "Engine started"
+    'Engine started'
   end
 
   def stop
-    "Engine stopped"
+    'Engine stopped'
   end
 end
 
@@ -192,7 +192,7 @@ end
 # the possibility of other kinds of engines. The Engine class itself could actually be an
 # abstract type and we might have a few types of engines, all available for use by our car.
 # On top of that, our car is not stuck with one engine implementation for its whole life.
-# We can now swap our engines at runtime. 
+# We can now swap our engines at runtime.
 
 # Another example
 

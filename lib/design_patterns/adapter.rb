@@ -3,7 +3,6 @@
 # Having ncompatible objects—objects that want to talk to each other but
 # cannot because their interfaces do not match.
 
-
 # GOF definition
 
 # The Adapter design pattern allows otherwise incompatible classes to work
@@ -57,7 +56,7 @@ class Renderer
     text = text_object.text
     size = text_object.size_inches
     color = text_object.color
-    
+
     puts "Text: #{text}, size: #{size}, color: #{color}"
   end
 end
@@ -79,7 +78,7 @@ p Renderer.new.render(text_object)
 
 class BritishTextObject
   attr_reader :string, :size_mm, :colour
-  
+
   def initialize(string, size_mm, colour)
     @string = string
     @size_mm = size_mm
@@ -94,7 +93,7 @@ class BritishTextObjectAdapter < BritishTextObject
   def initialize(bto)
     @bto = bto
   end
-  
+
   def text
     @bto.string
   end

@@ -128,7 +128,7 @@ class Employee
   end
 
   def position=(position)
-    @salary = salary
+    @position = position
     notify_observers
   end
 end
@@ -217,12 +217,12 @@ class EmployeeImproved
   attr_reader :name
   attr_accessor :salary, :position
 
-  def initialize(name, position, salary)
-    super()
-    @name = name
-    @position = position
-    @salary = salary
-  end
+  # def initialize(name, position, salary)
+  #   super()
+  #   @name = name
+  #   @position = position
+  #   @salary = salary
+  # end
 
   def changes_complete
     notify_observers

@@ -46,7 +46,7 @@ end
 
 motherboard = Motherboard.new(TurboCPU.new, 4000)
 drives = []
-drives << Drive.new(:hard_drive, 200000, true)
+drives << Drive.new(:hard_drive, 200_000, true)
 drives << Drive.new(:cd, 760, true)
 drives << Drive.new(:dvd, 4700, false)
 
@@ -63,7 +63,7 @@ puts computer.inspect
 
 class ComputerBuilder
   attr_reader :computer
-  
+
   def initialize
     @computer = Computer.new
   end
@@ -98,7 +98,7 @@ builder.display = :lcd
 builder.turbo
 builder.add_cd(true)
 builder.add_dvd
-builder.add_hard_disk(100000)
+builder.add_hard_disk(100_000)
 computer = builder.computer
 puts computer.inspect
 
@@ -159,12 +159,10 @@ class AbstractComputerBuilder
 end
 
 class DesktopComputerBuilder < AbstractComputerBuilder
+  attr_writer :display
+
   def initialize
     @computer = DesktopComputer.new
-  end
-
-  def display=(display)
-    @display = display
   end
 
   def add_cd(writer = false)
@@ -186,7 +184,7 @@ class LaptopBuilder < AbstractComputerBuilder
   end
 
   def display=(display)
-    raise "Laptop display must be lcd" unless display == :lcd
+    raise 'Laptop display must be lcd' unless display == :lcd
   end
 
   def add_cd(writer = false)
@@ -207,7 +205,7 @@ builder.display = :lcd
 builder.turbo
 builder.add_cd(true)
 builder.add_dvd
-builder.add_hard_disk(100000)
+builder.add_hard_disk(100_000)
 computer = builder.computer
 puts computer.inspect
 
@@ -219,18 +217,18 @@ puts computer.inspect
 
 class AbstractComputerBuilder
   def computer
-    raise "Not enough memory" if @computer.motherboard.memory_size < 512
-    raise "Too many drives" if @computer.drives.size > 3
+    raise 'Not enough memory' if @computer.motherboard.memory_size < 512
+    raise 'Too many drives' if @computer.drives.size > 3
     @computer
   end
 
-  def turbo
-    @computer.motherboard.cpu = TurboCPU.new
-  end
+  # def turbo
+  #   @computer.motherboard.cpu = TurboCPU.new
+  # end
 
-  def memory_size=(size_in_mb)
-    @computer.motherboard.memory_size = size_in_mb
-  end
+  # def memory_size=(size_in_mb)
+  #   @computer.motherboard.memory_size = size_in_mb
+  # end
 end
 
 # An important thing to consider when writing and using builders is if you can use a
@@ -238,10 +236,12 @@ end
 # you could use a LaptopBuilder to create a couple of identical computers in one go:
 
 builder = LaptopBuilder.new
-builder.add_hard_disk(100000)
+builder.add_hard_disk(100_000)
 builder.turbo
 computer1 = builder.computer
 computer2 = builder.computer
+p computer1
+p computer2
 
 # The trouble is, because the computer method always returns the same computer, both
 # computer1 and computer2 end up being references to the same computer, which is probably

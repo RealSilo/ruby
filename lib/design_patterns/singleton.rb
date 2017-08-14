@@ -1,6 +1,6 @@
 # The motivation behind the Singleton pattern is very simple: There are some things
 # that are unique. Programs frequently have a single configuration file. It is not
-# unusual for a program to let you know how it is doing via a single log file. Many 
+# unusual for a program to let you know how it is doing via a single log file. Many
 # applications need to talk to exactly one database. If you only ever have one
 # instance of a class and a lot of code that needs access to that instance, it seems
 # silly to pass the object from one method to another. In this kind of situation,
@@ -22,9 +22,9 @@ class SimpleLogger
   def self.instance
     @@instance
   end
-  
+
   def initialize
-    @log = File.open("log.txt", "w")
+    @log = File.open('log.txt', 'w')
     @level =  WARNING
   end
 
@@ -46,6 +46,8 @@ end
 
 logger1 = SimpleLogger.instance   # Returns the logger
 logger2 = SimpleLogger.instance   # Returns exactly the same logger
+p logger1
+p logger2
 
 # Our singleton implementation does appear to have one problem, however. What if we
 # want to build a second singleton class, perhaps for our configuration data? It
@@ -104,9 +106,3 @@ LOGGER = SimpleLogger.new
 # class has exactly one instance, and access to that one instance is available globally.
 # Using class methods and variables, we can easily build the classic implementation of the
 # singleton, the one recommended by the GoF.
-
-# 
-
-
-
-

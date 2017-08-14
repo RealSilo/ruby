@@ -97,6 +97,7 @@ class Command
   end
 
   def execute
+    # implement
   end
 end
 
@@ -110,11 +111,11 @@ class CompositeCommand < Command
   end
 
   def execute
-    @commands.each { |cmd| cmd.execute }
+    @commands.each(&:execute)
   end
 
   def unexecute
-    @commands.reverse.each { |cmd| cmd.unexecute }
+    @commands.reverse.each(&:unexecute)
   end
 
   def description
@@ -132,7 +133,7 @@ class CreateFile < Command
   end
 
   def execute
-    f = File.open(@path, "w")
+    f = File.open(@path, 'w')
     f.write(@contents)
     f.close
   end
@@ -149,22 +150,20 @@ class DeleteFile < Command
   end
 
   def execute
-    if File.exists?(@path)
-      @content = File.read(@path)
-    end
+    @content = File.read(@path) if File.exist?(@path)
     File.delete(@path)
   end
 
   def unexecute
     if @content
-      f = File.open(@path, "w")
+      f = File.open(@path, 'w')
       f.write(@content)
       f.close
     end
   end
 end
 
-class Copyfile < Command
+class CopyFile < Command
   def initialize(path, new_path)
     super("Copy file: #{path} to #{new_path}")
     @path = path
@@ -196,5 +195,3 @@ puts commands.description
 commands.execute
 sleep 2
 commands.unexecute
-
-

@@ -79,11 +79,8 @@ class All < Expression
     Find.find(dir) do |p|
       next unless File.file?(p)
       results << p
-    end 
+    end
+
     results
   end
 end
-
-
-
-

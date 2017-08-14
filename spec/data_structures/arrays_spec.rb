@@ -279,10 +279,10 @@ describe Arrays do
   end
 
   describe '#palindrome?' do
+    subject { described_class.new }
+
     context 'when the string is empty' do
       let(:string) { '' }
-
-      subject { described_class.new }
 
       it 'returns true' do
         expect(subject.palindrome?(string)).to be_truthy
@@ -292,8 +292,6 @@ describe Arrays do
     context 'when the string is a palindrome' do
       let(:string) { ' abcd dcb a' }
 
-      subject { described_class.new }
-
       it 'returns true' do
         expect(subject.palindrome?(string)).to be_truthy
       end
@@ -302,11 +300,69 @@ describe Arrays do
     context 'when the string is NOT a palindrome' do
       let(:string) { 'e abceed dcb a' }
 
-      subject { described_class.new }
-
       it 'returns false' do
         expect(subject.palindrome?(string)).to be_falsey
       end
+    end
+  end
+
+  describe '#urlify_inplace' do
+    let(:string) { 'Mr John Smith  ' }
+    let(:length) { 13 }
+    subject { described_class.new }
+
+    it 'returns the urlified string' do
+      expect(subject.urlify_inplace(string, length)).to eq('Mr%20John%20Smith')
+    end
+  end
+
+  describe '#urlify' do
+    let(:string) { 'Mr John Smith  ' }
+    let(:length) { 13 }
+    subject { described_class.new }
+
+    it 'returns the urlified string' do
+      expect(subject.urlify(string, length)).to eq('Mr%20John%20Smith')
+    end
+  end
+
+  describe '#urlify_backwards' do
+    let(:string) { 'Mr John Smith             ' }
+    let(:length) { 13 }
+    subject { described_class.new }
+
+    it 'returns the urlified string' do
+      expect(subject.urlify_backwards(string, length)).to eq('Mr%20John%20Smith')
+    end
+  end
+
+  describe '#rotate' do
+    let(:matrix) { [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]] }
+
+    subject { described_class.new }
+
+    it 'returns the rotated matrix' do
+      expect(subject.rotate(matrix)).to eq([[4, 8, 12, 16], [3, 7, 11, 15], [2, 6, 10, 14], [1, 5, 9, 13]])
+    end
+  end
+
+  describe '#rotate_in_place' do
+    let(:matrix) { [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]] }
+
+    subject { described_class.new }
+
+    it 'returns the rotated matrix' do
+      expect(subject.rotate_in_place(matrix)).to eq([[4, 8, 12, 16], [3, 7, 11, 15], [2, 6, 10, 14], [1, 5, 9, 13]])
+    end
+  end
+
+  describe '#change_zeros' do
+    let(:matrix) { [[1, 2, 3, 4], [5, 0, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]] }
+
+    subject { described_class.new }
+
+    it 'returns the modified matrix' do
+      expect(subject.change_zeros(matrix)).to eq([[1, 0, 3, 4], [0, 0, 0, 0], [9, 0, 11, 12], [13, 0, 15, 16]])
     end
   end
 end

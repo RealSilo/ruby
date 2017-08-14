@@ -1,4 +1,4 @@
-#GOF
+# GOF
 
 # A proxy, in its most general form, is a class functioning as an interface
 # to something else. The proxy could interface to anything: a network connection,
@@ -7,7 +7,7 @@
 # is being called by the client to access the real serving object behind the
 # scenes. Use of the proxy can simply be forwarding to the real object, or can
 # provide additional logic (for example caching when operations on the real
-# object are resource intensive, or checking preconditions before operations 
+# object are resource intensive, or checking preconditions before operations
 # on the real object are invoked). For the client, usage of a proxy object is
 # similar to using the real object, because both implement the same interface.
 
@@ -79,7 +79,7 @@ class BankAccountProtectionProxy
     check_access
     @bank_account.deposit(amount)
   end
-  
+
   def withdraw(amount)
     check_access
     @bank_account.withdraw(amount)
@@ -88,11 +88,11 @@ class BankAccountProtectionProxy
   private
 
   def check_access
-    raise 'No access granted' unless @owner[:status] === :valid
+    raise 'No access granted' unless @owner[:status] == :valid
   end
 end
 
-ba = BankAccountProtectionProxy.new(BankAccount.new(100), { name: 'Peter Jones', status: :valid })
+ba = BankAccountProtectionProxy.new(BankAccount.new(100), name: 'Peter Jones', status: :valid)
 ba.withdraw(20)
 puts ba.balance
 
@@ -123,7 +123,7 @@ class VirtualBankAccountProxy
   def deposit(amount)
     subject.deposit(amount)
   end
-  
+
   def withdraw(amount)
     subject.withdraw(amount)
   end
@@ -142,7 +142,7 @@ puts acc.balance
 # Second Implementation to delay creating expensive objects.
 
 # Metaprogramming (define methd / method missing) could be
-# used to clean up the class. 
+# used to clean up the class.
 
 class VirtualBankAccountProxyImproved
   def initialize(&bank_account_block)
@@ -156,7 +156,7 @@ class VirtualBankAccountProxyImproved
   def deposit(amount)
     subject.deposit(amount)
   end
-  
+
   def withdraw(amount)
     subject.withdraw(amount)
   end

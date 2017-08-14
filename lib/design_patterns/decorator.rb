@@ -21,13 +21,13 @@
 
 class EnhancedWriter
   attr_reader :check_sum
-  
+
   def initialize(path)
-    @file = File.open(path, "w")
+    @file = File.open(path, 'w')
     @check_sum = 0
     @line_number = 1
   end
-  
+
   def write_line(line)
     @file.print(line)
     @file.print("\n")
@@ -54,7 +54,7 @@ end
 
 writer = EnhancedWriter.new('template/out.txt')
 
-writer.write_line("A plain line")
+writer.write_line('A plain line')
 # or
 writer.checksumming_write_line('A line with checksum')
 puts("Checksum is #{writer.check_sum}")
@@ -185,7 +185,7 @@ writer = NumberingWriter.new(SimpleWriter.new('template/out2.txt'))
 writer.write_line('Hello out there')
 
 # Because all of the decorator objects support the same basic interface as the
-#Coriginal, the “real” object that we supply to any one of the decorators does not
+# original, the “real” object that we supply to any one of the decorators does not
 # actually have to be an instance of SimpleWriter — it can be any other decorator.
 # Thanks to this we can build arbitrarily long chains of decorators, with each one
 # adding its own secret ingredient to the whole. For instance we can finally get

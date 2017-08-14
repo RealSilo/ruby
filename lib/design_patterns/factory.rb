@@ -38,12 +38,12 @@ class FirstPond
     number_ducks.times do |i|
       duck = Duck.new("Duck#{i}")
       @ducks << duck
-      end
+    end
   end
 
   def simulate_one_day
-    @ducks.each { |duck| duck.speak }
-    @ducks.each { |duck| duck.eat }
+    @ducks.each(&:speak) # shortened version of @ducks.each { |d| d.speak }
+    @ducks.each(&:eat)
   end
 end
 
@@ -78,8 +78,8 @@ class SecondPond
   end
 
   def simulate_one_day
-    @animals.each { |animal| animal.speak }
-    @animals.each { |animal| animal.eat }
+    @animals.each(&:speak)
+    @animals.each(&:eat)
   end
 end
 
@@ -111,8 +111,8 @@ class MetaSecondPond
   end
 
   def simulate_one_day
-    @animals.each { |animal| animal.speak }
-    @animals.each { |animal| animal.eat }
+    @animals.each(&:speak)
+    @animals.each(&:eat)
   end
 end
 
@@ -170,9 +170,9 @@ class ThirdPond
   end
 
   def simulate_one_day
-    @plants.each { |plant| plant.grow }
-    @animals.each { |animal| animal.speak }
-    @animals.each { |animal| animal.eat }
+    @plants.each(&:grow)
+    @animals.each(&:speak)
+    @animals.each(&:eat)
   end
 
   def new_organism(type, name)
@@ -208,9 +208,9 @@ class MetaThirdPond
   end
 
   def simulate_one_day
-    @plants.each { |plant| plant.grow }
-    @animals.each { |animal| animal.speak }
-    @animals.each { |animal| animal.eat }
+    @plants.each(&:grow)
+    @animals.each(&:speak)
+    @animals.each(&:eat)
   end
 end
 
@@ -272,9 +272,9 @@ class FirstHabitat
   end
 
   def simulate_one_day
-    @plants.each { |plant| plant.grow }
-    @animals.each { |animal| animal.speak }
-    @animals.each { |animal| animal.eat }
+    @plants.each(&:grow)
+    @animals.each(&:speak)
+    @animals.each(&:eat)
   end
 
   def new_organism(type, name)
@@ -290,7 +290,7 @@ end
 
 jungle = FirstHabitat.new(1, Tiger, 4, Tree)
 jungle.simulate_one_day
-pond = FirstHabitat.new( 2, Duck, 4, WaterLily)
+pond = FirstHabitat.new(2, Duck, 4, WaterLily)
 pond.simulate_one_day
 
 # One problem with our new Habitat class is that it is possible to create incoherent
@@ -327,9 +327,9 @@ class SecondHabitat
   end
 
   def simulate_one_day
-    @plants.each { |plant| plant.grow }
-    @animals.each { |animal| animal.speak }
-    @animals.each { |animal| animal.eat }
+    @plants.each(&:grow)
+    @animals.each(&:speak)
+    @animals.each(&:eat)
   end
 end
 
@@ -357,7 +357,7 @@ end
 # that there will be no unholy mixing of pond creatures with jungle denizens:
 jungle = SecondHabitat.new(1, 4, JungleOrganismFactory.new)
 jungle.simulate_one_day
-pond = SecondHabitat.new( 2, 4, PondOrganismFactory.new)
+pond = SecondHabitat.new(2, 4, PondOrganismFactory.new)
 pond.simulate_one_day
 
 # The Abstract Factory pattern really boils down to a problem and a solution. The problem
@@ -393,7 +393,7 @@ jungle_organism_factory = OrganismFactory.new(Tree, Tiger)
 pond_organism_factory = OrganismFactory.new(WaterLily, Frog)
 jungle = SecondHabitat.new(1, 4, jungle_organism_factory)
 jungle.simulate_one_day
-pond = SecondHabitat.new( 2, 4, pond_organism_factory)
+pond = SecondHabitat.new(2, 4, pond_organism_factory)
 pond.simulate_one_day
 
 # The important thing about the abstract factory is that it encapsulates the knowledge of which
@@ -427,5 +427,3 @@ pond.simulate_one_day
 
 # The Builder pattern, which also produces new objects is more focused on constructing complex
 # objects than on picking the right class.
-
-

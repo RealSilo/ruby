@@ -341,4 +341,123 @@ class Arrays
 
     string[0] == string[-1] && palindrome?(string[1..-2])
   end
+
+  # PROBLEM 9: Write a method to replace all spaces in a string with '%20'. You can assume
+  # that the string has sufficient space at the end to hold the additional characters, and
+  # that you are given the "true" length of the string.
+  # "Mr John Smith  ",will be "Mr%20John%20Smith"
+
+  def urlify_inplace(string, length)
+    string = string[0..length - 1]
+
+    length.times do |i|
+      string[i] = '%20' if string[i] == ' '
+    end
+
+    string
+  end
+
+  def urlify(string, _length)
+    string.split(' ').join('%20')
+  end
+
+  def urlify_backwards(string, length)
+    space_count = 0
+
+    string = string[0..length - 1] # removing spaces from the end
+
+    (length - 1).times do |i|
+      space_count += 1 if string[i] == ' '
+    end
+
+    index = length + space_count * 2 # calculating the new length
+
+    (length..index).step(1) do |i|
+      string[i] = ' ' # setting the new length
+    end
+
+    string = string[0..-2] # getting rid of last space
+
+    (length - 1).downto(0) do |i|
+      if string[i] == ' '
+        string[index - 1] = '0'
+        string[index - 2] = '2'
+        string[index - 3] = '%'
+        index -= 3
+      else
+        string[index - 1] = string[i]
+        index -= 1
+      end
+    end
+
+    string
+  end
+
+  # PROBLEM 10: Rotate a matrix by 90
+  # 1  2  3  4       4  8  12 16
+  # 5  6  7  8   ==> 3  7  11 15
+  # 9  10 11 12  ==> 2  6  10 14
+  # 13 14 15 16      1  5  9  13
+
+  # [[1,2,3,4][5,6,7,8],[9,10,11,12],[13,14,15,16]]
+  # time complexity O(N) where N is the number of elements in the matrix
+  def rotate(matrix)
+    length = matrix.length
+    rotated_matrix = Array.new(length) { Array.new(length) { nil } }
+
+    matrix.each_with_index do |row, i|
+      row.each_with_index do |_col, j|
+        rotated_matrix[length - 1 - i][j] = matrix[j][i]
+      end
+    end
+
+    rotated_matrix
+  end
+
+  def rotate_in_place(matrix)
+    length = matrix.length
+
+    (length / 2).times do |layer|
+      last = length - 1 - layer
+      for i in layer..last - 1
+        offset = i - layer
+        top_temp = matrix[layer][i]
+
+        matrix[layer][i] = matrix[i][last]
+        matrix[i][last] = matrix[last][last - offset]
+        matrix[last][last - offset] = matrix[last - offset][layer]
+        matrix[last - offset][layer] = top_temp
+      end
+    end
+
+    matrix
+  end
+
+  # PROBLEM 11: Write an algorithm such that if an element in an MxN matrix
+  # is 0, its entire row and column are set to 0.
+  # In-place algorithm with time complextiy O(N) where N is the number of elements
+  # in the matrix.
+  def change_zeros(matrix)
+    zero_rows = [].to_set
+    zero_cols = [].to_set
+
+    matrix.each_with_index do |row, i|
+      row.each_with_index do |_col, j|
+        if matrix[i][j] == 0
+          zero_rows.add(i)
+          zero_cols.add(j)
+        end
+      end
+    end
+
+    zero_rows.each do |row|
+      matrix[row].each_with_index { |_number, i| matrix[row][i] = 0 }
+    end
+
+    zero_cols.each do |col|
+      matrix.each_with_index { |_row, i| matrix[i][col] = 0 }
+    end
+
+    matrix
+  end
 end
