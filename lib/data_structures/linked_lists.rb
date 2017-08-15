@@ -124,12 +124,13 @@ class LinkedLists
 
       if index == 0
         self.head = current.next_node
-      else
-        until index == current_index
-          previous_node = current
-          current = current.next_node
-          current_index += 1
-        end
+        return current
+      end
+
+      until index == current_index
+        previous_node = current
+        current = current.next_node
+        current_index += 1
       end
 
       previous_node.next_node = current.next_node
@@ -250,5 +251,29 @@ class LinkedLists
       end
       current = current.next_node
     end
+  end
+
+  # PROBLEM5: Implement a function to check if a linked list is a palindrome.
+  # 0 -> 1 -> 2 -> 1 -> 0
+  def palindrome?(head)
+    current = head
+    marker = head
+    stack = []
+
+    while marker && marker.next_node
+      stack << current.value
+      current = current.next_node
+      marker = marker.next_node.next_node
+    end
+
+    # if the number of the elements is odd
+    current = current.next_node if marker
+
+    while current
+      return false unless stack.pop == current.value
+      current = current.next_node
+    end
+
+    true
   end
 end

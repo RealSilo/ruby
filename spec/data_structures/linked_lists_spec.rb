@@ -90,4 +90,21 @@ describe LinkedLists do
       expect(s2.next_node).to be_nil
     end
   end
+
+  describe '#palindrome?' do
+    let(:s1) { LinkedLists::SinglyLinkedNode.new(1) }
+    let(:s2) { LinkedLists::SinglyLinkedNode.new(2, s1) }
+    let(:s3) { LinkedLists::SinglyLinkedNode.new(3, s2) }
+    let(:s4) { LinkedLists::SinglyLinkedNode.new(2, s3) }
+    let(:s5) { LinkedLists::SinglyLinkedNode.new(1, s4) }
+
+    it 'returns true if palindrome' do
+      expect(subject.palindrome?(s5)).to be_truthy
+    end
+
+    it 'returns false if not palindrome' do
+      s5.value = 2
+      expect(subject.palindrome?(s5)).to be_falsey
+    end
+  end
 end
