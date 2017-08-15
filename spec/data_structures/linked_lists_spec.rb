@@ -59,7 +59,6 @@ describe LinkedLists do
   end
 
   describe '#remove_duplicate' do
-    
     let(:s1) { LinkedLists::SinglyLinkedNode.new(2) }
     let(:s2) { LinkedLists::SinglyLinkedNode.new(3, s1) }
     let(:s3) { LinkedLists::SinglyLinkedNode.new(1, s2) }

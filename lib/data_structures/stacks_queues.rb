@@ -163,19 +163,6 @@ class StacksQueues
     end
   end
 
-  # qwts = QueueWithTwoStacks.new
-  # qwts.enqueue(1)
-  # qwts.enqueue(2)
-  # qwts.enqueue(3)
-  # qwts.dequeue
-  # puts qwts.inspect
-  # qwts.dequeue
-  # qwts.enqueue(4)
-  # qwts.dequeue
-  # puts qwts.inspect
-  # qwts.dequeue
-  # puts qwts.inspect
-
   # PROBLEM 3: Implement a Stack with a LinkedList
   module LinkedList
     class Node
@@ -258,15 +245,191 @@ class StacksQueues
       end
     end
 
-    q = Queue.new
-    q.enqueue(1)
-    q.enqueue(2)
-    q.enqueue(3)
-    q.enqueue(4)
-    p q.iterate
-    q.dequeue
-    q.dequeue
-    q.dequeue
-    p q.inspect
+    # q = Queue.new
+    # q.enqueue(1)
+    # q.enqueue(2)
+    # q.enqueue(3)
+    # q.enqueue(4)
+    # p q.iterate
+    # q.dequeue
+    # q.dequeue
+    # q.dequeue
+    # p q.inspect
+  end
+
+  # PROBLEM5: Stack min method with O(1)
+  module StackMin
+    class Node
+      attr_accessor :value, :next_node, :prev_min
+
+      def initialize(value, next_node = nil)
+        @value = value
+        @next_node = next_node
+        @prev_min = nil
+      end
+    end
+
+    class Stack
+      attr_reader :min
+
+      def initialize
+        @first = nil
+        @min = nil
+      end
+
+      def push(val)
+        @first = Node.new(val, @first)
+        @min = @first unless @first.next_node
+        if @first.value < @min.value
+          @first.prev_min = @min
+          @min = @first
+        end
+      end
+
+      def pop
+        raise 'Stack is empty' if empty?
+        value = @first.value
+        @min = @first.prev_min if @min == @first
+        @first = @first.next_node
+        value
+      end
+
+      def empty?
+        @first.nil?
+      end
+
+      def min
+        @min.value
+      end
+    end
+  end
+
+  # PROBLEM6: Sort Stack: Write a program to sort a stack such that the smallest
+  # items are on the top. You can use an additional temporary stack, but you may
+  # not copy the elements into any other data structure (such as an array). The
+  # stack supports the following operations: push, pop, peek, and isEmpty.
+
+  # This algorithm is O(N2) time and O(N) space.
+  # If we have the opportunity to have one more stack we could create 2 temp
+  # stacks and use modified merge/quick sort.
+  def sort_stack(stack)
+    temp_stack = Stack.new
+
+    until stack.empty?
+      temp = stack.pop
+      
+      # while the top element in the temp_stack is greater than temp we push
+      # those elements to the stack and push the temp to the temp stack, so
+      # temp is always gets to the right place
+      while !temp_stack.empty? && temp_stack.peek > temp
+        stack.push(temp_stack.pop)
+      end
+
+      temp_stack.push(temp)
+    end
+
+    until temp_stack.empty?
+      stack.push(temp_stack.pop)
+    end
+
+    stack
+  end
+
+  # PROBLEM7: An animal shelter, which holds only dogs and cats, operates on a
+  # strictly "FIFO" basis. Peoplemustadopteitherthe"oldest"(based on arrival
+  # time) of all animals at the shelter, or they can select whether they would
+  # prefer a dog or a cat (and will receive the oldest animal of that type).
+  # They cannot select which speci c animal they would like. Create the data
+  # structures to maintain this system and implement operations such as enqueue,
+  # dequeueAny, dequeueDog, and dequeueCat.
+
+  module AnimalQueueProblem
+    class Node
+      attr_accessor :value, :next_node, :time
+
+      def initialize(value, next_node = nil)
+        @value = value
+        @next_node = next_node
+        @time = Time.now
+      end
+    end
+
+    class Queue
+      attr_reader :first, :last
+
+      def initialize
+        @first = nil
+        @last = nil
+      end
+
+      def enqueue(value)
+        node = Node.new(value, nil)
+        @last.next_node = node if @last
+        @last = node
+        @first = node unless @first
+      end
+
+      def dequeue
+        raise 'Queue is empty' if empty?
+        value = @first.value
+        @last = nil unless @first.next_node
+        @first = @first.next_node
+        value
+      end
+
+      def empty?
+        @first.nil?
+      end
+    end
+
+    class Animal
+      def initialize(name, age)
+        @name = name
+        @age = age
+      end
+    end
+
+    class Dog < Animal
+    end
+
+    class Cat < Animal
+    end
+
+    class AnimalQueue
+      attr_reader :dogs, :cats
+
+      def initialize
+        @dogs = Queue.new
+        @cats = Queue.new
+      end
+
+      def enqueue(animal)
+        if animal.is_a?(Dog)
+          @dogs.enqueue(animal)
+        else
+          @cats.enqueue(animal)
+        end
+      end
+
+      def dequeue_any
+        return @dogs.dequeue if @cats.empty?
+        return @cats.dequeue if @dogs.empty?
+        @dogs.last.time < @cats.last.time ? @dogs.dequeue : @cats.dequeue
+      end
+
+      def dequeue_cat
+        @cats.dequeue
+      end
+
+      def dequeue_dog
+        @dogs.dequeue
+      end
+    end
+
+    # animal_queue = AnimalQueue.new
+    # dog = Dog.new('Jack', 5)
+    # animal_queue.enqueue(dog)
+    # p animal_queue.dogs.inspect
+    # p animal_queue.dequeue_any
   end
 end

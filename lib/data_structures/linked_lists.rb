@@ -282,6 +282,9 @@ class LinkedLists
   # defined based on reference, not value. That is, if the kth node of the first
   # linked list is the exact same node (by reference) as the jth node of the second
   # linked list, then they are intersecting.
+
+  # This algorithm takes O(M + N) time, where M and N are the lengths of the two
+  # linked lists.
   def find_intersection(head1, head2)
     current1 = head1
     current2 = head2
