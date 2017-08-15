@@ -276,4 +276,49 @@ class LinkedLists
 
     true
   end
+
+  # PROBLEM6: Intersection: Given two (singly) linked lists, determine if the two
+  # lists intersect. Return the intersecting node. Note that the intersection is
+  # defined based on reference, not value. That is, if the kth node of the first
+  # linked list is the exact same node (by reference) as the jth node of the second
+  # linked list, then they are intersecting.
+  def find_intersection(head1, head2)
+    current1 = head1
+    current2 = head2
+
+    result1 = find_tail_helper(current1)
+    result2 = find_tail_helper(current2)
+
+    length1, tail1 = result1[:length], result1[:current]
+    length2, tail2 = result2[:length], result2[:current]
+
+    return nil unless tail1 == tail2
+
+    shorter = length1 <= length2 ? head1 : head2
+    longer = length2 <= length1 ? head1 : head2
+
+    until length1 == length2
+      longer = longer.next_node
+      length1 < length2 ? length2 -= 1 : length1 -= 1
+    end
+
+    until shorter == longer
+      shorter = shorter.next_node
+      longer = longer.next_node
+    end
+
+    shorter
+  end
+
+  def find_tail_helper(current)
+    current = current
+    length = 0
+
+    while current.next_node
+      length += 1
+      current = current.next_node
+    end
+
+    { current: current, length: length }
+  end
 end

@@ -107,4 +107,26 @@ describe LinkedLists do
       expect(subject.palindrome?(s5)).to be_falsey
     end
   end
+
+  describe '#find_intersection' do
+    let(:s1) { LinkedLists::SinglyLinkedNode.new(1) }
+    let(:s2) { LinkedLists::SinglyLinkedNode.new(2, s1) }
+    let(:s3) { LinkedLists::SinglyLinkedNode.new(3, s2) }
+    let(:s4) { LinkedLists::SinglyLinkedNode.new(4, s3) }
+
+    let(:s5) { LinkedLists::SinglyLinkedNode.new(5) }
+    let(:s6) { LinkedLists::SinglyLinkedNode.new(6, s5) }
+    let(:s7) { LinkedLists::SinglyLinkedNode.new(7, s6) }
+    let(:s8) { LinkedLists::SinglyLinkedNode.new(8, s7) }
+    let(:s9) { LinkedLists::SinglyLinkedNode.new(9, s8) }
+
+    it 'returns nil if no intersection' do
+      expect(subject.find_intersection(s4, s9)).to be_nil
+    end
+
+    it 'returns the node at the intersection' do
+      s6.next_node = s2
+      expect(subject.find_intersection(s4, s9)).to eq(s2)
+    end
+  end
 end
