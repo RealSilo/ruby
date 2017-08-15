@@ -407,7 +407,9 @@ class Arrays
 
     matrix.each_with_index do |row, i|
       row.each_with_index do |_col, j|
-        rotated_matrix[length - 1 - i][j] = matrix[j][i]
+        # rotated_matrix[length - 1 - i][j] = matrix[j][i]
+        # rotated_matrix[i][j] = matrix[j][length - 1 - i]
+        rotated_matrix[length - 1 - j][i] = matrix[i][j]
       end
     end
 
