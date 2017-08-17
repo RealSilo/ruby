@@ -137,7 +137,7 @@ class Graphs
     routes
   end
 
-  p Graphs.new.dijkstra(atlanta, graph)
+  # p Graphs.new.dijkstra(atlanta, graph)
 
   # Depth-First Search (DFS)
   # it explores possible vertices down each branch before backtracking
@@ -150,14 +150,51 @@ class Graphs
   # mark the current vertex visited
   # explorce each adjacent vertex that is not included in the visited set
 
+  # Implementation with the Graph/Vertex above
   def dfs(graph, start_node)
+    visited = [].to_set
+    stack = [start_node]
+
+    until stack.empty?
+      vertex = stack.pop
+
+      next if visited.include?(vertex)
+
+      visited.add(vertex)
+
+      graph.vertex(vertex).connections.each do |key, value|
+        stack << key
+      end
+    end
+
+    visited
+  end
+
+  g = Graph.new
+  gr = {
+    'A' => ['B', 'C'],
+    'B' => ['A', 'D', 'E'],
+    'C' => ['A', 'F'],
+    'D' => ['B'],
+    'E' => ['F'],
+    'F' => []
+  }
+  gr.each do |key, val|
+    val.each do |value|
+      g.add_edge(key, value)
+    end
+  end
+
+  # p Graphs.new.dfs(g, 'A')
+
+  def simple_dfs(graph, start_node)
     visited = [].to_set
     stack = [start_node]
 
     while stack.any?
       vertex = stack.pop
 
-      next unless visited.include?(vertex)
+      next if visited.include?(vertex)
 
       visited.add(vertex)
 
@@ -192,8 +229,8 @@ class Graphs
     'F' => [].to_set
   }
 
-  p Graphs.new.dfs(simple_graph, 'A')
-  p Graphs.new.dfs_with_recursion(simple_graph, 'A')
+  # p Graphs.new.simple_dfs(simple_graph, 'A')
+  # p Graphs.new.dfs_with_recursion(simple_graph, 'A')
 
   simple_acyclic_graph = {
     'A' => ['C', 'B'].to_set,
@@ -238,7 +275,7 @@ class Graphs
   end
 
   # p Graphs.new.topological_sort(simple_acyclic_graph, 'A')
-  p Graphs.new.topological_sort(other_acyclic_graph, 'A')
+  # p Graphs.new.topological_sort(other_acyclic_graph, 'A')
 
   # Breadth-first search (BFS)
   # Questions to be answered by BFS
@@ -247,20 +284,19 @@ class Graphs
 
   # Greedy algorithm
   # time complexity: O(V+E)
-
-  def bfs(graph, start_node)
-    visited = [].to_set
+  def simple_bfs(graph, start_node)
+    visited = []
     queue = [start_node]
 
     while queue.any?
       vertex = queue.shift
 
-      next unless visited.include?(vertex)
+      next if visited.include?(vertex)
       # an if else statement could be added here if we look
       # for some property that should stop the algorithm e.g.
       # shortest path to this node
 
-      visited.add(vertex)
+      visited << vertex
 
       graph[vertex].each do |node|
         queue << node unless visited.include?(node)
@@ -270,8 +306,32 @@ class Graphs
     visited
   end
 
-  bfs_visit = Graphs.new.bfs(simple_graph, 'B')
-  p bfs_visit
+  # bfs_visit = Graphs.new.simple_bfs(simple_graph, 'A')
+  # p bfs_visit
+
+  def simple_bfs_path_to(graph, start_node, to_node)
+    queue = [[start_node]]
+    visited = []
+
+    while queue.any?
+      path = queue.shift
+      vertex = path[-1]
+
+      return path if vertex == to_node
+      next if visited.include?(vertex)
+      visited << vertex
+
+      graph[vertex].each do |node|
+        new_path = Array.new(path)
+        new_path << node
+        queue << new_path
+        return new_path if node == to_node
+      end
+    end
+  end
+
+  bfs_shortest = Graphs.new.simple_bfs_path_to(simple_graph, 'A', 'F')
+  p bfs_shortest
 
   def distance_with_bfs(graph, root)
     node_lengths = {}

@@ -263,6 +263,38 @@ end
 # let MyClass.new be your default way of creating new objects. Add in a builder only when
 # requirements force you to do so.
 
+# Blocks can be also helpful invoking the builder:
+
+class LaptopBlockBuilder < AbstractComputerBuilder
+  attr_reader :computer
+
+  def self.build(&block)
+    builder = new # self.new
+    block.call(builder)
+    builder.computer
+  end
+
+  def initialize
+    @computer = Laptop.new
+  end
+
+  def display=(display)
+    raise 'Laptop display must be lcd' unless display == :lcd
+  end
+
+  def add_cd(writer = false)
+    @computer.drives << LaptopDrive.new(:cd, 760, writer)
+  end
+end
+
+comp = LaptopBlockBuilder.build do |builder|
+  builder.add_hard_disk(100_000)
+  builder.turbo
+  builder.add_cd(true)
+end
+
+p comp
+
 # WRAP UP
 
 # The idea behind the Builder pattern is that if your object is hard to build, if you
