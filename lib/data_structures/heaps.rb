@@ -57,7 +57,7 @@ class MinHeap
     while idx > 1 && heap[idx] < heap[idx / 2]
       heap[idx], heap[idx / 2] = heap[idx / 2], heap[idx]
 
-      idx = idx / 2
+      idx /= 2
     end
   end
 

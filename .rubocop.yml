@@ -42,6 +42,8 @@ Style/GuardClause:
   Enabled: false
 Style/ConditionalAssignment:
   Enabled: false
+Style/WordArray:
+  Enabled: false
 Documentation:
   Enabled: false
 Metrics/ClassLength:

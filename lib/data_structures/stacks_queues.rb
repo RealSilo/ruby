@@ -216,7 +216,7 @@ class StacksQueues
       def enqueue(value)
         # @first = Node.new(value, @first)
         node = Node.new(value, nil)
-        @last.next_node = node if @last
+        @last&.next_node = node
         @last = node
         @first = node unless @first
       end
@@ -317,7 +317,7 @@ class StacksQueues
 
     until stack.empty?
       temp = stack.pop
-      
+
       # while the top element in the temp_stack is greater than temp we push
       # those elements to the stack and push the temp to the temp stack, so
       # temp is always gets to the right place
@@ -328,9 +328,7 @@ class StacksQueues
       temp_stack.push(temp)
     end
 
-    until temp_stack.empty?
-      stack.push(temp_stack.pop)
-    end
+    stack.push(temp_stack.pop) until temp_stack.empty?
 
     stack
   end
@@ -364,7 +362,7 @@ class StacksQueues
 
       def enqueue(value)
         node = Node.new(value, nil)
-        @last.next_node = node if @last
+        @last&.next_node = node
         @last = node
         @first = node unless @first
       end

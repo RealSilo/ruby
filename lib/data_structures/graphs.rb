@@ -59,20 +59,6 @@ class Graphs
     end
   end
 
-  graph = Graph.new
-  atlanta = graph.add_vertex('Atlanta')
-  graph.add_vertex('Boston')
-  graph.add_vertex('Chicago')
-  graph.add_vertex('Denver')
-  graph.add_vertex('El Paso')
-  graph.add_edge('Atlanta', 'Boston', 100)
-  graph.add_edge('Atlanta', 'Denver', 160)
-  graph.add_edge('Boston', 'Chicago', 120)
-  graph.add_edge('Boston', 'Denver', 180)
-  graph.add_edge('Chicago', 'El Paso', 80)
-  graph.add_edge('Denver', 'Chicago', 40)
-  graph.add_edge('Denver', 'El Paso', 140)
-
   # Find the cheapest way from Atlanta to the other cities.
   # shortest path problem
 
@@ -137,6 +123,15 @@ class Graphs
     routes
   end
 
+  # graph = Graph.new
+  # atlanta = graph.add_vertex('Atlanta')
+  # graph.add_edge('Atlanta', 'Boston', 100)
+  # graph.add_edge('Atlanta', 'Denver', 160)
+  # graph.add_edge('Boston', 'Chicago', 120)
+  # graph.add_edge('Boston', 'Denver', 180)
+  # graph.add_edge('Chicago', 'El Paso', 80)
+  # graph.add_edge('Denver', 'Chicago', 40)
+  # graph.add_edge('Denver', 'El Paso', 140)
   # p Graphs.new.dijkstra(atlanta, graph)
 
   # Depth-First Search (DFS)
@@ -152,7 +147,7 @@ class Graphs
 
   # Implementation with the Graph/Vertex above
   def dfs(graph, start_node)
-    visited = [].to_set
+    visited = []
     stack = [start_node]
 
     until stack.empty?
@@ -160,35 +155,18 @@ class Graphs
 
       next if visited.include?(vertex)
 
-      visited.add(vertex)
+      visited << vertex
 
-      graph.vertex(vertex).connections.each do |key, value|
-        stack << key
+      graph.vertex(vertex).connections.each do |key, _weight|
+        stack << key unless visited.include?(key)
       end
     end
 
     visited
   end
 
-  g = Graph.new
-  gr = {
-    'A' => ['B', 'C'],
-    'B' => ['A', 'D', 'E'],
-    'C' => ['A', 'F'],
-    'D' => ['B'],
-    'E' => ['F'],
-    'F' => []
-  }
-  gr.each do |key, val|
-    val.each do |value|
-      g.add_edge(key, value)
-    end
-  end
-
-  # p Graphs.new.dfs(g, 'A')
-
   def simple_dfs(graph, start_node)
-    visited = [].to_set
+    visited = []
     stack = [start_node]
 
     while stack.any?
@@ -196,7 +174,7 @@ class Graphs
 
       next if visited.include?(vertex)
 
-      visited.add(vertex)
+      visited << vertex
 
       graph[vertex].each do |node|
         stack << node unless visited.include?(node)
@@ -208,7 +186,7 @@ class Graphs
 
   @@dfs_visited = [].to_set
   def dfs_with_recursion(graph, start_node)
-    dfs_helper(graph, 'A')
+    dfs_helper(graph, start_node)
     @@dfs_visited
   end
 
@@ -220,41 +198,9 @@ class Graphs
     end
   end
 
-  simple_graph = {
-    'A' => ['B', 'C'].to_set,
-    'B' => ['A', 'D', 'E'].to_set,
-    'C' => ['A', 'F'].to_set,
-    'D' => ['B'].to_set,
-    'E' => ['F'].to_set,
-    'F' => [].to_set
-  }
-
-  # p Graphs.new.simple_dfs(simple_graph, 'A')
-  # p Graphs.new.dfs_with_recursion(simple_graph, 'A')
-
-  simple_acyclic_graph = {
-    'A' => ['C', 'B'].to_set,
-    'B' => ['D', 'E'].to_set,
-    'C' => ['F'].to_set,
-    'D' => ['E'].to_set,
-    'E' => ['F'].to_set,
-    'F' => [].to_set
-  }
-
-  other_acyclic_graph = {
-    'A' => ['B', 'C'],
-    'B' => ['D'],
-    'C' => ['D'],
-    'D' => ['E', 'F'],
-    'E' => ['G'],
-    'F' => ['G'],
-    'G' => []
-  }
-
   # Topological sort
   # It uses modified DFS to find a topological order.
-
-  @@tvisited = [].to_set
+  @@tvisited = []
   @@tsorted = []
   def topological_sort(graph, root)
     topological_helper(graph, root)
@@ -262,7 +208,7 @@ class Graphs
   end
 
   def topological_helper(graph, vertex)
-    @@tvisited.add(vertex)
+    @@tvisited << vertex
 
     graph[vertex].each do |node|
       topological_helper(graph, node) unless @@tvisited.include?(node)
@@ -271,11 +217,8 @@ class Graphs
     # When we are coming back from the last vertex of the recursive call stack
     # we add it to the array since there is no way an other element could come
     # after it as this is the last invocation in the stack.
-    @@tsorted.unshift(vertex)
+    @@tsorted.unshift(vertex) unless @@tsorted.include?(vertex)
   end
-
-  # p Graphs.new.topological_sort(simple_acyclic_graph, 'A')
-  # p Graphs.new.topological_sort(other_acyclic_graph, 'A')
 
   # Breadth-first search (BFS)
   # Questions to be answered by BFS
@@ -284,6 +227,25 @@ class Graphs
 
   # Greedy algorithm
   # time complexity: O(V+E)
+  def bfs(graph, start_node)
+    visited = []
+    queue = [start_node]
+
+    while queue.any?
+      vertex = queue.shift
+
+      next if visited.include?(vertex)
+
+      visited << vertex
+
+      graph.vertex(vertex).connections.each do |key, _weight|
+        queue << key unless visited.include?(key)
+      end
+    end
+
+    visited
+  end
+
   def simple_bfs(graph, start_node)
     visited = []
     queue = [start_node]
@@ -306,10 +268,7 @@ class Graphs
     visited
   end
 
-  # bfs_visit = Graphs.new.simple_bfs(simple_graph, 'A')
-  # p bfs_visit
-
-  def simple_bfs_path_to(graph, start_node, to_node)
+  def shortest_path_with_bfs(graph, start_node, to_node)
     queue = [[start_node]]
     visited = []
 
@@ -330,9 +289,7 @@ class Graphs
     end
   end
 
-  bfs_shortest = Graphs.new.simple_bfs_path_to(simple_graph, 'A', 'F')
-  p bfs_shortest
-
+  # The following solution uses adjacency matrix
   def distance_with_bfs(graph, root)
     node_lengths = {}
 
@@ -363,15 +320,4 @@ class Graphs
 
     node_lengths
   end
-
-  adjacency_matrix = [
-    [0, 1, 1, 1, 0],
-    [0, 0, 1, 0, 0],
-    [1, 1, 0, 0, 0],
-    [0, 0, 0, 1, 0],
-    [0, 1, 0, 0, 0]
-  ]
-
-  # distances = Graphs.new.distance_with_bfs(adjacency_matrix, 1)
-  # p distances
 end
