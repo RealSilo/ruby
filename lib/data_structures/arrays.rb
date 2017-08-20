@@ -295,14 +295,14 @@ class Arrays
     string.each_char.with_index do |char, i|
       if string[i + 1] == ' '
         coded_char << char
-        parsed_array << coded_char unless coded_char == ''
+        parsed_array << coded_char
         coded_char = ''
       else
         coded_char << char unless char == ' '
       end
     end
 
-    parsed_array << coded_char unless coded_char == ''
+    parsed_array << coded_char
 
     parsed_array
   end

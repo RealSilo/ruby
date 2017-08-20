@@ -3,15 +3,11 @@ require 'byebug'
 
 class Graphs
   class Vertex
-    UNVISITED = 0
-    VISITED = 1
-
     attr_reader :id, :connections
 
     def initialize(key)
       @id = key
       @connections = {}
-      @visited = UNVISITED
     end
 
     def add_neighbor(nbr, weight = 0)
@@ -43,8 +39,7 @@ class Graphs
     end
 
     def vertex(key)
-      return @vertex_list[key] if @vertex_list.include?(key)
-      nil
+      @vertex_list[key]
     end
 
     def add_edge(from, to, weight = 0)
@@ -133,6 +128,16 @@ class Graphs
   # graph.add_edge('Denver', 'Chicago', 40)
   # graph.add_edge('Denver', 'El Paso', 140)
   # p Graphs.new.dijkstra(atlanta, graph)
+
+  # Used to find the shortest path from a source node to every other node in any
+  # edge-weighted digraph with negative or non-negative weights. It's slower than
+  # Dijkstra's algorithm but it has the advantage of working with negative weights.
+  # Notice, though, that it won't work if the graph has a negative cycle (i.e.
+  # a cycle whose the sum of the edges' weight is a negative value, since any path
+  # could be made shorter just with another walk, over and over).
+
+  def bellman_ford(root, graph)
+  end
 
   # Depth-First Search (DFS)
   # it explores possible vertices down each branch before backtracking
