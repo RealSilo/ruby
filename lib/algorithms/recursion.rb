@@ -61,7 +61,7 @@ class Recursion
     string[-1] + recursive_reverse(string[0..-2])
   end
 
-  # PROBLEM 5: Given a string write a  recursive function that returns all
+  # PROBLEM 5: Given a string write a recursive function that returns all
   # the permutations of that string
   # With 'abc' as arg would return ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
   # Duplicates are fine => 'xxx' would return [ 'xxx' * 6]
@@ -150,5 +150,12 @@ class Recursion
     end
 
     min_coins
+  end
+
+  # PROBLEM8: Write a function to perform integer division without using either
+  # the / or * operators.
+  def divide(m, n)
+    return 0 if m < n
+    1 + divide(m - n, n)
   end
 end

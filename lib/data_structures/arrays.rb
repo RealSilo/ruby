@@ -366,8 +366,8 @@ class Arrays
 
     string = string[0..length - 1] # removing spaces from the end
 
-    (length - 1).times do |i|
-      space_count += 1 if string[i] == ' '
+    string.each_char do |char|
+      space_count += 1 if char == ' '
     end
 
     index = length + space_count * 2 # calculating the new length
@@ -435,7 +435,7 @@ class Arrays
     matrix
   end
 
-  # PROBLEM 11: Write an algorithm such that if an element in an MxN matrix
+  # PROBLEM11: Write an algorithm such that if an element in an MxN matrix
   # is 0, its entire row and column are set to 0.
   # In-place algorithm with time complextiy O(N) where N is the number of elements
   # in the matrix.
@@ -461,5 +461,103 @@ class Arrays
     end
 
     matrix
+  end
+
+  # PROBLEM12: Find the first non-repeated (unique) character in a given string.
+  # Time complexity O(N), space complexity O(N) where N is the length of the string.
+  def first_non_repeated_char(string)
+    return nil if string.empty?
+    store = {}
+
+    string.each_char do |letter|
+      if store[letter]
+        store[letter] += 1
+      else
+        store[letter] = 1
+      end
+    end
+
+    string.each_char do |letter|
+      return letter if store[letter] == 1
+    end
+  end
+
+  # PROBLEM13: Find all permutations of a string.
+  # Easy solution: "abc".chars.permutation.map &:join
+  def permutations(string)
+    # output = []
+
+    # if string.length == 1
+    #   output = [string]
+    # else
+    #   string.each_char.with_index do |char, index|
+    #     for perm in permutation_count((string[0..index] + string[(index + 1)..-1])) do
+    #       output += [char + perm]
+    #     end
+    #   end
+    # end
+
+    # output
+  end
+
+  # PROBLEM14: Remove all the duplicated chars from a string.
+  def remove_duplicates(string)
+    store = {}
+
+    string.each_char do |letter|
+      if store[letter]
+        store[letter] += 1
+      else
+        store[letter] = 1
+      end
+    end
+
+    (string.length - 1).downto(0) do |i|
+      if store[string[i]] > 1
+        store[string[i]] -= 1
+        string.slice!(i)
+      end
+    end
+
+    string
+  end
+
+  # PROBLEM15: How to check if a String is valid shuffle of two String?
+  # Order must be kept so 'ABDEFC' is a valid shuffle of 'ABC' and 'DEF' but
+  # 'BADEFC' is not
+  def shuffle_of_two_strings?(string1, string2, string3)
+    i = 0
+    j = 0
+
+    string3.each_char do |char|
+      if char == string1[i]
+        i += 1
+      elsif char == string2[j]
+        j += 1
+      else
+        return false
+      end
+    end
+
+    true
+  end
+
+  # PROBLEM16: Write a program to check if a String contains another String in
+  # O(N) time.
+  def substring_of_string(string1, string2)
+    i = 0
+
+    string1.each_char.with_index do |char, j|
+      if char == string2[i]
+        i += 1
+        return j - string2.length + 2 if i == string2.length - 1
+      elsif char == string2[0]
+        i = 1
+      else
+        i = 0
+      end
+    end
+
+    false
   end
 end

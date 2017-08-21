@@ -105,6 +105,3 @@ end
 
 p graph.bfs('A')
 p graph.dfs('A')
-
-
-

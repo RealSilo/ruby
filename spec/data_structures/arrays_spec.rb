@@ -2,6 +2,8 @@ require_relative '../../lib/data_structures/arrays'
 require 'byebug'
 
 describe Arrays do
+  subject { described_class.new }
+
   describe 'dynamic array' do
     let(:dynamic_array) { Arrays::DynamicArray.new(1) }
 
@@ -23,8 +25,6 @@ describe Arrays do
   end
 
   describe '#anagram' do
-    subject { described_class.new }
-
     context 'when the 2 strings are anagrams' do
       let(:string1) { 'a R a' }
       let(:string2) { 'RAA' }
@@ -45,8 +45,6 @@ describe Arrays do
   end
 
   describe '#sorted_array_pair_sum' do
-    subject { described_class.new }
-
     context 'when there is a sum of pai that equals the number' do
       let(:array) { [1, 2, 4, 4] }
       let(:number) { 8 }
@@ -85,8 +83,6 @@ describe Arrays do
   end
 
   describe '#unsorted_array_pair_sum' do
-    subject { described_class.new }
-
     context 'when there is a sum of pai that equals the number' do
       let(:array) { [4, 2, 1, 4] }
       let(:number) { 8 }
@@ -129,8 +125,6 @@ describe Arrays do
       let(:array1) { [1, 2, 3, 4, 5, 6] }
       let(:array2) { [4, 3, 1, 6, 2] }
 
-      subject { described_class.new }
-
       it 'returns the missing element' do
         expect(subject.find_missing(array1, array2)).to eq 5
       end
@@ -139,8 +133,6 @@ describe Arrays do
     context 'with duplication' do
       let(:array1) { [1, 2, 3, 4, 5, 5] }
       let(:array2) { [4, 3, 1, 5, 2] }
-
-      subject { described_class.new }
 
       it 'returns the missing element' do
         expect(subject.find_missing(array1, array2)).to eq 5
@@ -152,8 +144,6 @@ describe Arrays do
     context 'without positive and negative elements' do
       let(:array) { [1, 2, -1, 3, 4, 10, 10, -10, -1] }
 
-      subject { described_class.new }
-
       it 'returns the largest const sum' do
         expect(subject.largest_cont_sum(array)).to eq 29
       end
@@ -161,8 +151,6 @@ describe Arrays do
 
     context 'with only negative elements' do
       let(:array) { [-1, -2, -1, -10, -1] }
-
-      subject { described_class.new }
 
       it 'returns 0' do
         expect(subject.largest_cont_sum(array)).to eq 0
@@ -174,8 +162,6 @@ describe Arrays do
     context 'without leading and trailing whitespaces' do
       let(:string) { 'Haha hihi huhu5' }
 
-      subject { described_class.new }
-
       it 'returns the reversed sentence' do
         expect(subject.sentence_reversal(string)).to eq 'huhu5 hihi Haha'
       end
@@ -183,8 +169,6 @@ describe Arrays do
 
     context 'with leading and trailing whitespaces' do
       let(:string) { '  Haha hihi huhu5  ' }
-
-      subject { described_class.new }
 
       it 'returns the reversed sentence' do
         expect(subject.sentence_reversal(string)).to eq 'huhu5 hihi Haha'
@@ -196,8 +180,6 @@ describe Arrays do
     context 'with non-repeating char at the beginning and the end' do
       let(:string) { 'gAABBccccd' }
 
-      subject { described_class.new }
-
       it 'returns the compressed string' do
         expect(subject.string_compression(string)).to eq 'g1A2B2c4d1'
       end
@@ -205,8 +187,6 @@ describe Arrays do
 
     context 'with repeating char at the beginning and the end' do
       let(:string) { 'AABBcccc' }
-
-      subject { described_class.new }
 
       it 'returns the compressed string' do
         expect(subject.string_compression(string)).to eq 'A2B2c4'
@@ -217,8 +197,6 @@ describe Arrays do
   describe '#parse_string' do
     let(:string) { ' 12 + 5 6 + 77' }
 
-    subject { described_class.new }
-
     it 'returns the parsed string' do
       expect(subject.parse_string(string)).to eq ['12', '+', '5', '6', '+', '77']
     end
@@ -228,8 +206,6 @@ describe Arrays do
     context 'when number is less than 1' do
       let(:number) { 0 }
 
-      subject { described_class.new }
-
       it 'returns 0' do
         expect(subject.number_of_trailing_zeros_of_factorial(number)).to eq 0
       end
@@ -237,8 +213,6 @@ describe Arrays do
 
     context 'when number is more than 1' do
       let(:number) { 5 }
-
-      subject { described_class.new }
 
       it 'returns the number of 0-s at the end of the factorial' do
         expect(subject.number_of_trailing_zeros_of_factorial(number)).to eq 1
@@ -250,8 +224,6 @@ describe Arrays do
     context 'when the string is empty' do
       let(:string) { '' }
 
-      subject { described_class.new }
-
       it 'returns true' do
         expect(subject.palindrome_without_recursion?(string)).to be_truthy
       end
@@ -259,8 +231,6 @@ describe Arrays do
 
     context 'when the string is a palindrome' do
       let(:string) { ' abcd dcb a' }
-
-      subject { described_class.new }
 
       it 'returns true' do
         expect(subject.palindrome_without_recursion?(string)).to be_truthy
@@ -270,8 +240,6 @@ describe Arrays do
     context 'when the string is NOT a palindrome' do
       let(:string) { 'e abceed dcb a' }
 
-      subject { described_class.new }
-
       it 'returns false' do
         expect(subject.palindrome_without_recursion?(string)).to be_falsey
       end
@@ -279,8 +247,6 @@ describe Arrays do
   end
 
   describe '#palindrome?' do
-    subject { described_class.new }
-
     context 'when the string is empty' do
       let(:string) { '' }
 
@@ -309,7 +275,6 @@ describe Arrays do
   describe '#urlify_inplace' do
     let(:string) { 'Mr John Smith  ' }
     let(:length) { 13 }
-    subject { described_class.new }
 
     it 'returns the urlified string' do
       expect(subject.urlify_inplace(string, length)).to eq('Mr%20John%20Smith')
@@ -319,7 +284,6 @@ describe Arrays do
   describe '#urlify' do
     let(:string) { 'Mr John Smith  ' }
     let(:length) { 13 }
-    subject { described_class.new }
 
     it 'returns the urlified string' do
       expect(subject.urlify(string, length)).to eq('Mr%20John%20Smith')
@@ -329,7 +293,6 @@ describe Arrays do
   describe '#urlify_backwards' do
     let(:string) { 'Mr John Smith             ' }
     let(:length) { 13 }
-    subject { described_class.new }
 
     it 'returns the urlified string' do
       expect(subject.urlify_backwards(string, length)).to eq('Mr%20John%20Smith')
@@ -339,30 +302,107 @@ describe Arrays do
   describe '#rotate' do
     let(:matrix) { [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]] }
 
-    subject { described_class.new }
-
     it 'returns the rotated matrix' do
-      expect(subject.rotate(matrix)).to eq([[4, 8, 12, 16], [3, 7, 11, 15], [2, 6, 10, 14], [1, 5, 9, 13]])
+      expect(subject.rotate(matrix)).to eq(
+        [[4, 8, 12, 16], [3, 7, 11, 15], [2, 6, 10, 14], [1, 5, 9, 13]]
+      )
     end
   end
 
   describe '#rotate_in_place' do
     let(:matrix) { [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]] }
 
-    subject { described_class.new }
-
     it 'returns the rotated matrix' do
-      expect(subject.rotate_in_place(matrix)).to eq([[4, 8, 12, 16], [3, 7, 11, 15], [2, 6, 10, 14], [1, 5, 9, 13]])
+      expect(subject.rotate_in_place(matrix)).to eq(
+        [[4, 8, 12, 16], [3, 7, 11, 15], [2, 6, 10, 14], [1, 5, 9, 13]]
+      )
     end
   end
 
   describe '#change_zeros' do
     let(:matrix) { [[1, 2, 3, 4], [5, 0, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]] }
 
-    subject { described_class.new }
-
     it 'returns the modified matrix' do
-      expect(subject.change_zeros(matrix)).to eq([[1, 0, 3, 4], [0, 0, 0, 0], [9, 0, 11, 12], [13, 0, 15, 16]])
+      expect(subject.change_zeros(matrix)).to eq(
+        [[1, 0, 3, 4], [0, 0, 0, 0], [9, 0, 11, 12], [13, 0, 15, 16]]
+      )
+    end
+  end
+
+  describe '#first_non_repeated_char' do
+    let(:string) { 'abcdabc' }
+
+    it 'returns the parsed string' do
+      expect(subject.first_non_repeated_char(string)).to eq('d')
+    end
+  end
+
+  # describe '#permutations' do
+  #   let(:string) { 'abc' }
+
+  #   subject { described_class.new }
+
+  #   it 'returns the parsed string' do
+  #     expect(subject.permutations('', string)).to eq(
+  #       ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
+  #     )
+  #   end
+  # end
+
+  describe '#remove_duplicates' do
+    let(:string) { 'ababcccddabdc' }
+
+    it 'returns the parsed string' do
+      expect(subject.remove_duplicates(string)).to eq('abcd')
+    end
+  end
+
+  describe '#shuffle_of_two_strings?' do
+    let(:string1) { 'abc' }
+    let(:string2) { 'def' }
+
+    context 'if shuffle' do
+      let(:string3) { 'adefbc' }
+
+      it 'returns true' do
+        expect(subject.shuffle_of_two_strings?(string1, string2, string3)).to be_truthy
+      end
+    end
+
+    context 'if not shuffle' do
+      let(:string3) { 'adefcb' }
+
+      it 'returns false' do
+        expect(subject.shuffle_of_two_strings?(string1, string2, string3)).to be_falsey
+      end
+    end
+  end
+
+  describe '#substring_of_string' do
+    let(:string1) { 'abcmmmamadef' }
+
+    context 'if substring' do
+      let(:string2) { 'mama' }
+
+      it 'returns the starting index' do
+        expect(subject.substring_of_string(string1, string2)).to eq 5
+      end
+    end
+
+    context 'if substring' do
+      let(:string2) { 'def' }
+
+      it 'returns the starting index' do
+        expect(subject.substring_of_string(string1, string2)).to eq 9
+      end
+    end
+
+    context 'if not shuffle' do
+      let(:string2) { 'haha' }
+
+      it 'returns false' do
+        expect(subject.substring_of_string(string1, string2)).to be_falsey
+      end
     end
   end
 end
