@@ -560,4 +560,23 @@ class Arrays
 
     false
   end
+
+  # PROBLEM17: One of the simplest and most widely known ciphers is a Caesar
+  # cipher, also known as a shift cipher. In a shift cipher the meanings of the
+  # letters are shifted by some set amount. A common modern use is the ROT13
+  # cipher, where the values of the letters are shifted by 13 places. Thus
+  # 'A' ↔ 'N', 'B' ↔ 'O' and so on.
+  def caesar_cipher(string)
+    split_str = string.split('');
+
+    split_str.each_with_index do |char, i|
+      unless split_str[i] == ' '
+        split_str[i] = split_str[i].ord + 13
+        split_str[i] -= 26 if split_str[i] > 90
+        split_str[i] = split_str[i].chr
+      end
+    end
+
+    split_str.join
+  end
 end

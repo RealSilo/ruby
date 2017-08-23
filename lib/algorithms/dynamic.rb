@@ -1,17 +1,15 @@
 class Dynamic
-  # PROBLEM 1: The knapsack problem:
-  # You wanna take a few item (value, weight) You can carry 4lbs.
-  # What items should you put ing the bag o maximize the value?
-
-  # Stereo $3000 3lbs
-  # Laptop $2000 2lbs
-  # Guitar $1500 1lbs
-  # Your limit is 4lbs -> Correct solution guitar + laptop = $3500
+  # PROBLEM 1: Suppose you’re a greedy thief. You’re in a store with a knapsack,
+  # and there are all these items you can steal. But you can only take what you
+  # can fit in your knapsack. How can you maximize the value stolen?
 
   # This also could be solved with a greedy solution which doesn't give
   # you the right answer but it's pretty close to it. Greedy solution would
   # be to take the most expensive item that fits your bag then take the next
   # most expensive one...
+
+  def knapsack()
+  end
 
   # PROBLEM 2
   # Count the number of ways you can get the amount with the given coins.
@@ -57,18 +55,18 @@ class Dynamic
           end
         else
           if i == 0 && j == 0
-             num[i][j] = 0
-          elsif i == 0 &&  j > 0  #First ith element
-             num[i][j] = [0,  num[i][j - 1]].max
-          elsif j == 0 && i > 0  #First jth element
-              num[i][j] = [0, num[i - 1][j]].max
+            num[i][j] = 0
+          elsif i == 0 &&  j > 0  # First ith element
+            num[i][j] = [0,  num[i][j - 1]].max
+          elsif j == 0 && i > 0  # First jth element
+            num[i][j] = [0, num[i - 1][j]].max
           else
             num[i][j] = [num[i - 1][j], num[i][j - 1]].max
           end
         end
       end
     end
-    
+
     p num[s1.length - 1][s2.length - 1]
     chars.map(&:first).join
   end
@@ -76,7 +74,7 @@ class Dynamic
   # PROBLEM3: Common longest substring
   # 'abcdegfgh' and 'aqcezfg' => 'fg'
   # O(MN) time and O(MN) complexity
-  # Only the previous column of the grid storing the dynamic state is ever 
+  # Only the previous column of the grid storing the dynamic state is ever
   # actually used in computing the next column. Thus, these algorithm can be
   # altered to have only an O(N) storage requirement. By reassigning array
   # references between two 1D arrays, this can be done without copying the state
@@ -85,11 +83,11 @@ class Dynamic
   # of extra storage and algorithmic complexity.
   def common_longest_substring(str1, str2)
     return '' if str1.empty? || str2.empty?
-    
+
     array = Array.new(str1.length) { Array.new(str2.length) { 0 } }
     intersection_length = 0
     intersection_end    = 0
-    
+
     str1.length.times do |x|
       str2.length.times do |y|
         # Go to next if letters are not the same
