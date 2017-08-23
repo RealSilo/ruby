@@ -1,3 +1,4 @@
+require 'byebug'
 class Dynamic
   # PROBLEM 1: Suppose you’re a greedy thief. You’re in a store with a knapsack,
   # and there are all these items you can steal. But you can only take what you
@@ -8,8 +9,48 @@ class Dynamic
   # be to take the most expensive item that fits your bag then take the next
   # most expensive one...
 
-  def knapsack()
+  # The brute force solution would take O(2^N) steps as you have to find all
+  # the subsets of the set.
+
+  def knapsack(items, space, step)
+    grid = Array.new(items.size) { Array.new(space / step, 0) }
+    # stolen_items = []
+
+    items.each_with_index do |(_name, value), i|
+      (step..space).step(step).with_index do |size, j|
+        if i == 0 && j >= 0
+          grid[i][j] = value[:price] if value[:space] <= size
+        elsif j == 0 && i > 0
+          current_value = value[:space] <= size ? value[:price] : 0
+          grid[i][j] = [grid[i - 1][j], current_value].max
+        else
+          if size >= value[:space]
+            prev_max = grid[i - 1][j]
+            remaining_space = size - value[:space]
+            remaining_space_index = [0, remaining_space / step - 1].max
+            remaining_space_value = grid[i - 1][remaining_space_index]
+            current_value = value[:price] + remaining_space_value
+            grid[i][j] = [prev_max, current_value].max
+          else
+            grid[i][j] = grid[i - 1][j]
+          end
+        end
+      end
+    end
+
+    grid
   end
+
+  items = {
+    'porcelain': { price: 3000, space: 3 },
+    'guitar': { price: 2500, space: 2 },
+    'necklace': { price: 2000, space: 0.5 },
+    'laptop': { price: 1500, space: 1 },
+    'tv': { price: 1000, space: 2.5 },
+    'phone': { price: 800, space: 0.5 }
+  }
+
+  p Dynamic.new.knapsack(items, 4, 0.5)
 
   # PROBLEM 2
   # Count the number of ways you can get the amount with the given coins.

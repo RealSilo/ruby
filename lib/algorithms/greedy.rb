@@ -66,7 +66,7 @@ class Greedy
   items = [
     { name: 'porcelain', value: 3000, space: 3 },
     { name: 'guitar', value: 2500, space: 2 },
-    { name: 'necklace', value: 2000, space: 0.1 },
+    { name: 'necklace', value: 2000, space: 0.5 },
     { name: 'laptop', value: 1500, space: 1 },
     { name: 'tv', value: 1000, space: 2.5 },
     { name: 'phone', value: 800, space: 0.5 }
@@ -80,7 +80,7 @@ class Greedy
 
     while items.any?
       max_value_item = nil
-      
+
       items.each do |name, values|
         unless max_value_item
           max_value_item = name
@@ -104,7 +104,7 @@ class Greedy
   items2 = {
     'porcelain': { value: 3000, space: 3 },
     'guitar': { value: 2500, space: 2 },
-    'necklace': { value: 2000, space: 0.1 },
+    'necklace': { value: 2000, space: 0.5 },
     'laptop': { value: 1500, space: 1 },
     'tv': { value: 1000, space: 2.5 },
     'phone': { value: 800, space: 0.5 }
