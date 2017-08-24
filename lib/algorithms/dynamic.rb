@@ -1,5 +1,15 @@
 require 'byebug'
 class Dynamic
+  # Dynamic programming is a method for solving a complex problem by breaking it
+  # down into a collection of simpler subproblems, solving each of those
+  # subproblems just once, and storing their solutions.
+
+  # Dynamic programming is useful when you’re trying to optimize something given
+  # a constraint. In the knapsack problem, you have to maximize the value of the
+  # goods you stole, constrained by the size of the knapsack.
+  # You can use dynamic programming when the problem can be broken into discrete
+  # subproblems, and they don’t depend on each other.
+
   # PROBLEM 1: Suppose you’re a greedy thief. You’re in a store with a knapsack,
   # and there are all these items you can steal. But you can only take what you
   # can fit in your knapsack. How can you maximize the value stolen?
@@ -12,6 +22,7 @@ class Dynamic
   # The brute force solution would take O(2^N) steps as you have to find all
   # the subsets of the set.
 
+  # O(MN) where M is the number of items and N is space/step.
   def knapsack(items, space, step)
     grid = Array.new(items.size) { Array.new(space / step, 0) }
     # stolen_items = []
@@ -54,26 +65,31 @@ class Dynamic
 
   # PROBLEM 2
   # Count the number of ways you can get the amount with the given coins.
-  # def possible_set_of_coins_for_sum(amount, coins)
-  #   arr = [1] + [0] * amount
 
-  #   # Number of ways you can get amount is the sum of numbers you can get
-  #   # (amount - coin)
-  #   # In case of 'A', 'B', 'C'
-  #   # ways[i] => ways[i - 'A'] + ways[i - 'B'] + ways[i - 'C']
+  # Basic solution would be to find all the sets of coin combinations (2^N)
+  # With dynamic programming we can solve it with O(KN) time complexity where K
+  # is coin number and N is the amount.
+  def possible_set_of_coins_for_sum(amount, coins)
+    # We need one at the arr[0] spot since if the coin is 5 and the amount too
+    # then we have a solution.
+    arr = [1] + [0] * amount
 
-  #   # basic solution would be to find all the sets of coin combinations (2^N)
-  #   # where N is the number of amount
+    # Number of ways you can get amount is the sum of numbers you can get
+    # (amount - coin)
+    # In case of 'A', 'B', 'C'
+    # ways[i] => ways[i - 'A'] + ways[i - 'B'] + ways[i - 'C']
+    coins.each do |coin|
+      for i in (coin..amount)
+        arr[i] += arr[i - coin]
+        p [arr, coin, i]
+      end
+    end
 
-  #   # O(k * n) time complexity where k is coin number and n is the amount
-  #   coins.each do |coin|
-  #     for i in (coin..amount + 1)
-  #       arr[i] += arr[i - coin]
-  #     end
-  #   end
+    return 0 if amount == 0
+    arr[amount]
+  end
 
-  #   arr[amount]
-  # end
+  puts Dynamic.new.possible_set_of_coins_for_sum(5, [1, 2, 5])
 
   # PROBLEM3: Common longest subsequence
   # 'abcdegfgh' and 'aqcezfg' => 'acefg'
@@ -112,7 +128,7 @@ class Dynamic
     chars.map(&:first).join
   end
 
-  # PROBLEM3: Common longest substring
+  # PROBLEM4: Common longest substring
   # 'abcdegfgh' and 'aqcezfg' => 'fg'
   # O(MN) time and O(MN) complexity
   # Only the previous column of the grid storing the dynamic state is ever

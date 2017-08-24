@@ -91,16 +91,16 @@ class Trees
     # BSTs are a powerful node-based data structure that provides order
     # maintenance, while also offering fast search, insertion, and deletion.
 
-    attr_reader :size
+    attr_reader :size, :root
 
     def initialize
       @root = nil
       @size = 0
     end
 
-    def insert(data)
+    def insert(data, node = @root)
       if @root
-        insert_place(data, @root)
+        insert_place(data, node)
       else
         @root = TreeNode.new(data)
       end
@@ -270,15 +270,15 @@ class Trees
   btn = BinaryTree.new(TreeNode.new(20))
   ln = btn.insert_left(btn.root, 10)
   rn = btn.insert_right(btn.root, 30)
-  puts ln
-  puts rn
+  # puts ln
+  # puts rn
   btn.insert_left(ln, 5)
   btn.insert_right(rn, 40)
   btn.inorder
   btn.preorder
   btn.postorder
-  print btn.levelorder
-  puts btn.inspect
+  # print btn.levelorder
+  # puts btn.inspect
 
   bst = BinarySearchTree.new
   bst.insert(20)
@@ -333,8 +333,27 @@ class Trees
     tree.left = trim_tree(tree.left, min, max)
     tree.right = trim_tree(tree.right, min, max)
 
-    return true if min <= tree.val && tree.val <= max
-    return tree.right if tree.val < min
-    return tree.left if tree.val > max
+    return true if min <= tree.data && tree.data <= max
+    return tree.right if tree.data < min
+    return tree.left if tree.data > max
   end
+
+  # p bst
+  # self.trim_tree(bst.root, 2, 10)
+  # p bst
+
+  # PROBLEM 3: Given a sorted (increasing order) array with unique integer
+  # elements, write an algorithm to create a binary search tree with minimal
+  # height.
+  def balanced_binary_with_sorted_array(arr, min, max)
+    return nil if min > max
+    mid = (min + max) / 2
+    root = TreeNode.new(arr[mid])
+    root.left = balanced_binary_with_sorted_array(arr, min, mid - 1)
+    root.right = balanced_binary_with_sorted_array(arr, mid + 1, max)
+    root
+  end
+
+  arr = [1, 3, 4, 8, 12, 15, 20, 32, 40]
+  p Trees.new.balanced_binary_with_sorted_array(arr, 0, arr.length - 1)
 end
