@@ -342,12 +342,14 @@ class Trees
   # self.trim_tree(bst.root, 2, 10)
   # p bst
 
-  # PROBLEM 3: Given a sorted (increasing order) array with unique integer
+  # PROBLEM3: Given a sorted (increasing order) array with unique integer
   # elements, write an algorithm to create a binary search tree with minimal
   # height.
+
   def balanced_binary_with_sorted_array(arr, min, max)
     return nil if min > max
     mid = (min + max) / 2
+    # Always passes the next middle as next root, so the tree stays balanced.
     root = TreeNode.new(arr[mid])
     root.left = balanced_binary_with_sorted_array(arr, min, mid - 1)
     root.right = balanced_binary_with_sorted_array(arr, mid + 1, max)
@@ -356,4 +358,53 @@ class Trees
 
   arr = [1, 3, 4, 8, 12, 15, 20, 32, 40]
   p Trees.new.balanced_binary_with_sorted_array(arr, 0, arr.length - 1)
+
+  # PROBLEM4: Given a binary tree, design an algorithm which creates a linked
+  # list of all the nodes at each depth (e.g., if you have a tree with depth D,
+  # you'll have D linked lists).
+  class LinkedTreeNode
+    attr_accessor :data, :left, :right, :next_node
+
+    def initialize(data, left = nil, right = nil, next_node = nil)
+      @data = data
+      @left = left
+      @right = right
+      @next_node = next_node
+    end
+  end
+
+  def level_order_linked_list(node)
+    queue = []
+    queue << node
+    prev = nil
+
+    until queue.empty?
+      temp_queue = []
+      prev = nil
+      
+      queue.each do |vertex|
+        temp_queue << vertex.left if vertex.left
+        temp_queue << vertex.right if vertex.right
+        prev&.next_node = vertex
+        prev = vertex
+      end
+
+      queue = temp_queue
+    end
+
+    node
+  end
+
+  # n = LinkedTreeNode.new(20)
+  # n.left = LinkedTreeNode.new(10)
+  # n.right = LinkedTreeNode.new(30)
+  # n.left.left = LinkedTreeNode.new(5)
+  # n.left.right = LinkedTreeNode.new(15)
+  # n.right.left = LinkedTreeNode.new(25)
+  # n.right.right = LinkedTreeNode.new(35)
+  # n = Trees.new.level_order_linked_list(n)
+  # puts n.next_node == nil
+  # puts n.right.next_node == nil
+  # puts n.left.next_node.data
+  # puts n.left.left.next_node.data
 end

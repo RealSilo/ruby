@@ -75,12 +75,12 @@ class HTML2
 
   TAG_LIST.each do |tag|
     define_method(tag) do |content = '', options = {}, &block|
-      attributes = options.reduce('') { |result, (key, val)| result << "#{key}='#{val}' " }
+      attributes = options.reduce('') { |result, (key, val)| result << " #{key}='#{val}'" }
       if block
-        @rendered << "<#{tag} #{attributes}>"
+        @rendered << "<#{tag}#{attributes}>"
         block.call
       else
-        @rendered << "<#{tag} #{attributes}>#{content}"
+        @rendered << "<#{tag}#{attributes}>#{content}"
       end
       @rendered << "</#{tag}>"
     end
@@ -100,7 +100,7 @@ result2 = HTML2.new do
 
   ul do
     li 'list element', class: 'haha', id: 'hihi'
-    li 'list element' do
+    li do
       span 'alfsadlf'
     end
   end
