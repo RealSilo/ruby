@@ -1,3 +1,20 @@
+# Very commonly, a trie is used to store the entire (English) language for quick
+# pre x lookups. While a hash table can quickly look up whether a string is a
+# valid word, it cannot tell us if a string is a pre x of any valid words. A trie
+# can do this very quickly.
+
+# A trie can check if a string is a valid pre x in 0(K) time, where K is the
+# length of the string. This is actually the same runtime as a hash table will
+# take. Although we often refer to hash table lookups as being 0(1) time, this
+# isn't entirely true. A hash table must read through all the characters in the
+# input, which takes O(K) time in the case of a word lookup.
+
+# Many problems involving lists of valid words leverage a trie as an optimization.
+# In situations when we search through the tree on related pre xes repeatedly
+# (e.g., looking up M, then MA, then MAN, then MANY), we might pass around a
+# reference to the current node in the tree. This will allow us to just check if
+# Y is a child of MAN, rather than starting from the root each time.
+
 class Node
   attr_accessor :hash, :end_node, :data
 

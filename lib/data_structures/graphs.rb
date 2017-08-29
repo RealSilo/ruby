@@ -1,6 +1,24 @@
 require 'set'
 require 'byebug'
 
+# In terms of programming there are two common ways to represent a graph:
+# Adjacency List and Adjacency Matrix
+
+# Adjacency list
+# This is the most common way to represent a graph. Every vertex stores a list of
+# adjacent vertices. You don't necessarily need any additional classes to
+# represent a graph. An array or a hash table of lists (arrays, linked lists,
+# etc.) can store the adjacency list.
+
+# Adjacency matrix
+# An adjacency matrix is an NxN matrix (where N is the number of nodes), where a
+# 1 value at matrix[i][j] indicates an edge from node i to node j. The rest of
+# the fields are 0-s.
+
+# In the adjacency list representation, you can easily iterate through the
+# neighbors of a node. In the adjacency matrix representation, you will need to
+# iterate through all the nodes to identify a node's neighbors.
+
 class Graphs
   class Vertex
     attr_reader :id, :connections

@@ -93,8 +93,8 @@ class Trees
 
     attr_reader :size, :root
 
-    def initialize
-      @root = nil
+    def initialize(root = nil)
+      @root = root
       @size = 0
     end
 
@@ -119,17 +119,13 @@ class Trees
 
     def find_min(node)
       current = node
-
       current = current.left while current.left
-
       current.data
     end
 
     def find_max(node)
       current = node
-
       current = current.right while current.right
-
       current.data
     end
 
@@ -288,35 +284,32 @@ class Trees
   bst.insert(40)
   bst.insert(35)
   bst.insert(50)
-  bst.find(50)
-  bst.delete(30)
-  puts bst.inspect
-  puts bst.min_height
-  puts bst.max_height
-  puts bst.balanced?
-  print bst.levelorder
+  # bst.find(50)
+  # bst.delete(30)
+  # puts bst.inspect
+  # puts bst.min_height
+  # puts bst.max_height
+  # puts bst.balanced?
+  # print bst.levelorder
 
   # PROBLEM 1:
   # Given a binary tree check if it's binary search tree
 
-  # with fake tree
-
-  TREE_VALS = []
-
+  
   # Traversal is O(n) complexity
-  def self.inorder_for_check(tree)
-    if tree
-      inorder_for_check(tree.left)
-      TREE_VALS << tree.root
-      inorder_for_check(tree.right)
+  TREE_VALS = []
+  # this only works with no duplicates
+  def self.inorder_for_check(node)
+    if node
+      inorder_for_check(node.left)
+      TREE_VALS << node.data
+      raise 'not in order' unless TREE_VALS[TREE_VALS.length - 2] <= TREE_VALS[TREE_VALS.length - 1]
+      inorder_for_check(node.right)
     end
+    TREE_VALS
   end
-
-  def self.sort_check
-    # could be made faster if just checking the next and prev value O(N)
-    TREE_VALS == TREE_VALS.sort
-  end
-  # p sort_check == true
+  
+  p inorder_for_check(bst.root)
 
   # PROBLEM 2
   # Trim a binary search tree based on min and max values:
@@ -356,8 +349,8 @@ class Trees
     root
   end
 
-  arr = [1, 3, 4, 8, 12, 15, 20, 32, 40]
-  p Trees.new.balanced_binary_with_sorted_array(arr, 0, arr.length - 1)
+  # arr = [1, 3, 4, 8, 12, 15, 20, 32, 40]
+  # p Trees.new.balanced_binary_with_sorted_array(arr, 0, arr.length - 1)
 
   # PROBLEM4: Given a binary tree, design an algorithm which creates a linked
   # list of all the nodes at each depth (e.g., if you have a tree with depth D,
