@@ -1,6 +1,10 @@
-# provides powerful alternative when loops are not ideal
-# a base case always has to be found
-# O(n) space complexity
+# Recursive algorithms can be very space inefficient. Each recursive call adds a
+# new layer to the stack, which means that ifyour algorithm recurses to a depth
+# of n,it uses atleastO(N) memory. For this reason, it's often better to implement
+# a recursive algorithm iteratively. A recursive algorithms can be implemented
+# iteratively, although sometimes the code to do so is much more complex. Before
+# diving into recursive code, ask yourself how hard it would be to implement it
+# iteratively.
 
 class Recursion
   # PROBLEM 1: Write the factorial function recursively

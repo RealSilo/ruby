@@ -4,6 +4,12 @@ class Dynamic
   # down into a collection of simpler subproblems, solving each of those
   # subproblems just once, and storing their solutions.
 
+  # Dynamic programming is mostly just a matter of taking a recursive algorithm
+  # and  finding the overlapping subproblems (that is, the repeated calls). You
+  # then cache those results for future recursive calls. Alternatively, you can
+  # study the pattern of the recursive calls and implement something iterative.
+  # You still have to cache the previous steps.
+
   # Dynamic programming is useful when you’re trying to optimize something given
   # a constraint. In the knapsack problem, you have to maximize the value of the
   # goods you stole, constrained by the size of the knapsack.

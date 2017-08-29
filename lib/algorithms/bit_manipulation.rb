@@ -49,8 +49,6 @@ def next_number(integer)
     flipping_slot = 0
   end
 
-  debugger
-
   x = 0
   (flipping_slot + 1).upto(binary.length - 1) do |j|
     if binary[j] == '1'
@@ -67,3 +65,13 @@ def next_number(integer)
 end
 
 p next_number(12)
+
+# PROBLEM3: Write a function to determine the number of bits you would need to
+# flip to convert integer A to integer B.
+# 29 (or: 11101), 15 (or: 01111) => 2
+
+def number_of_flipping_slots(integer1, integer2)
+  (integer1 ^ integer2).to_s(2).count('1')
+end
+
+number_of_flipping_slots(29, 15)
