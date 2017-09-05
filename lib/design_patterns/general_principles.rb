@@ -99,8 +99,8 @@ my_vehicle.travel(200)
 # go off to the left. At each level we have succeeded in taking advantage of all
 # the workings of the higher-level superclasses. The trouble is that inheritance
 # comes with some unhappy strings attached. When you create a subclass of an
-# existing class, you are not really creating two sepa- rate entities: Instead,
-# you are making two classes that are bound together by a com- mon implementation
+# existing class, you are not really creating two separate entities: Instead,
+# you are making two classes that are bound together by a common implementation
 # core. Inheritance, by its very nature, tends to marry the subclass to the
 # superclass. Change the behavior of the superclass, and there is an excellent
 # chance that you have also changed the behavior of the subclass. Besides that
