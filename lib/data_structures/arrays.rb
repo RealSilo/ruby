@@ -567,7 +567,7 @@ class Arrays
   # cipher, where the values of the letters are shifted by 13 places. Thus
   # 'A' ↔ 'N', 'B' ↔ 'O' and so on.
   def caesar_cipher(string)
-    split_str = string.split('');
+    split_str = string.split('')
 
     split_str.each_with_index do |char, i|
       unless split_str[i] == ' '

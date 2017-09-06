@@ -324,4 +324,37 @@ class LinkedLists
 
     { current: current, length: length }
   end
+
+  # PROBLEM7: Inserting a Node Into a Sorted Doubly Linked List
+  def insert_node(head, value)
+    if head
+      current = head
+      prev = current.prev_node
+      while current
+        break if current.value > value
+        prev = current
+        current = current.next_node
+      end
+
+      node = DoublyLinkedNode.new(value, prev, current)
+
+      current&.prev_node = node
+      prev&.next_node = node
+    else
+      node = DoublyLinkedNode.new(value)
+      node
+    end
+  end
+
+  dd1 = DoublyLinkedNode.new(5)
+  dd2 = DoublyLinkedNode.new(3, nil, dd1)
+  dd1.prev_node = dd2
+  dd3 = DoublyLinkedNode.new(1)
+  dd2.prev_node = dd3
+
+  LinkedLists.new.insert_node(dd2, 4)
+  p dd2.next_node.value
+  p dd1.prev_node.value
+  p dd2.next_node.next_node.value
+  p dd1.prev_node.prev_node.value
 end

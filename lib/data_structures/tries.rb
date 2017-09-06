@@ -71,18 +71,44 @@ class Trie
     false
   end
 
-  def print(node = @root)
+  def print_all(node = @root)
     collect(node, '')
     @words
   end
 
+  def find_with_str(word = '', node = @root)
+    matches = []
+    collect_with_str(node, '', word)
+    matches << @words
+    @words = []
+    matches
+  end
+
   private
+
+  def collect_with_str(node, string, word = '')
+    if node && node.hash.any?
+      if word.empty?
+        node.hash.each_key do |letter|
+          new_string = string + letter
+          collect_with_str(node.hash[letter], new_string)
+        end
+      else
+        new_string = string + word[0]
+        collect_with_str(node.hash[word[0]], new_string, word[1..-1])
+      end
+
+      @words.push("#{string}": node.data) if node.end_node
+    elsif node
+      @words.push("#{string}": node.data) unless string.empty?
+    end
+  end
 
   def collect(node, string)
     if node.hash.empty?
       string.empty? ? nil : @words << string
     else
-      node.hash.each_value do |letter|
+      node.hash.each_key do |letter|
         new_string = string + letter
         collect(node.hash[letter], new_string)
       end
@@ -93,10 +119,15 @@ class Trie
 end
 
 trie = Trie.new
-trie.add('peter', date: '1988-02-26')
-trie.add('petra', date: '1977-02-12')
-trie.add('danny', date: '1998-04-21')
-trie.add('jane', date: '1985-05-08')
-trie.add('jack', date: '1994-11-04')
-trie.add('pete', date: '1977-12-18')
-print trie.print
+trie.add('hackerrank', date: '1988-02-26')
+trie.add('hack', date: '1977-02-12')
+# trie.add('danny', date: '1998-04-21')
+# trie.add('jane', date: '1985-05-08')
+# trie.add('jack', date: '1994-11-04')
+# trie.add('pete', date: '1977-12-18')
+p trie.find_with_str('hack')
+p trie.find_with_str('hak')
+p trie.find_with_str('hacker')
+# p trie.find_with_str('he')
+p trie.print_all
+p trie.find('hack')

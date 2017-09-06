@@ -2,7 +2,7 @@ require 'byebug'
 # PROBLEM 1: Flip Bit to Win
 # You have an integer and you can flip exactly one bit from a 0 to a 1. Write
 # code to finnd the length of the longest sequence of ls you could create.
-# 1775 (or: 11011101111) => 8 
+# 1775 (or: 11011101111) => 8
 def flip_bit(integer)
   binary = integer.to_s(2)
   max = 0

@@ -128,4 +128,21 @@ describe LinkedLists do
       expect(subject.find_intersection(s4, s9)).to eq(s2)
     end
   end
+
+  describe '#insert_node' do
+    let(:d1) { LinkedLists::DoublyLinkedNode.new(7) }
+    let(:d2) { LinkedLists::DoublyLinkedNode.new(5, nil, d1) }
+    let(:d3) { LinkedLists::DoublyLinkedNode.new(3, nil, d2) }
+
+    before do
+      d1.prev_node = d2
+      d2.prev_node = d3
+      subject.insert_node(d3, 6)
+    end
+
+    it 'inserts the node at the right place' do
+      expect(d2.next_node.value).to eq 6
+      expect(d1.prev_node.value).to eq 6
+    end
+  end
 end

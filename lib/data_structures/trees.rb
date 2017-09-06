@@ -295,7 +295,6 @@ class Trees
   # PROBLEM 1:
   # Given a binary tree check if it's binary search tree
 
-  
   # Traversal is O(n) complexity
   TREE_VALS = []
   # this only works with no duplicates
@@ -308,7 +307,7 @@ class Trees
     end
     TREE_VALS
   end
-  
+
   p inorder_for_check(bst.root)
 
   # PROBLEM 2
@@ -374,7 +373,7 @@ class Trees
     until queue.empty?
       temp_queue = []
       prev = nil
-      
+
       queue.each do |vertex|
         temp_queue << vertex.left if vertex.left
         temp_queue << vertex.right if vertex.right
