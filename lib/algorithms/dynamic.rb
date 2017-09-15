@@ -96,6 +96,7 @@ class Dynamic
   end
 
   puts Dynamic.new.possible_set_of_coins_for_sum(5, [1, 2, 5])
+  puts Dynamic.new.possible_set_of_coins_for_sum(4, [1, 2, 3])
 
   # PROBLEM3: Common longest subsequence
   # 'abcdegfgh' and 'aqcezfg' => 'acefg'

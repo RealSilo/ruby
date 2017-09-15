@@ -344,3 +344,52 @@ class Graphs
     node_lengths
   end
 end
+
+# Find the largest non-zero region in an m*n matrix.
+# Modified BFS
+
+# 5 in the following case:
+# 1 1 0 0
+# 0 1 1 0
+# 0 0 1 0
+# 1 0 0 0
+def connected_max(arr)
+  visited = []
+  largest = 0
+
+  arr.each_with_index do |row, i|
+    row.each_with_index do |_col, j|
+      next if arr[i][j] == 0
+      next if visited.include?([i, j])
+
+      queue = [[i, j]]
+      current = 0
+
+      while queue.any?
+        element = queue.shift
+        next if visited.include?(element)
+        visited << element
+        current += 1
+
+        k = element[0]
+        l = element[1]
+
+        (-1).upto(1) do |m|
+          (-1).upto(1) do |n|
+            if (k + m) >= 0 && (k + m) < arr.length && (l + n) >= 0 && (l + n) < arr[0].length
+              unless arr[k + m][l + n] == 0 || visited.include?([k + m, l + n])
+                queue << [k + m, l + n]
+              end
+            end
+          end
+        end
+      end
+
+      largest = current if current > largest
+    end
+  end
+
+  largest
+end
+
+p connected_max([[1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 0], [1, 0, 0, 0]])
