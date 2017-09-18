@@ -11,6 +11,8 @@ end
 
 class LruCache
   # Data structure to implement key-value caches with limited storage.
+  # Linked hash map (hash that maintains a doubly-linked list running through
+  # all of its entries)
   # When the storage is full the least recently used (hence LRU) element
   # should be removed from the cache. We need a dobuly linked list as
   # underlying data structure since when we use the get method the node
