@@ -167,4 +167,113 @@ class Sort
   # - memory!!! consumption?
   # - does it have to be parallel?
   # - guaranteed performance is required?
+
+
+  # Counting sort: buckets hold only a single value
+  # Bucket sort: buckets hold a range of values
+  # Radix sort: buckets hold values based on digits within their values
+  
+  # COUNTING SORT
+  # Time-complexity: O(n+k), Auxiliary-space:O(n+k), Not In-place, Not stable
+  # n is number of elements and k is the range of input
+  # Counting sort is efficient if the range of input data is not significantly greater 
+  # than the number of objects to be sorted.
+  # It is often used as a sub-routine to another sorting algorithm like radix sort.
+
+  def counting_sort(arr, min, max)
+    output = Array.new(arr.length) { 0 }
+
+    count = Array.new(max - min + 1) { 0 }
+
+    arr.each { |element| count[element] += 1 }
+
+    count.each_with_index { |_element, i| count[i] += count[i - 1] }
+
+    arr.each do |element|
+      output[count[element] - 1] = element
+      count[element] -= 1
+    end
+
+    output
+  end
+
+  p new.counting_sort([1, 4, 1, 2, 7, 5, 2], 0, 9)
+
+  # RADIX SORT
+
+  # What if the elements are in range from 1 to n^2? We can’t use counting sort because
+  # counting sort will take O(n^2) which is worse than comparison based sorting algorithms.
+  # Can we sort such an array in linear time? Radix Sort is the answer. The idea of Radix
+  # Sort is to do digit by digit sort starting from least significant digit to most
+  # significant digit. Radix sort uses counting sort as a subroutine to sort.
+  def radix_counting_sort(arr, exp)
+    output = Array.new(arr.length) { 0 }
+    count = Array.new(10) { 0 }
+
+    arr.each_with_index do |element, i|
+      idx = element / exp
+      count[idx % 10] += 1
+    end
+
+    count.each_with_index { |_element, j| count[j] += count[j - 1] }
+
+    (arr.length - 1).downto(0) do |k|
+      idx = arr[k] / exp
+      output[count[idx % 10] - 1] = arr[k]
+      count[idx % 10] -= 1
+    end
+
+    arr.length.times { |i| arr[i] = output[i] }
+  end
+
+  def radix_sort(arr)
+    max = arr.max
+    exp = 1
+
+    while max / exp > 0
+      Sort.new.radix_counting_sort(arr, exp)
+      exp *= 10
+    end
+
+    arr
+  end
+
+  p new.radix_sort([ 170, 45, 75, 90, 802, 24, 2, 66])
+
+  # BUCKET SORT
+  # We must know in advance that the integers are fairly well distributed over
+  # an interval (i, j). Then we can divide this interval in N equal sub-intervals
+  # (or buckets). We’ll put each number in its corresponding bucket. Finally for every
+  # bucket that contains more than one number we’ll use some linear sorting algorithm.
+
+  # The complexity of bucket sort isn’t constant depending on the input. However in
+  # the average case the complexity of the algorithm is O(n + k) where n is the length
+  # of the input sequence, while k is the number of buckets.
+
+  # The problem is that its worst-case performance is O(n^2)
+  # The main thing we should be aware of is the way the input data is dispersed over
+  # an interval.
+  def bucket_sort(arr, min, max, size)
+    bucket_count = ((max - min) / size) + 1
+    buckets = Array.new(bucket_count) { [] }
+
+
+    arr.each do |element|
+      bucket_index = (element - min) / size
+      buckets[bucket_index] << element
+    end
+
+    output = []
+
+    buckets.each do |bucket|
+      bucket.sort!
+      bucket.each do |value|
+        output << value
+      end
+    end
+
+    output
+  end
+
+  p new.bucket_sort([3, 13, 4, 20, 3, 24, 1], 0, 29, 10)
 end
