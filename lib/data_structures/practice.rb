@@ -242,3 +242,23 @@ def connected_max(arr)
 end
 
 p connected_max([[1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 0], [1, 0, 0, 0]])
+
+# You buy stocks and you wanna maximize your profit. You have to sell later
+# than you bought.
+
+# [5, 10, 4, 6, 12] should return 12 - 4 = 8
+
+# This greedy solution uses O(N) time and O(1) space.
+def max_profit(arr)
+  min = arr.first
+  diff = 0
+
+  arr.each do |element|
+    diff = [element - min, diff].max
+    min = [element, min].min
+  end
+
+  diff
+end
+
+p max_profit([5, 10, 4, 6, 12])
