@@ -262,3 +262,33 @@ def max_profit(arr)
 end
 
 p max_profit([5, 10, 4, 6, 12])
+
+def is_match(text, pattern, text_index = 0, pat_index = 0)
+  # base case, one of the indexes reached the end
+  if text_index >= text.length
+    return true if pat_index >= pattern.length
+    if pat_index + 1 < pattern.length && pattern[pat_index + 1] == '*'
+      is_match(text, pattern, text_index, pat_index + 2)
+    else
+      false
+    end
+  # if we need a next pattern match but there is none
+  elsif pat_index >= pattern.length && text_index < text.length
+    return false
+  # string matching for character followed by '*'
+  elsif pat_index + 1 < pattern.length && pattern[pat_index + 1] == '*'
+    if pattern[pat_index] == '.' || text[text_index] == pattern[pat_index]
+      is_match(text, pattern, text_index, pat_index + 2) || is_match(text, pattern, text_index + 1, pat_index)
+    else
+      is_match(text, pattern, text_index, pat_index + 2)
+    end
+  # string matching for ordinary char or '.'
+  elsif pattern[pat_index] == '.' || pattern[pat_index] == text[text_index]
+    is_match(text, pattern, text_index + 1, pat_index + 1)
+  else
+    false
+  end
+end
+
+p is_match('abaa', 'a.*a*')
+

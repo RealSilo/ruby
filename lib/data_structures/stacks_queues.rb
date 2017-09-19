@@ -163,7 +163,31 @@ class StacksQueues
     end
   end
 
-  # PROBLEM 3: Implement a Stack with a LinkedList
+  # PROBLEM 3: Implement a Stack with 2 Queues
+  class StackWithTwoQueues
+    attr_reader :queue1, :queue2
+
+    def initialize
+      @queue1 = []
+      @queue2 = []
+    end
+
+    def push(element)
+      queue1.push(element)
+    end
+
+    def pop
+      queue2.push(queue1.shift) while queue1.length > 1
+
+      value = queue1.shift
+      
+      @queue1, @queue2 = @queue2, @queue1
+
+      value
+    end
+  end
+
+  # PROBLEM 4: Implement a Stack with a LinkedList
   module LinkedList
     class Node
       attr_accessor :value, :next_node
@@ -204,7 +228,7 @@ class StacksQueues
     # s.pop
     # p s.first.inspect
 
-    # PROBLEM 4: Implement a Queue with a LinkedList
+    # PROBLEM 5: Implement a Queue with a LinkedList
     # we don't need doubly linked list as we always remove
     # the first element
     class Queue
@@ -257,7 +281,7 @@ class StacksQueues
     # p q.inspect
   end
 
-  # PROBLEM5: Stack min method with O(1)
+  # PROBLEM 6: Stack min method with O(1)
   module StackMin
     class Node
       attr_accessor :value, :next_node, :prev_min
@@ -304,7 +328,7 @@ class StacksQueues
     end
   end
 
-  # PROBLEM6: Sort Stack: Write a program to sort a stack such that the smallest
+  # PROBLEM 7: Sort Stack: Write a program to sort a stack such that the smallest
   # items are on the top. You can use an additional temporary stack, but you may
   # not copy the elements into any other data structure (such as an array). The
   # stack supports the following operations: push, pop, peek, and isEmpty.
@@ -333,7 +357,7 @@ class StacksQueues
     stack
   end
 
-  # PROBLEM7: An animal shelter, which holds only dogs and cats, operates on a
+  # PROBLEM 8: An animal shelter, which holds only dogs and cats, operates on a
   # strictly "FIFO" basis. Peoplemustadopteitherthe"oldest"(based on arrival
   # time) of all animals at the shelter, or they can select whether they would
   # prefer a dog or a cat (and will receive the oldest animal of that type).

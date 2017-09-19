@@ -50,6 +50,26 @@ describe StacksQueues do
     end
   end
 
+  describe StacksQueues::StackWithTwoQueues do
+    subject { described_class.new }
+
+    before do
+      subject.push(1)
+      subject.push(2)
+      subject.push(3)
+    end
+
+    it 'behaves like LIFO when the element is popped' do
+      expect(subject.pop).to eq 3
+    end
+
+    it 'behaves like LIFO when the element is popped' do
+      subject.pop
+      subject.push(4)
+      expect(subject.pop).to eq 4
+    end
+  end
+
   describe StacksQueues::StackMin::Stack do
     subject { described_class.new }
 

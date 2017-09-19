@@ -277,3 +277,42 @@ class Sort
 
   p new.bucket_sort([3, 13, 4, 20, 3, 24, 1], 0, 29, 10)
 end
+
+# Implement a document scanning function word_count_engine, which receives a string
+# document and returns a list of all unique words in it and their number of occurrences,
+# sorted by the number of occurrences in a descending order. Assume that all letters are
+# in English alphabet.
+
+# input:  document = "Practice makes perfect. you'll only get Perfect by practice. just practice!"
+
+# output: [["practice", "3"], ["perfect", "2"], ["makes", "1"], ["get", "1"], ["by", "1"],
+# ["just", "1"], ["youll", "1"], ["only", "1"]]
+
+# The trick here is that we know the max value so we can use bucket sort.
+def word_count_engine(document)
+  document = document.gsub(/[^ 0-9A-Za-z]/, '').downcase.split(' ')
+
+  store = {}
+  max = 0
+  
+  document.each do |element|
+    if store[element]
+      store[element] += 1
+      max = [store[element], max].max
+    else
+      store[element] = 1
+      max = 1 if max == 0
+    end
+  end
+  
+  buckets = Array.new(max) { [] }
+  
+  store.each do |key, value|
+    buckets[max - value].push([key, value.to_s])
+  end
+  
+  buckets.flatten(1)
+end
+
+p word_count_engine("Practice makes perfect. you'll only get Perfect by practice. just practice!")
+
