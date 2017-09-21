@@ -193,7 +193,7 @@ class HTMLFormatterImproved
   end
 end
 
-class PlainTextFormatterImproved < Formatter
+class PlainTextFormatterImproved
   def output_report(context)
     puts context.name
     context.text.each do |line|

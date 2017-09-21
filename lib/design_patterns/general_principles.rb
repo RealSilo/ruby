@@ -80,7 +80,7 @@ my_vehicle.travel(200)
 # this second example illustrates the principle of programming to an interface.
 # The original code worked with exactly one type of vehicle but the new and
 # improved version will work with any Vehicle. The idea here is to program to
-# the most general type you cannot to call a car a car if you can get away
+# the most general type you can. Don' call a car a car if you can get away
 # with calling it a vehicle, regardless of whether Car and Vehicle are real
 # classes or abstract interfaces. And if you can get away with calling your car
 # something more general still, such as a movable object, so much the better.

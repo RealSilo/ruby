@@ -405,4 +405,22 @@ describe Arrays do
       end
     end
   end
+
+  describe '#reverse_vowels' do
+    context 'if vowels are next to each other' do
+      let(:string) { 'friends' }
+
+      it 'returns the starting index' do
+        expect(subject.reverse_vowels(string)).to eq 'freinds'
+      end
+    end
+
+    context 'if last char is vowel' do
+      let(:string) { 'apple' }
+
+      it 'returns the starting index' do
+        expect(subject.reverse_vowels(string)).to eq 'eppla'
+      end
+    end
+  end
 end

@@ -272,7 +272,6 @@ class Arrays
     string.each_char.with_index do |char, i|
       coded_char = char
       if char == string[i + 1]
-        coded_char = char
         repetition += 1
       else
         coded_char << repetition.to_s
@@ -578,5 +577,29 @@ class Arrays
     end
 
     split_str.join
+  end
+
+  # PROBLEM18: Reverse only the vowels in a word
+  def reverse_vowels(string)
+    vowels = ['a', 'e', 'i', 'o', 'u']
+
+    i = 0
+    j = string.length - 1
+
+    until i >= j
+      until vowels.include?(string[i]) || i >= j
+        i += 1
+      end
+
+      until vowels.include?(string[j]) || i >= j
+        j -= 1
+      end
+
+      string[i], string[j] = string[j], string[i] unless i == j
+      i += 1
+      j -= 1
+    end
+
+    string
   end
 end

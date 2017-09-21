@@ -241,7 +241,7 @@ def connected_max(arr)
   largest
 end
 
-p connected_max([[1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 0], [1, 0, 0, 0]])
+# p connected_max([[1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 0], [1, 0, 0, 0]])
 
 # You buy stocks and you wanna maximize your profit. You have to sell later
 # than you bought.
@@ -261,7 +261,7 @@ def max_profit(arr)
   diff
 end
 
-p max_profit([5, 10, 4, 6, 12])
+# p max_profit([5, 10, 4, 6, 12])
 
 def is_match(text, pattern, text_index = 0, pat_index = 0)
   # base case, one of the indexes reached the end
@@ -290,5 +290,106 @@ def is_match(text, pattern, text_index = 0, pat_index = 0)
   end
 end
 
-p is_match('abaa', 'a.*a*')
+# p is_match('abaa', 'a.*a*')
 
+# class Solution
+#     @@nodes = []
+#     # @param a : array of integers
+#     # @return an integer
+#     class Node
+#         attr_accessor :value, :children, :parent
+#         def initialize(value, parent = nil)
+#             @children = []
+#             @value = value 
+#         end
+#     end
+    
+#     def height(node = @@nodes[0])
+#         return 0 if node.nil?
+        
+#         values = []
+#         node.children.each do |child|
+#             values << height(child)
+#         end
+#         (values.max || 0) + 1
+#     end
+
+#     def diameter(node = @@nodes[0])
+#         return 0 if node.nil?
+        
+#         height_vals = []
+#         node.children.each do |child|
+#             height_vals << height(child)
+#         end
+        
+#         return 0 if height_vals.empty?
+#         return height_vals[0] if height_vals.length == 1
+        
+#         diameters = []
+#         node.children.each do |child|
+#             diameters << diameter(child)
+#         end
+ 
+#         two_heights = height_vals.combination(2).to_a
+#         two_diams = diameters.combination(2).to_a
+
+#         max = 0
+#         two_heights.each_with_index do |e, i|
+#           new_max = [two_heights[i][0] + two_heights[i][1] + 1, two_diams[i].max].max
+#           max = [max, new_max].max
+#         end
+
+#         max
+#     end
+    
+#     def solve(a)
+#         return 0 if a.length == 1
+#         a.each_with_index do |val, i|
+#             node = Node.new(i)
+#             @@nodes << node
+#             @@nodes[val].children << node unless val == -1
+#         end
+#         diameter(@@nodes[0])
+#     end
+
+#     def solve2(a)
+#         return 0 if a.length == 1
+#         a.each_with_index do |val, i|
+#             node = Node.new(i)
+#             node.parent = @@nodes[val] unless val == -1
+#             @@nodes << node
+#             @@nodes[val].children << node unless val == -1
+#         end
+#         @@nodes
+#         bfsa(a)
+#     end
+
+#     def bfsa(a, root = @@nodes[0])
+#       node_lengths = {}
+      
+#       a.each_with_index do |_val, index|
+#         node_lengths[index] = Float::INFINITY
+#       end
+      
+#       visited = []
+#       queue = [[root, 0]]
+#       dist = 0
+      
+#       while queue.any?
+#           vertex = queue.shift
+#           dist = [vertex[1], dist].max
+#           visited << vertex
+          
+#           connections = vertex.children
+#           connections << vertex.parent if vertex.parent
+          
+#           connections.each do |connection|
+#               queue << [connection, vertex[1] + 1] unless visited.include?(connection)
+#           end
+#       end
+      
+#       max
+#     end
+# end
+
+# p Solution.new.solve2([-1, 0, 0, 0, 3])
