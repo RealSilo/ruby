@@ -73,16 +73,144 @@ class Hashes
     storage[index].each do |element|
       return element[1] if element[0] == key
     end
+
+    nil
   end
 end
 
-h = Hashes.new
+# h = Hashes.new
+# h.add('Eterp', 4)
+# h.add('Peter', 5)
+# h.add('Retep', 3)
+# h.add('John', 2)
+# h.remove('John')
+# h.add('John', 1)
+# puts h.find('Peter')
+# h.remove('Peter')
+# print h.storage
+
+class Node
+  attr_accessor :key, :value, :next_node
+
+  def initialize(key, value, next_node = nil)
+    @key = key
+    @value = value
+    @next_node = next_node
+  end
+end
+
+class LinkedList
+  attr_accessor :head
+
+  def initialize(key, value)
+    @head = Node.new(key, value)
+  end
+end
+
+class HashWithLinkedList
+  attr_accessor :storage
+  attr_reader :storage_limit
+
+  def initialize(storage_limit = 10)
+    @storage_limit = storage_limit
+    @storage = []
+  end
+
+  def hash(key)
+    hash_value = 0
+
+    key.each_char do |char|
+      hash_value += char.ord
+    end
+
+    hash_value % storage_limit
+  end
+
+  def add(key, value)
+    index = hash(key)
+
+    if storage[index]
+      current = storage[index].head
+
+      while current.next_node
+        if current.key == key
+          current.value = value
+          return current.value
+        end
+
+        current = current.next_node
+      end
+
+      if current.key == key
+        current.value = value
+        return current.value
+      end
+
+      current.next_node = Node.new(key, value)
+      current.next_node.value
+    else
+      storage[index] = LinkedList.new(key, value)
+      storage[index].head
+    end
+  end
+
+  def find(key)
+    index = hash(key)
+
+    return nil unless storage[index]
+
+    current = storage[index].head
+
+    while current
+      return current.value if current.key == key
+      current = current.next_node
+    end
+
+    nil
+  end
+
+  def remove(key)
+    index = hash(key)
+
+    return nil unless storage[index]
+
+    current = storage[index].head
+
+    if current.key == key
+      value = storage[index].head.value
+
+      if current.next_node
+        storage[index].head = storage[index].head.next_node
+      else
+        storage[index] = nil
+      end
+
+      return value
+    end
+
+    while current
+      prev = nil
+
+      if current.key == key
+        prev&.next_node = current.next_node
+        return current.value
+      end
+      prev = current
+      current = current.next_node
+    end
+
+    nil
+  end
+end
+
+h = HashWithLinkedList.new
 h.add('Eterp', 4)
 h.add('Peter', 5)
 h.add('Retep', 3)
 h.add('John', 2)
 h.remove('John')
 h.add('John', 1)
+puts h.find('John')
 puts h.find('Peter')
 h.remove('Peter')
-print h.storage
+puts h.find('Peter')

@@ -180,7 +180,7 @@ class StacksQueues
       queue2.push(queue1.shift) while queue1.length > 1
 
       value = queue1.shift
-      
+
       @queue1, @queue2 = @queue2, @queue1
 
       value

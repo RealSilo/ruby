@@ -4,8 +4,24 @@
 # Gather together the things that change for the same reasons and separate
 # things that change for different reasons.
 
+# Readability, Reusability, Easier to test
+
+# What is a reason to change? For instance you have an invitation class with
+# token generation.
+
+# Also you check how often the class changes
 
 # Open Closed principle
+
+# Follows polymorphism
+
+# To follow this rule you have to use some form of dependency injection.
+
+# Either there are different options to do the same action based on type (so action
+# just happens once) or you have to notify MORE objects that a change happend and
+# those have to trigger some action. The second one can be nicely solved with the
+# observer pattern.
+
 module OpenClosed
   module Problem1
     class Vehicle
@@ -77,7 +93,9 @@ end
 # While a Bike technically is a vehicle, the Vehicle class makes the assumption
 # that all vehicles have an engine. Because the Bike subclass has no engine it
 # does not satisfy the Liskov Substitution Principle for the Vehicle superclass.
+
 module Example1
+  # This is where composition makes sense.
   class Engine
     def start
       puts 'start'
@@ -108,6 +126,7 @@ module Example1
   Car.new.start_engine
   Moto.new.start_engine
   # Bike.new.start_engine This is not working!!!!!!!!
+  # If you wanna make it work you have to use if else statements.
 end
 
 # Example2
@@ -137,10 +156,14 @@ end
 
 # DEPENDENCY INVERSION PRINCIPLE
 
+# Polymorphism
 
+# High level modules should not depend on low level modules. Both should depend
+# on abstractions. Systems tend to exhibit the dependency inversion principle
+# as a natural result of using OCP.
 
+# Dependencies should not be hardcoded but injected in the class
 
-
-
-
-
+# Module vs Decorator
+# Testing easier, you can swap things are runtime, follows SRP
+# Mental overhead

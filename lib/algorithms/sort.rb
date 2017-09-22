@@ -168,15 +168,14 @@ class Sort
   # - does it have to be parallel?
   # - guaranteed performance is required?
 
-
   # Counting sort: buckets hold only a single value
   # Bucket sort: buckets hold a range of values
   # Radix sort: buckets hold values based on digits within their values
-  
+
   # COUNTING SORT
   # Time-complexity: O(n+k), Auxiliary-space:O(n+k), Not In-place, Not stable
   # n is number of elements and k is the range of input
-  # Counting sort is efficient if the range of input data is not significantly greater 
+  # Counting sort is efficient if the range of input data is not significantly greater
   # than the number of objects to be sorted.
   # It is often used as a sub-routine to another sorting algorithm like radix sort.
 
@@ -210,7 +209,7 @@ class Sort
     output = Array.new(arr.length) { 0 }
     count = Array.new(10) { 0 }
 
-    arr.each_with_index do |element, i|
+    arr.each do |element|
       idx = element / exp
       count[idx % 10] += 1
     end
@@ -238,7 +237,7 @@ class Sort
     arr
   end
 
-  p new.radix_sort([ 170, 45, 75, 90, 802, 24, 2, 66])
+  p new.radix_sort([170, 45, 75, 90, 802, 24, 2, 66])
 
   # BUCKET SORT
   # We must know in advance that the integers are fairly well distributed over
@@ -256,7 +255,6 @@ class Sort
   def bucket_sort(arr, min, max, size)
     bucket_count = ((max - min) / size) + 1
     buckets = Array.new(bucket_count) { [] }
-
 
     arr.each do |element|
       bucket_index = (element - min) / size
@@ -294,7 +292,7 @@ def word_count_engine(document)
 
   store = {}
   max = 0
-  
+
   document.each do |element|
     if store[element]
       store[element] += 1
@@ -304,15 +302,14 @@ def word_count_engine(document)
       max = 1 if max == 0
     end
   end
-  
+
   buckets = Array.new(max) { [] }
-  
+
   store.each do |key, value|
     buckets[max - value].push([key, value.to_s])
   end
-  
+
   buckets.flatten(1)
 end
 
 p word_count_engine("Practice makes perfect. you'll only get Perfect by practice. just practice!")
-

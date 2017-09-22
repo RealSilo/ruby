@@ -3,6 +3,7 @@ AllCops:
   Exclude:
     - config/*.rb
     - 'lib/language/*.rb'
+    - 'lib/data_structures/practice.rb'
 
 Metrics/LineLength:
   Max: 120
@@ -47,4 +48,4 @@ Style/WordArray:
 Documentation:
   Enabled: false
 Metrics/ClassLength:
-  Max: 300
+  Max: 400
