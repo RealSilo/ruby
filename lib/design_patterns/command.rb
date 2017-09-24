@@ -69,7 +69,7 @@
 # commands in a list. Periodically, you can open a connection to the database,
 # execute all of your commands, and flush out this list.
 
-# Commands pattern is used for instance for active record migrations.
+# Command pattern is used for instance for active record migrations.
 
 # WRAP UP
 

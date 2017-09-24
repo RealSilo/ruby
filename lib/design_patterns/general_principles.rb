@@ -20,6 +20,99 @@
 # be confined to those separated, change-prone areas and the rest of your code
 # can live on in peace.
 
+# When you define hierarchies you should try to depend on the classes which
+# rarely change. For instance the code depends on the built in Ruby classes like
+# String or Integer, which is good because those classes barealy changes. But if
+# you create you custom classes you have decide which class depends on an other.
+# The following implementations do the same but the dependency is reversed. At the
+# end of the day the class that rarely changes should be the one the other classes
+# depend on.
+
+module GearDependsOnWheel
+  class Gear
+    attr_reader :chainring, :cog, :rim, :tire
+
+    def initialize(chainring, cog, rim, tire)
+      @chainring = chainring
+      @cog       = cog
+      @rim       = rim
+      @tire      = tire
+    end
+
+    def gear_inches
+      ratio * wheel.diameter
+    end
+
+    def ratio
+      chainring / cog.to_f
+    end
+
+    def wheel
+      @wheel ||= Wheel.new(rim, tire)
+    end
+  end
+
+  class Wheel
+    attr_reader :rim, :tire
+
+    def initialize(rim, tire)
+      @rim = rim
+      @tire = tire
+    end
+
+    def diameter
+      rim + (tire * 2)
+    end
+
+    # ...
+  end
+
+  p Gear.new(52, 11, 26, 1.5).gear_inches
+end
+
+module WheelDependsOnGear
+  class Gear
+    attr_reader :chainring, :cog
+
+    def initialize(chainring, cog)
+      @chainring = chainring
+      @cog = cog
+    end
+
+    def gear_inches(diameter)
+      ratio * diameter
+    end
+    
+    def ratio
+      chainring / cog.to_f
+    end
+
+    # ...
+  end
+
+  class Wheel
+    attr_reader :rim, :tire, :gear
+
+    def initialize(rim, tire, chainring, cog)
+      @rim = rim
+      @tire = tire
+      @gear = Gear.new(chainring, cog)
+    end
+
+    def diameter
+      rim + (tire * 2)
+    end
+
+    def gear_inches
+      gear.gear_inches(diameter)
+    end
+
+    # ...
+  end
+
+  p Wheel.new(26, 1.5, 52, 11).gear_inches
+end
+
 # PROGRAM TO AN INTERFACE NOT AN IMPLEMENTATION.
 
 class MyCar
@@ -34,12 +127,14 @@ class MyAirplane
   end
 end
 
-# Clearly, this bit of code is married to the Car class. It will work
+# Clearly, this bit of code is married to the MyCar class. It will work
 # as long as the requirement is that we need to deal with exactly one
-# type of vehicle: a car.
+# type of vehicle: a car. Same goes for MyAirplane
 
 my_car = MyCar.new
 my_car.drive(200)
+my_plane = MyAirplane.new
+my_plane.fly(400)
 
 # Of course, if the requirement changes and the code needs to deal with
 # a second type of transport (such as an airplane), we suddenly have a
@@ -127,7 +222,7 @@ class Vehicle
 end
 
 class Car < Vehicle
-  def drive
+  def travel
     start_engine
     # go somewhere
     stop_engine
@@ -170,7 +265,7 @@ class ComposedCar
     @engine = GasolineEngine.new
   end
 
-  def drive
+  def travel
     @engine.start
     # go somewhere
     @engine.stop
@@ -223,6 +318,221 @@ end
 # taxonomy (the duplication by necessity problem), or you refactor everything that depends on
 # the existing taxonomy to adapt the taxonomy to the new use case due to the fragile base
 # class problem. Composition is immune to both.
+
+module CombinatorialExplosion
+  module Inheritance
+    # It is vulnerable to combinatorial explosion when there are multiple
+    # independent parts of the code that vary.
+    class Vehicle
+      def run
+        refill
+        load
+      end
+    end
+
+    class Car < Vehicle
+      def load
+        puts 'load passengers'
+      end
+    end
+
+    class Truck < Vehicle
+      def load
+        puts 'load cargo'
+      end
+    end
+
+    class GasolineCar < Car
+      def refill
+        puts 'refill with fuel'
+      end
+    end
+
+    class ElectricCar < Car
+      def refill
+        puts 'refill with electricity'
+      end
+    end
+
+    class GasolineTruck < Truck
+      def refill
+        puts 'refill with fuel' # (code duplication!)
+      end
+    end
+
+    class ElectricTruck < Truck
+      def refill
+        puts 'refill with electricity' # (code duplication!)
+      end
+    end
+
+    GasolineCar.new.run
+  end
+
+  module ModuleImplementation
+    # It is better than simple inheritance: no code is duplicated, we can add a new level
+    # of specialization and easily build any type of vehicle. It’s also clear what features
+    # our vehicles have.
+
+    # If by any chance two modules contain methods with the same name, you’re gonna run into
+    # problems - one module will silently use the method from the other one. In the same way
+    # a module can mess up the code in your own class.
+    module Vehicle
+      def run
+        refill
+        load
+      end
+    end
+
+    module Truck
+      def load
+        puts 'load cargo'
+      end
+    end
+
+    module Car
+      def load
+        puts 'load passengers'
+      end
+    end
+
+    module ElectricEngine
+      def refill
+        puts 'refill with electricity'
+      end
+    end
+
+    module GasolineEngine
+      def refill
+        puts 'refill with gas'
+      end
+    end
+
+    class GasolineCar
+      include Vehicle
+      include Car
+      include GasolineEngine
+    end
+
+    class ElectricCar
+      include Vehicle
+      include Car
+      include ElectricEngine
+    end
+
+    class GasolineTruck
+      include Vehicle
+      include Truck
+      include GasolineEngine
+    end
+
+    class ElectricTruck
+      include Vehicle
+      include Truck
+      include ElectricEngine
+    end
+
+    GasolineCar.new.run
+  end
+
+  module Composition
+    class Vehicle
+      def initialize(body:, engine:)
+        @body = body
+        @engine = engine
+      end
+
+      def run
+        @engine.refill
+        @body.load
+      end
+    end
+
+    class ElectricEngine
+      def refill
+        puts 'refill with electricity'
+      end
+    end
+
+    class GasolineEngine
+      def refill
+        puts 'refill with gas'
+      end
+    end
+
+    class CarBody
+      def load
+        puts 'load passengers'
+      end
+    end
+
+    class TruckBody
+      def load
+        puts 'load cargo'
+      end
+    end
+
+    # Builder/factory pattern could be used here to make the code neater.
+    gasoline_car = Vehicle.new(engine: GasolineEngine.new, body: CarBody.new)
+    gasoline_car.run
+  end
+end
+
+# You could go wrong with a wrong abstraction right from the beginning.
+# You have a Square class that inherits from Rectangle class. In reality this makes sense
+# all the squares are rectangles, so you could say Square is_a Rectangle. But when it comes
+# to their representations in code they are pretty different. You realize that you have to
+# overwrite the height= and the width= methods for square since if the height changes you
+# have to set the width to the same value too. Then somebody calls width= on a Square
+# instance when thought it was a Rectangle and the height gets changed as well.
+module WrongAbstraction
+  class Rectangle
+    def initialize(height, width)
+       @height = height
+       @width = width
+    end
+    
+    def height=(value)
+      @height = value
+    end
+
+    def width=(value)
+      @width = value
+    end
+  end
+
+  class Square < Rectangle
+    def height=(value)
+      @height = value
+      @width = value
+    end
+
+    def width=(value)
+      @width = value
+      @height = value
+    end
+  end
+end
+
+module BetterAbstraction
+  # This could make sense in some cases, but it depends on the logic.
+  class Shape
+  end
+
+  class Rectangle < Shape
+  end
+
+  class Square < Shape
+  end
+end
+
+# People tend to think about the domain model as a hierarchy.
+
+# Inheritance advantages:
+# Composition advantages:
+
+# When to use inheritance/modules:
+# There are clearly related reusable pieces of code that fit under a single common concept.
 
 # DELEGATE, DELEGATE, DELEGATE
 
