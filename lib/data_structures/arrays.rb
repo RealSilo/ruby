@@ -602,4 +602,28 @@ class Arrays
 
     string
   end
+
+  # PROBLEM19: Implement split in Ruby
+  def my_split(string, divider)
+    result = []
+    current = ''
+
+    formatted_string = string.clone
+    formatted_string.strip!
+    
+    formatted_string.each_char do |char|
+      if char == divider
+        result << current
+        current = ''
+      else
+        current.concat(char)
+      end
+    end
+
+    result << current unless current.empty?
+
+    result
+  end
+
+  p new.my_split('5 + 11 + 4', ' ')
 end

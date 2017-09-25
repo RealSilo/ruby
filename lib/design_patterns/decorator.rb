@@ -54,14 +54,13 @@ end
 
 writer = EnhancedWriter.new('template/out.txt')
 
-writer.write_line('A plain line')
+p writer.write_line('A plain line')
 # or
-writer.checksumming_write_line('A line with checksum')
-puts("Checksum is #{writer.check_sum}")
+p writer.checksumming_write_line('A line with checksum')
 # or
-writer.timestamping_write_line('with time stamp')
+p writer.timestamping_write_line('with time stamp')
 # or
-writer.numbering_write_line('with line number')
+p writer.numbering_write_line('with line number')
 
 # The problems with this approach: First, every client that uses EnhancedWriter
 # will need to know whether it is writing out numbered, checksummed, or
@@ -182,7 +181,7 @@ end
 # talking to a NumberingWriter instead of the SimpleWriter. From outside both
 # flavors of writer look exactly the same.
 writer = NumberingWriter.new(SimpleWriter.new('template/out2.txt'))
-writer.write_line('Hello out there')
+p writer.write_line('Hello out there')
 
 # Because all of the decorator objects support the same basic interface as the
 # original, the “real” object that we supply to any one of the decorators does not
@@ -197,7 +196,7 @@ combined_writer = CheckSummingWriter.new(
     )
   )
 )
-combined_writer.write_line('Hello out there')
+p combined_writer.write_line('Hello out there')
 
 # The Decorator pattern takes one of GoF advices to heart: It incorporates a
 # lot of delegation. We can see this in the WriterDecorator class, which consists

@@ -423,4 +423,12 @@ describe Arrays do
       end
     end
   end
+
+  describe '#my_split' do
+    let(:string) { '  5 + 11 + 4 ' }
+    
+    it 'returns the split array' do
+      expect(subject.my_split(string, ' ')).to eq ['5', '+', '11', '+', '4']
+    end
+  end
 end

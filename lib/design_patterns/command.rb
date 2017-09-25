@@ -176,7 +176,7 @@ class CopyFile < Command
   end
 
   def unexecute
-    if @contents
+    if @content
       f = File.open(@new_path, 'w')
       f.write(@contents)
       f.close

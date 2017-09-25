@@ -1,6 +1,6 @@
 # PROBLEM
 
-# Having ncompatible objects—objects that want to talk to each other but
+# Having non-compatible objects — objects that want to talk to each other but
 # cannot because their interfaces do not match.
 
 # GOF definition
@@ -38,6 +38,19 @@
 # - The interface mismatch is extensive and complex. For example, you probably
 # would not want to modify a string to look like a Fixnum object.
 # - You have no idea how this class works.
+
+# You can find a classic application of the Adapter pattern in ActiveRecord,
+# the ORM used by Ruby on Rails. ActiveRecord needs to deal with the fact that
+# it has to talk to different database systems: MYSQL,Oracle,Postgres, etc.).
+# All of these db systems provide a Ruby API, but all of the APIs are different.
+# For instance, if you have a connection with a MYSQL database and you wanna
+# execute some SQL, you have to call the query method:
+
+# mysql_connection.query(sql)
+
+# But if you use Sybase, you need to call another method:
+
+# sybase_connection.sql(sql)
 
 # WRAP UP
 # Adapters exist to soak up the differences between the interfaces that we
