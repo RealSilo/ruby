@@ -80,9 +80,9 @@ describe Recursion do
     end
   end
 
-  # describe '#min_coin_number' do
-  #   it 'it returns the min coin number' do
-  #     expect(subject.min_coin_number(11, [1, 2, 5, 10])).to eq 2
-  #   end
-  # end
+  describe '#levenshtein' do
+    it 'it returns the number on the nth place' do
+      expect(subject.levenshtein('greatest', 'grandest')).to eq 3
+    end
+  end
 end

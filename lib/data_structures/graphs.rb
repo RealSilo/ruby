@@ -154,8 +154,7 @@ class Graphs
   # a cycle whose the sum of the edges' weight is a negative value, since any path
   # could be made shorter just with another walk, over and over).
 
-  def bellman_ford(root, graph)
-  end
+  def bellman_ford(root, graph); end
 
   # Depth-First Search (DFS)
   # it explores possible vertices down each branch before backtracking
@@ -374,8 +373,8 @@ def connected_max(arr)
         k = element[0]
         l = element[1]
 
-        (-1).upto(1) do |m|
-          (-1).upto(1) do |n|
+        -1.upto(1) do |m|
+          -1.upto(1) do |n|
             if (k + m) >= 0 && (k + m) < arr.length && (l + n) >= 0 && (l + n) < arr[0].length
               unless arr[k + m][l + n] == 0 || visited.include?([k + m, l + n])
                 queue << [k + m, l + n]

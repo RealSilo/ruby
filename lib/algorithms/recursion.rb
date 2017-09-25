@@ -162,4 +162,24 @@ class Recursion
     return 0 if m < n
     1 + divide(m - n, n)
   end
+
+  # PROBLEM9: Write the Levenshtein algorithm recursively
+  # It's inefficent as it doesn't save previous values.
+  # Dynamic programming makes more sense here.
+  def levenshtein(string1, string2)
+    return 0 if string1.empty?
+    return 0 if string2.empty?
+
+    if string1[-1] == string2[-1]
+      cost = 0
+    else
+      cost = 1
+    end
+
+    [levenshtein(string1[0..-2], string2) + 1,
+     levenshtein(string1, string2[0..-2]) + 1,
+     levenshtein(string1[0..-2], string2[0..-2]) + cost].min
+  end
+
+  p new.levenshtein('grandest', 'greatest')
 end

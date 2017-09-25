@@ -569,11 +569,11 @@ class Arrays
     split_str = string.split('')
 
     split_str.each_with_index do |char, i|
-      unless split_str[i] == ' '
-        split_str[i] = split_str[i].ord + 13
-        split_str[i] -= 26 if split_str[i] > 90
-        split_str[i] = split_str[i].chr
-      end
+      next if split_str[i] == ' '
+
+      split_str[i] = split_str[i].ord + 13
+      split_str[i] -= 26 if split_str[i] > 90
+      split_str[i] = split_str[i].chr
     end
 
     split_str.join
@@ -587,13 +587,8 @@ class Arrays
     j = string.length - 1
 
     until i >= j
-      until vowels.include?(string[i]) || i >= j
-        i += 1
-      end
-
-      until vowels.include?(string[j]) || i >= j
-        j -= 1
-      end
+      i += 1 until vowels.include?(string[i]) || i >= j
+      j -= 1 until vowels.include?(string[j]) || i >= j
 
       string[i], string[j] = string[j], string[i] unless i == j
       i += 1
@@ -610,7 +605,7 @@ class Arrays
 
     formatted_string = string.clone
     formatted_string.strip!
-    
+
     formatted_string.each_char do |char|
       if char == divider
         result << current
@@ -624,6 +619,4 @@ class Arrays
 
     result
   end
-
-  p new.my_split('5 + 11 + 4', ' ')
 end

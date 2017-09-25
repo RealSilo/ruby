@@ -172,7 +172,37 @@ class Dynamic
 
     str1.slice(intersection_start..intersection_end)
   end
-end
 
-puts Dynamic.new.common_longest_subsequence('houseboat', 'computer')
-puts Dynamic.new.common_longest_substring('houseboat', 'coumputer')
+  puts new.common_longest_subsequence('houseboat', 'computer')
+  puts new.common_longest_substring('houseboat', 'coumputer')
+
+  #
+  def levenshtein_distance(string1, string2)
+    return string1 if string2.empty?
+    return string2 if string1.empty?
+
+    a = string1.downcase
+    b = string2.downcase
+
+    matrix = Array.new(a.length + 1) { Array.new(b.length + 1) { 0 } }
+
+    (0..b.length).each { |i| matrix[0][i] = i }
+    (1..a.length).each { |i| matrix[i][0] = i }
+
+    (1..a.length).each do |i|
+      (1..b.length).each do |j|
+        subcost = a[i-1] == b[j-1] ? 0 : 1 # if the same substit. not needed
+        matrix[i][j] = [
+          matrix[i-1][j] + 1, # insertion
+          matrix[i][j-1] + 1, # deletion
+          matrix[i-1][j-1] + subcost # substitution
+        ].min
+      end
+    end
+
+    matrix.last.last
+  end
+
+  p new.levenshtein_distance('greatest', 'grandest')
+  p new.levenshtein_distance('kitten', 'wkitten')
+end

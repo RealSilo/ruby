@@ -82,7 +82,7 @@ module WheelDependsOnGear
     def gear_inches(diameter)
       ratio * diameter
     end
-    
+
     def ratio
       chainring / cog.to_f
     end
@@ -488,10 +488,10 @@ end
 module WrongAbstraction
   class Rectangle
     def initialize(height, width)
-       @height = height
-       @width = width
+      @height = height
+      @width = width
     end
-    
+
     def height=(value)
       @height = value
     end
