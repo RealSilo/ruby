@@ -130,9 +130,8 @@ class AddLiquidsTask < Task
 end
 
 # composite class
-# While the MakeBatterTask class looks to the outside world
-# like any other sim- ple task—it implements the key
-# time_required method—it is actually built up from two
+# While the MakeBatterTask class looks to the outside world like any other simple 
+# ask—it implements the key time_required method—it is actually built up from two
 # subtasks: AddDryIngredientsTask and AddLiquidsTask
 class MakeBatterTaskDraft < Task
   def initialize
@@ -157,9 +156,8 @@ class MakeBatterTaskDraft < Task
   end
 end
 
-# Since we will have more composite tasks it makes sense
-# to extract the details of managing child tasks to another
-# base class.
+# Since we will have more composite tasks it makes sense to extract the details
+# of managing child tasks to another base class.
 
 class CompositeTask < Task
   def initialize(name)
