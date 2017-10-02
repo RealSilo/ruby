@@ -64,16 +64,17 @@ class Select
   # order statistic (kth smallest number) in an unsorted array with length n.
   # Median of medians can also be used as a pivot strategy in quicksort
   def median_kth(arr, kth = 10, base = 5)
-    return arr.sort[kth - 1] if arr.length <= base
+    return arr.sort[(arr.length - 1) / 2] if arr.length <= base
 
     medians = []
     left = []
     right = []
 
     arr.each_slice(base) do |base_arr|
-      medians << base_arr.sort[base_arr.length / 2 - 1]
+      medians << base_arr.sort[(base_arr.length - 1) / 2]
     end
 
+    # median number is found
     m = median_kth(medians, medians.length / 2)
 
     arr.each do |n|

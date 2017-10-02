@@ -176,7 +176,8 @@ class Dynamic
   puts new.common_longest_subsequence('houseboat', 'computer')
   puts new.common_longest_substring('houseboat', 'coumputer')
 
-  #
+  # PROBLEM5: Calculate the Levenshtein-distance of two strings with dynamic
+  # programming.
   def levenshtein_distance(string1, string2)
     return string1 if string2.empty?
     return string2 if string1.empty?
@@ -205,4 +206,38 @@ class Dynamic
 
   p new.levenshtein_distance('greatest', 'grandest')
   p new.levenshtein_distance('kitten', 'wkitten')
+
+  # Start from the top-left corner of a grid and find a path to the bottom-right
+  # corner if exists. Some cells can be blocked (0 is free cell, 1 is blocked).
+  # Only can move to the right and down.
+  def right_down_grid_path(arr)
+    return nil if arr.nil? || arr.empty? || arr.first.empty?
+    
+    path = []
+    return path if get_path(arr, arr.length - 1, arr.first.length - 1, path)
+
+    nil
+  end
+
+  def get_path(arr, row, col, path, failed_points = [])
+    return false if col < 0 || row < 0 || !arr[row][col] || arr[row][col] == 1
+
+    failed_points = []
+    return false if failed_points.include?([row, col])
+
+    start_point = (col == 0 && row == 0)
+
+    if start_point ||
+       get_path(arr, row - 1, col, path, failed_points) ||
+       get_path(arr, row, col - 1, path, failed_points)
+      path << [row, col]
+      return true
+    end
+
+    failed_points << [row, col]
+    false
+  end
+
+  p new.right_down_grid_path([[0, 0, 0], [1, 1, 0], [0, 0, 0]])
+  p new.right_down_grid_path([[0, 1, 0, 0], [0, 0, 1, 0], [1, 0, 0, 1], [1, 1, 0, 0]])
 end
