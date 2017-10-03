@@ -217,4 +217,35 @@ class Backtracking
     @board.display if @solution_found
     @boards.each(&:display)
   end
+
+  # def eight_queens_short(row= 0, cols = [0,0,0,0,0,0,0,0], results = [], default_size = 8)
+  #   if row == default_size
+  #     results << cols.clone
+  #   else
+  #     (0..default_size).each do |i|
+  #       if valid?(cols, row, i)
+  #         cols[row] = i
+  #         eight_queens_short(row + 1, cols, results)
+  #       end
+  #     end
+  #   end
+
+  #   results
+  # end
+
+  # def valid?(cols, row, col)
+  #   (0..row).each do |i|
+  #     col2 = cols[i]
+
+  #     return false if col == col2
+  #     col_distance = (col - col2).abs
+  #     row_distance = (row - i).abs
+
+  #     return false if col_distance == row_distance
+  #   end
+
+  #   true
+  # end
+
+  p new.eight_queens_short
 end

@@ -164,17 +164,12 @@ class Recursion
   end
 
   # PROBLEM9: Write the Levenshtein algorithm recursively
-  # It's inefficent as it doesn't save previous values.
+  # It's inefficient as it doesn't save previous values.
   # Dynamic programming makes more sense here.
   def levenshtein(string1, string2)
-    return 0 if string1.empty?
-    return 0 if string2.empty?
+    return 0 if string1.empty? || string2.empty?
 
-    if string1[-1] == string2[-1]
-      cost = 0
-    else
-      cost = 1
-    end
+    cost = string1[-1] == string2[-1] ? 0: 1
 
     [levenshtein(string1[0..-2], string2) + 1,
      levenshtein(string1, string2[0..-2]) + 1,
@@ -182,4 +177,14 @@ class Recursion
   end
 
   p new.levenshtein('grandest', 'greatest')
+
+  # PROBLEM10: Recursive multiply. Write a function that multiplies two integers
+  # without using *.
+  def recursive_multiply(a, b, c = 0)
+    return c if a == 0
+
+    recursive_multiply(a - 1, b, c + b)
+  end
+
+  p new.recursive_multiply(30, 30)
 end

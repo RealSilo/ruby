@@ -77,11 +77,9 @@ class Trie
   end
 
   def find_with_str(word = '', node = @root)
-    matches = []
-    collect_with_str(node, '', word)
-    matches << @words
     @words = []
-    matches
+    collect_with_str(node, '', word)
+    @words.select { |w| word.length <= w.keys[0].length }
   end
 
   private
@@ -90,7 +88,7 @@ class Trie
     if node && node.hash.any?
       if word.empty?
         node.hash.each_key do |letter|
-          new_string = string + letter
+          new_string = string.clone + letter
           collect_with_str(node.hash[letter], new_string)
         end
       else
@@ -109,7 +107,7 @@ class Trie
       string.empty? ? nil : @words << string
     else
       node.hash.each_key do |letter|
-        new_string = string + letter
+        new_string = string.clone + letter
         collect(node.hash[letter], new_string)
       end
 
@@ -129,5 +127,5 @@ p trie.find_with_str('hack')
 p trie.find_with_str('hak')
 p trie.find_with_str('hacker')
 # p trie.find_with_str('he')
-p trie.print_all
-p trie.find('hack')
+# p trie.print_all
+# p trie.find('hack')
