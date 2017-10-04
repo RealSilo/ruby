@@ -393,3 +393,90 @@ end
 # end
 
 # p Solution.new.solve2([-1, 0, 0, 0, 3])
+
+# class Product
+#   attr_reader :name, :categories
+
+#   def initialize(name)
+#     @name = name
+#     @categories = []
+#   end
+
+#   def add_category(category)
+#     @categories << category
+#     category.products << self
+#   end
+# end
+
+# class Category
+#   attr_reader :name, :products
+
+#   def initialize(name)
+#     @name = name
+#     @products = []
+#   end
+
+#   def add_product(product)
+#     @products << product
+#     product.categories << self
+#   end
+# end
+
+# product = Product.new('shirt')
+# category = Category.new('clothes')
+# product.add_category(category)
+# p category.products
+
+birth_data_date = {
+  '1985': [
+    { 'Peter': { 'birthplace': 'Baltimore', 'hospital': 'St Mary' }},
+    { 'Tom': { 'birthplace': 'Chicago', 'hospital': 'St Stephen' }},
+    { 'Andy': { 'birthplace': 'Washington', 'hospital': 'St Stephen' }},
+    { 'John': { 'birthplace': 'San Francisco', 'hospital': 'UCSF Medical Center' }}
+  ],
+  '1986': [
+    { 'Jack': { 'birthplace': 'New Jersey', 'hospital': 'General Hospital' }},
+    { 'Tom': { 'birthplace': 'Washington', 'hospital': 'St Stephen' }},
+    { 'Steven': { 'birthplace': 'Indianapolis', 'hospital': 'City Hospital' }},
+    { 'Jack': { 'birthplace': 'Dallas', 'hospital': 'Dallas City Hospital' }}
+  ],
+  '1987': [
+    { 'David': { 'birthplace': 'Pittsburgh', 'hospital': 'Pittsburgh Hospital' }},
+    { 'Michael': { 'birthplace': 'Los Angeles', 'hospital': 'UCLA Medical Center' }},
+    { 'Brad': { 'birthplace': 'New Jersey', 'hospital': 'General Hospital' }},
+    { 'David': { 'birthplace': 'Kansas City', 'hospital': 'Kanas State Hospital' }}
+  ],
+  '1988': [
+    { 'Peter': { 'birthplace': 'Boston', 'hospital': 'St Peter' }},
+    { 'Tom': { 'birthplace': 'Pittsburgh', 'hospital': 'Pittsburgh Hospital' }}
+  ],
+  '1989': [
+    { 'Donald': { 'birthplace': 'San Francisco', 'hospital': 'UCSF Medical Center' }},
+    { 'Tom': { 'birthplace': 'Miami', 'hospital': 'Florida State Hospital' }},
+    { 'Aaron': { 'birthplace': 'Seattle', 'hospital': 'Seattle Medical Center' }},
+    { 'Aaron': { 'birthplace': 'Chicago', 'hospital': 'St Stephen' }}
+  ]
+}
+
+# birthname_data = {
+#   'Aaron': [
+#     { 'date': '1989', 'birthplace': 'Seattle', 'hospital': 'Seattle Medical Center' },
+#     { 'date': '1989', 'birthplace': 'Chicago', 'hospital': 'St Stephen' }
+#   ]
+# }
+birth_data_name = {}
+
+birth_data_date.each do |key, value|
+  value.each do |hash|
+    hash.each do |k, v|
+      v.merge!('date': key.to_s)
+      if birth_data_name[k.to_s]
+        birth_data_name[k.to_s] << v
+      else
+        birth_data_name[k.to_s] = [v]
+      end
+    end
+  end
+end
+
+puts birth_data_name['Peter']

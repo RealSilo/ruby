@@ -116,16 +116,75 @@ class Trie
   end
 end
 
-trie = Trie.new
-trie.add('hackerrank', date: '1988-02-26')
-trie.add('hack', date: '1977-02-12')
+# trie = Trie.new
+# trie.add('hackerrank', date: '1988-02-26')
+# trie.add('hack', date: '1977-02-12')
 # trie.add('danny', date: '1998-04-21')
 # trie.add('jane', date: '1985-05-08')
 # trie.add('jack', date: '1994-11-04')
 # trie.add('pete', date: '1977-12-18')
-p trie.find_with_str('hack')
-p trie.find_with_str('hak')
-p trie.find_with_str('hacker')
+# p trie.find_with_str('hack')
+# p trie.find_with_str('hak')
+# p trie.find_with_str('hacker')
 # p trie.find_with_str('he')
 # p trie.print_all
 # p trie.find('hack')
+
+birth_data_date = {
+  '1985': [
+    { 'Peter': { 'birthplace': 'Baltimore', 'hospital': 'St Mary' }},
+    { 'Tom': { 'birthplace': 'Chicago', 'hospital': 'St Stephen' }},
+    { 'Andy': { 'birthplace': 'Washington', 'hospital': 'St Stephen' }},
+    { 'John': { 'birthplace': 'San Francisco', 'hospital': 'UCSF Medical Center' }}
+  ],
+  '1986': [
+    { 'Jack': { 'birthplace': 'New Jersey', 'hospital': 'General Hospital' }},
+    { 'Tom': { 'birthplace': 'Washington', 'hospital': 'St Stephen' }},
+    { 'Steven': { 'birthplace': 'Indianapolis', 'hospital': 'City Hospital' }},
+    { 'Jack': { 'birthplace': 'Dallas', 'hospital': 'Dallas City Hospital' }}
+  ],
+  '1987': [
+    { 'David': { 'birthplace': 'Pittsburgh', 'hospital': 'Pittsburgh Hospital' }},
+    { 'Michael': { 'birthplace': 'Los Angeles', 'hospital': 'UCLA Medical Center' }},
+    { 'Brad': { 'birthplace': 'New Jersey', 'hospital': 'General Hospital' }},
+    { 'David': { 'birthplace': 'Kansas City', 'hospital': 'Kanas State Hospital' }}
+  ],
+  '1988': [
+    { 'Peter': { 'birthplace': 'Boston', 'hospital': 'St Peter' }},
+    { 'Tom': { 'birthplace': 'Pittsburgh', 'hospital': 'Pittsburgh Hospital' }},
+    { 'Pete': { 'birthplace': 'Green Bay', 'hospital': 'Green Bay Hospital' }}
+  ],
+  '1989': [
+    { 'Donald': { 'birthplace': 'San Francisco', 'hospital': 'UCSF Medical Center' }},
+    { 'Tom': { 'birthplace': 'Miami', 'hospital': 'Florida State Hospital' }},
+    { 'Aaron': { 'birthplace': 'Seattle', 'hospital': 'Seattle Medical Center' }},
+    { 'Aaron': { 'birthplace': 'Chicago', 'hospital': 'St Stephen' }},
+    { 'Pete': { 'birthplace': 'Denver', 'hospital': 'Hopkins Hospital' }}
+  ]
+}
+
+birth_data_name = {}
+
+birth_data_date.each do |key, value|
+  value.each do |hash|
+    hash.each do |k, v|
+      v.merge!('date': key.to_s)
+      if birth_data_name[k.to_s]
+        birth_data_name[k.to_s] << v
+      else
+        birth_data_name[k.to_s] = [v]
+      end
+    end
+  end
+end
+
+puts birth_data_name['Peter']
+
+trie = Trie.new
+
+birth_data_name.each do |k ,v|
+  trie.add(k, v)
+end
+
+p trie.find_with_str('Peter')
+p trie.find_with_str('Pet')
