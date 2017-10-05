@@ -69,28 +69,25 @@ class Recursion
   # the permutations of that string
   # With 'abc' as arg would return ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
   # Duplicates are fine => 'xxx' would return [ 'xxx' * 6]
-  @@result = []
+  RESULT = []
   def string_permutation(string, output = '')
     return if string.length == 0
 
     if string.length == 1
-      @@result << output + string[0]
+      RESULT << output + string[0]
       return
     end
 
     string.each_char.with_index do |char, i|
       if i > 0
-        new_string = string[0..i] + string[(i + 1)..string.length - 1]
+        new_string = string[0..i - 1] + string[(i + 1)..string.length - 1]
       else
         new_string = string[1..-1]
       end
-      p new_string
       string_permutation(new_string, output + string[i])
     end
-    @@result
+    RESULT
   end
-
-  new.string_permutation('abc')
 
   # PROBLEM 6: Implement Fibonacci sequence with and without memoization
 
@@ -135,9 +132,7 @@ class Recursion
     a = 0
     b = 1
 
-    n.times do
-      a, b = b, a + b
-    end
+    n.times { a, b = b, a + b }
 
     a
   end
