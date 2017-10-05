@@ -206,5 +206,25 @@ class Greedy
     'station7': ['ID', 'NV', 'UT']
   }
 
-  p Greedy.new.set_cover2(states, stations2)
+  p new.set_cover2(states, stations2)
+
+  # You buy stocks and you wanna maximize your profit. You have to sell later
+  # than you bought.
+
+  # [5, 10, 4, 6, 12] should return 12 - 4 = 8
+
+  # This greedy solution uses O(N) time and O(1) space.
+  def max_profit(arr)
+    min = arr.first
+    diff = 0
+
+    arr.each do |element|
+      diff = [element - min, diff].max
+      min = [element, min].min
+    end
+
+    diff
+  end
+
+  p new.max_profit([5, 10, 4, 6, 12])
 end

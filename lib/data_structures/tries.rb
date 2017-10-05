@@ -1,3 +1,4 @@
+require 'byebug'
 # Very commonly, a trie is used to store the entire (English) language for quick
 # pre x lookups. While a hash table can quickly look up whether a string is a
 # valid word, it cannot tell us if a string is a pre x of any valid words. A trie
@@ -30,10 +31,11 @@ class Node
 end
 
 class Trie
+  attr_reader :root
+
   def initialize
     @root = Node.new
     @words = []
-    @string = ''
   end
 
   def add(input, data, node = @root)
@@ -49,6 +51,8 @@ class Trie
   end
 
   def find(input, node = @root)
+    return nil unless node
+
     if input.empty? && node.end_node?
       return node.data
     elsif input.empty?
@@ -76,29 +80,37 @@ class Trie
     @words
   end
 
-  def find_with_str(word = '', node = @root)
+  def find_with_str(term = '', node = @root)
     @words = []
-    collect_with_str(node, '', word)
-    @words.select { |w| word.length <= w.keys[0].length }
+    collect_with_str(node, term.length, '', term)
+    @words
   end
 
   private
 
-  def collect_with_str(node, string, word = '')
+  def collect_with_str(node, term_length, string, term = '')
     if node && node.hash.any?
-      if word.empty?
+      if term.empty?
         node.hash.each_key do |letter|
           new_string = string.clone + letter
-          collect_with_str(node.hash[letter], new_string)
+          collect_with_str(node.hash[letter], term_length, new_string)
         end
       else
-        new_string = string + word[0]
-        collect_with_str(node.hash[word[0]], new_string, word[1..-1])
+        new_string = string + term[0]
+        collect_with_str(node.hash[term[0]], term_length, new_string, term[1..-1])
       end
 
-      @words.push("#{string}": node.data) if node.end_node
+      # when it comes back from the recursion middle words get added
+      # if it's an end node and the term is shorter
+      if node.end_node && string.length >= term_length
+        @words.push("#{string}": node.data)
+      end
     elsif node
-      @words.push("#{string}": node.data) unless string.empty?
+      # we know it's an endpoint since it's a leaf, but we have tocheck if it's
+      # not root or it's not shorter than the term
+      unless string.empty? || string.length < term_length
+        @words.push("#{string}": node.data)
+      end
     end
   end
 
@@ -116,19 +128,18 @@ class Trie
   end
 end
 
-# trie = Trie.new
-# trie.add('hackerrank', date: '1988-02-26')
-# trie.add('hack', date: '1977-02-12')
-# trie.add('danny', date: '1998-04-21')
-# trie.add('jane', date: '1985-05-08')
-# trie.add('jack', date: '1994-11-04')
-# trie.add('pete', date: '1977-12-18')
-# p trie.find_with_str('hack')
-# p trie.find_with_str('hak')
-# p trie.find_with_str('hacker')
-# p trie.find_with_str('he')
-# p trie.print_all
-# p trie.find('hack')
+ttrie = Trie.new
+ttrie.add('hackerrank', date: '1988-02-26')
+ttrie.add('hack', date: '1977-02-12')
+ttrie.add('danny', date: '1998-04-21')
+ttrie.add('jane', date: '1985-05-08')
+ttrie.add('jack', date: '1994-11-04')
+ttrie.add('pete', date: '1977-12-18')
+p ttrie.find_with_str('hack')
+p ttrie.find_with_str('hak')
+p ttrie.find_with_str('hacker')
+p ttrie.find_with_str('he')
+p ttrie.print_all
 
 birth_data_date = {
   '1985': [

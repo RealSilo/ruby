@@ -44,11 +44,11 @@ describe Recursion do
     end
   end
 
-  # describe '#string_permutation' do
-  #   it 'it returns all the combinations' do
-  #     expect(subject.string_permutation('abc')).to eq ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
-  #   end
-  # end
+  describe '#string_permutation' do
+    it 'it returns all the combinations' do
+      expect(subject.string_permutation('abc')).to eq ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
+    end
+  end
 
   describe '#fibonacci' do
     it 'it returns the number on the nth place' do

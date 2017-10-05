@@ -400,14 +400,13 @@ class Arrays
 
   # [[1,2,3,4][5,6,7,8],[9,10,11,12],[13,14,15,16]]
   # time complexity O(N) where N is the number of elements in the matrix
+  # space complaexity O(N)
   def rotate(matrix)
     length = matrix.length
     rotated_matrix = Array.new(length) { Array.new(length) { nil } }
 
     matrix.each_with_index do |row, i|
       row.each_with_index do |_col, j|
-        # rotated_matrix[length - 1 - i][j] = matrix[j][i]
-        # rotated_matrix[i][j] = matrix[j][length - 1 - i]
         rotated_matrix[length - 1 - j][i] = matrix[i][j]
       end
     end

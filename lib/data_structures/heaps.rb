@@ -1,100 +1,74 @@
 require 'byebug'
+# like binary search tree except:
+# 1.
+# if min store:
+# values of child nodes must be greater than parent node's value
+# if max hep:
+# values of child nodes must be smaller than parent node's value
+# 2.
+# all levels of the tree, except possibly the last one (deepest) are FULLY FILLED,
+# and, if the last level of the tree is not complete, the nodes of that level
+# are filled from left to right
 
-class BinaryHeap
-  # like binary search tree except:
-  # 1.
-  # if min heap:
-  # values of child nodes must be greater than parent node's value
-  # if max hep:
-  # values of child nodes must be smaller than parent node's value
-  # 2.
-  # all levels of the tree, except possibly the last one (deepest) are FULLY FILLED,
-  # and, if the last level of the tree is not complete, the nodes of that level
-  # are filled from left to right
-
-  # in order to guarantee log performance we must keep our tree balanced
-  # a balanced binary tree has roughly the same number of nodes in the
-  # left and the right subtrees of the root. (in definition -> fully filled, so this
-  # is not a problem here)
-
-  def initialize
-    @heap_list = [0]
-    @current_size = 0
-  end
-
-  def insert(k)
-    @heap_list.push(k)
-    @heap_list.current_size += 1
-    perc_up(current_size)
-  end
-
-  def perc_up(i)
-    while i / 2 > 0
-      if @heap_list[i] < @heap_list[i / 2]
-        @heap_list[i], @heap_list[i / 2] = @heap_list[i / 2], @heap_list
-      end
-      i /= 2
-    end
-  end
-
-  # ......
-end
-
+# in order to guarantee log performance we must keep our tree balanced
+# a balanced binary tree has roughly the same number of nodes in the
+# left and the right subtrees of the root. (in definition -> fully filled, so this
+# is not a problem here)
 class MinHeap
-  attr_accessor :heap
+  attr_accessor :store
 
   def initialize
-    @heap = [nil]
+    @store = [nil]
   end
 
   def add(value)
-    heap.push(value)
+    store.push(value)
 
-    idx = heap.length - 1
+    idx = store.length - 1
 
-    return if heap.length < 3
+    return if store.length < 3
 
-    while idx > 1 && heap[idx] < heap[idx / 2]
-      heap[idx], heap[idx / 2] = heap[idx / 2], heap[idx]
+    while idx > 1 && store[idx] < store[idx / 2]
+      store[idx], store[idx / 2] = store[idx / 2], store[idx]
 
       idx /= 2
     end
   end
 
   def remove
-    smallest = heap[1]
+    smallest = store[1]
 
-    if heap.length > 2
-      heap[1] = heap.pop
+    if store.length > 2
+      store[1] = store.pop
 
-      if heap.length == 3
-        heap[1], heap[2] = heap[2], heap[1] if heap[1] > heap[2]
+      if store.length == 3
+        store[1], store[2] = store[2], store[1] if store[1] > store[2]
         return smallest
       end
 
-      return smallest if heap.length == 2
+      return smallest if store.length == 2
 
       i = 1
       left = 2 * i
       right = 2 * i + 1
 
-      while heap[i] > heap[left] || heap[i] > heap[right]
-        if heap[left] < heap[right]
-          heap[i], heap[left] = heap[left], heap[i]
+      while store[i] > store[left] || store[i] > store[right]
+        if store[left] < store[right]
+          store[i], store[left] = store[left], store[i]
           i = 2 * i
         else
-          heap[i], heap[right] = heap[right], heap[i]
+          store[i], store[right] = store[right], store[i]
           i = 2 * i + 1
         end
 
         left = 2 * i
         right = 2 * i + 1
 
-        break if heap[left].nil? || heap[right].nil?
+        break if store[left].nil? || store[right].nil?
       end
 
-    elsif heap.length == 2
-      return heap.pop
+    elsif store.length == 2
+      return store.pop
     else
       return nil
     end
@@ -104,34 +78,156 @@ class MinHeap
   def heap_sort
     result = []
 
-    result << remove while heap.length > 1
+    result << remove while store.length > 1
 
     result
   end
 end
 
-min_heap = MinHeap.new
-min_heap.add(20)
-min_heap.add(30)
-min_heap.add(25)
-min_heap.add(40)
-min_heap.add(10)
-p min_heap.heap
-min_heap.remove
-p min_heap.heap
-min_heap.remove
-p min_heap.heap
-min_heap.remove
-p min_heap.heap
-min_heap.remove
-p min_heap.heap
-min_heap.remove
-p min_heap.heap
+min_store = MinHeap.new
+min_store.add(20)
+min_store.add(30)
+min_store.add(25)
+min_store.add(40)
+min_store.add(10)
+p min_store.store
+min_store.remove
+p min_store.store
+min_store.remove
+p min_store.store
+min_store.remove
+p min_store.store
+min_store.remove
+p min_store.store
+min_store.remove
+p min_store.store
 
-min_heap.add(20)
-min_heap.add(30)
-min_heap.add(25)
-min_heap.add(40)
-min_heap.add(10)
+min_store.add(20)
+min_store.add(30)
+min_store.add(25)
+min_store.add(40)
+min_store.add(10)
 
-p min_heap.heap_sort
+# p min_store.heap_sort
+
+class MaxHeap
+  attr_reader :store
+
+  def initialize
+    @store = [nil]
+  end
+
+  def add(element)
+    store << element
+
+    return if store.length < 3
+
+    idx = store.length - 1
+
+    while idx > 1 && store[idx] > store[idx / 2]
+      store[idx], store[idx / 2] = store[idx / 2], store[idx]
+      idx /= 2
+    end
+  end
+
+  def remove
+    largest = store[1]
+
+    if store.length > 2
+      store[1] = store.pop
+
+      if store.length == 3
+        store[1], store[2] = store[2], store[1] if store[2] > store[1]
+        return largest
+      end
+
+      return largest if store.length == 2
+
+      i = 1
+
+      left = i * 2
+      right = i * 2 + 1
+
+      while store[i] < store[left] || store[i] < store[right]
+        if store[left] < store[right]
+          store[i], store[right] = store[right], store[i]
+          i = i * 2 + 1
+        else
+          store[i], store[left] = store[left], store[i]
+          i *= 2
+        end
+
+        left = i * 2
+        right = i * 2 + 1
+
+        break if store[left].nil? || store[right].nil?
+      end
+    elsif store.length == 2
+      return store.pop
+    else
+      return nil
+    end
+
+    largest
+  end
+end
+
+max_store = MaxHeap.new
+max_store.add(20)
+max_store.add(30)
+max_store.add(25)
+max_store.add(40)
+max_store.add(10)
+p max_store.store
+max_store.remove
+p max_store.store
+max_store.remove
+p max_store.store
+max_store.remove
+p max_store.store
+max_store.remove
+p max_store.store
+max_store.remove
+p max_store.store
+
+max_store.add(20)
+max_store.add(30)
+max_store.add(25)
+max_store.add(40)
+max_store.add(10)
+
+# PROBLEM1: Find the RUNNING median for an unsorted list.
+
+def calc_median(array)
+  min_store = MinHeap.new
+  max_store = MaxHeap.new
+  medians = []
+
+  array.each_with_index do |element, i|
+    i.even? ? max_store.add(element) : min_store.add(element)
+    
+    if i == 0
+      medians << max_store.store[1].to_f
+      next
+    end
+
+    if max_store.store[1] > min_store.store[1]
+      temp1 = max_store.remove
+      temp2 = min_store.remove
+
+      max_store.add(temp2)
+      min_store.add(temp1)
+    end
+
+    if i.even? 
+      medians << max_store.store[1].to_f
+    else
+      sum = max_store.store[1].to_f + min_store.store[1].to_f
+      medians << sum / 2
+    end
+  end
+
+  medians
+end
+
+puts calc_median([2,6,4,10,8,11,13,15,17,33,44,55])

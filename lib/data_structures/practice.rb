@@ -182,20 +182,20 @@ require 'byebug'
 #     puts row.join(' ')
 # end
 
-def min_loss(data)
-    orig_index = data.map.with_index.sort.map(&:last)
-    data = data.sort
+# def min_loss(data)
+#     orig_index = data.map.with_index.sort.map(&:last)
+#     data = data.sort
     
-    diff = 10 ** 2
+#     diff = 10 ** 2
     
-    data.each_with_index do |num, i|
-        if data[i + 1] && data[i + 1] - data[i] > 0 && data[i + 1] - data[i] < diff && orig_index[i + 1] < orig_index[i]
-            diff = data[i + 1] - data[i]
-        end
-    end
+#     data.each_with_index do |num, i|
+#         if data[i + 1] && data[i + 1] - data[i] > 0 && data[i + 1] - data[i] < diff && orig_index[i + 1] < orig_index[i]
+#             diff = data[i + 1] - data[i]
+#         end
+#     end
     
-    diff
-end
+#     diff
+# end
 
 # p min_loss([0, 9, 3])
 
@@ -242,24 +242,6 @@ def connected_max(arr)
 end
 
 # p connected_max([[1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 0], [1, 0, 0, 0]])
-
-# You buy stocks and you wanna maximize your profit. You have to sell later
-# than you bought.
-
-# [5, 10, 4, 6, 12] should return 12 - 4 = 8
-
-# This greedy solution uses O(N) time and O(1) space.
-def max_profit(arr)
-  min = arr.first
-  diff = 0
-
-  arr.each do |element|
-    diff = [element - min, diff].max
-    min = [element, min].min
-  end
-
-  diff
-end
 
 # p max_profit([5, 10, 4, 6, 12])
 
@@ -427,36 +409,6 @@ end
 # product.add_category(category)
 # p category.products
 
-birth_data_date = {
-  '1985': [
-    { 'Peter': { 'birthplace': 'Baltimore', 'hospital': 'St Mary' }},
-    { 'Tom': { 'birthplace': 'Chicago', 'hospital': 'St Stephen' }},
-    { 'Andy': { 'birthplace': 'Washington', 'hospital': 'St Stephen' }},
-    { 'John': { 'birthplace': 'San Francisco', 'hospital': 'UCSF Medical Center' }}
-  ],
-  '1986': [
-    { 'Jack': { 'birthplace': 'New Jersey', 'hospital': 'General Hospital' }},
-    { 'Tom': { 'birthplace': 'Washington', 'hospital': 'St Stephen' }},
-    { 'Steven': { 'birthplace': 'Indianapolis', 'hospital': 'City Hospital' }},
-    { 'Jack': { 'birthplace': 'Dallas', 'hospital': 'Dallas City Hospital' }}
-  ],
-  '1987': [
-    { 'David': { 'birthplace': 'Pittsburgh', 'hospital': 'Pittsburgh Hospital' }},
-    { 'Michael': { 'birthplace': 'Los Angeles', 'hospital': 'UCLA Medical Center' }},
-    { 'Brad': { 'birthplace': 'New Jersey', 'hospital': 'General Hospital' }},
-    { 'David': { 'birthplace': 'Kansas City', 'hospital': 'Kanas State Hospital' }}
-  ],
-  '1988': [
-    { 'Peter': { 'birthplace': 'Boston', 'hospital': 'St Peter' }},
-    { 'Tom': { 'birthplace': 'Pittsburgh', 'hospital': 'Pittsburgh Hospital' }}
-  ],
-  '1989': [
-    { 'Donald': { 'birthplace': 'San Francisco', 'hospital': 'UCSF Medical Center' }},
-    { 'Tom': { 'birthplace': 'Miami', 'hospital': 'Florida State Hospital' }},
-    { 'Aaron': { 'birthplace': 'Seattle', 'hospital': 'Seattle Medical Center' }},
-    { 'Aaron': { 'birthplace': 'Chicago', 'hospital': 'St Stephen' }}
-  ]
-}
 
 # birthname_data = {
 #   'Aaron': [
@@ -464,19 +416,137 @@ birth_data_date = {
 #     { 'date': '1989', 'birthplace': 'Chicago', 'hospital': 'St Stephen' }
 #   ]
 # }
-birth_data_name = {}
 
-birth_data_date.each do |key, value|
-  value.each do |hash|
-    hash.each do |k, v|
-      v.merge!('date': key.to_s)
-      if birth_data_name[k.to_s]
-        birth_data_name[k.to_s] << v
-      else
-        birth_data_name[k.to_s] = [v]
-      end
+
+# def left_rotation(k, a)
+#   diff = k.clone
+#   start = 0
+#   while start < diff
+#     jump = start
+#     while jump < a.length - 1
+#       if a[jump - k] < 0
+#         temp = a[a.length - 1 - jump + k]
+#         a[a.length - 1 - jump + k] = a[jump]
+#       else
+#         a[jump - k] = a[jump]
+#       end
+
+#       jump += k
+#     end
+#     start += 1
+#   end
+# end
+
+# k = 4
+# a = [1,2,3,4,5]
+# left_rotation(k, a)
+
+# @result = []
+# def permute(result,input)
+#   if(input.length == 0)
+#     return
+#   end
+
+#   if(input.length == 1)
+#     p result
+#     @result << result + input[0]
+#     return
+#   end
+
+#   # if(input.length == 2)
+#   #   puts result + input[0] + input[1]
+#   #   puts result + input[1] + input[0]
+#   #   return
+#   # end
+
+#   (0...input.length).step(1).each do |i|
+#     firstpart = result+input[i]
+#     secondpart = (i > 0 ? input[0..(i-1)] : '') + (input[(i+1)..-1] || '')
+#     permute(firstpart,secondpart)
+#   end
+
+#   @result
+# end
+
+# p permute('', 'abcd')
+
+class Node
+    attr_accessor :children, :end_node, :size
+    
+    def initialize
+        @children = {}
+        @end_node = false
+        @size = 0
     end
-  end
 end
 
-puts birth_data_name['Peter']
+class Trie
+    attr_accessor :count
+    
+    def initialize
+        @root = Node.new
+        @count = 0
+    end
+    
+    def add(input, node = @root)
+        if input.empty?
+            node.end_node = true
+        elsif node.children.keys.include?(input[0])
+            node.size += 1
+            add(input[1..-1], node.children[input[0]])
+        else
+            node.size += 1
+            node.children[input[0]] = Node.new
+            add(input[1..-1], node.children[input[0]])
+        end 
+    end
+    
+    def find_base(term, node = @root)
+        return nil unless node
+        return node if term.empty?
+        find_base(term[1..-1], node.children[term[0]])
+    end
+    
+    def find_count(term)
+        node = find_base(term)
+        unless node
+            puts 0
+            return
+        end
+        puts node.size
+        # count_children(node)
+    end
+    
+    def count_children(node)
+        return unless node
+        @count += 1 if node.end_node
+        node.children.each do |_key, node|
+          count_children(node)
+        end
+    end
+end
+
+@@trie = Trie.new
+
+def contacts(op, contact)
+    if op == 'add'
+        @@trie.add(contact)
+    elsif op == 'find'
+        # @@trie.count = 0
+        @@trie.find_count(contact)
+        # puts @@trie.count
+    end
+end
+
+contacts('add', 's')
+contacts('add', 'ss')
+contacts('add', 'sss')
+contacts('add', 'ssss')
+contacts('add', 'sssss')
+contacts('find', 's')
+contacts('find', 'ss')
+contacts('find', 'sss')
+contacts('find', 'ssss')
+contacts('find', 'sssss')
+contacts('find', 'ssssss')
+# contacts('find', 'hak')
