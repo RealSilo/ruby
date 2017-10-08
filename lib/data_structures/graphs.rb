@@ -358,7 +358,7 @@ def connected_max(arr)
   arr.each_with_index do |row, i|
     row.each_with_index do |_col, j|
       next if arr[i][j] == 0
-      next if visited["#{i}#{j}"]
+      next if visited["#{i}:#{j}"]
 
       queue = [[i, j]]
       current = 0
@@ -368,14 +368,14 @@ def connected_max(arr)
 
         k = element[0]
         l = element[1]
-        next if visited["#{k}#{l}"]
-        visited["#{k}#{l}"] = 1
+        next if visited["#{k}:#{l}"]
+        visited["#{k}:#{l}"] = 1
         current += 1
 
         -1.upto(1) do |m|
           -1.upto(1) do |n|
             if (k + m) >= 0 && (k + m) < arr.length && (l + n) >= 0 && (l + n) < arr[0].length
-              unless arr[k + m][l + n] == 0 || visited["#{k + m}#{l + n}"]
+              unless arr[k + m][l + n] == 0 || visited["#{k + m}:#{l + n}"]
                 queue << [k + m, l + n]
               end
             end
