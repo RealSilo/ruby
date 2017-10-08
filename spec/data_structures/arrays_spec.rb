@@ -431,4 +431,12 @@ describe Arrays do
       expect(subject.my_split(string, ' ')).to eq ['5', '+', '11', '+', '4']
     end
   end
+
+  describe '#my_flatten' do
+    let(:array) { [[3, 4], 5, [[4, 8], 9], 10] }
+
+    it 'returns the flattened array' do
+      expect(subject.my_flatten(array)).to eq [3, 4, 5, 4, 8, 9, 10]
+    end
+  end
 end

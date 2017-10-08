@@ -617,4 +617,18 @@ class Arrays
 
     result
   end
+
+  # PROBLEM: Flatten an array
+  # [[3, 4], 5, [[4, 8], 9], 10] => [3, 4, 5, 4, 8, 9, 10]
+  @@flattened_arr = []
+  def my_flatten(arr)
+    arr.each do |element|
+      if element.is_a? Array
+        my_flatten(element)
+      else
+        @@flattened_arr << element
+      end
+    end
+    @@flattened_arr
+  end
 end
