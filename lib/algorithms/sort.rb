@@ -113,7 +113,7 @@ class Sort
       end
 
       break if right_mark < left_mark
-      
+
       array[left_mark], array[right_mark] = array[right_mark], array[left_mark]
     end
 

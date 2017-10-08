@@ -71,14 +71,14 @@ class Recursion
   # Duplicates are fine => 'xxx' would return [ 'xxx' * 6]
   RESULT = []
   def string_permutation(string, output = '')
-    return if string.length == 0
+    return if string.empty?
 
     if string.length == 1
       RESULT << output + string[0]
       return
     end
 
-    string.each_char.with_index do |char, i|
+    string.each_char.with_index do |_char, i|
       if i > 0
         new_string = string[0..i - 1] + string[(i + 1)..string.length - 1]
       else

@@ -184,7 +184,7 @@ class Graphs
       end
     end
 
-    visited.map { |k, v| k }
+    visited.map { |k, _v| k }
   end
 
   def simple_dfs(graph, start_node)
@@ -286,7 +286,7 @@ class Graphs
       end
     end
 
-    visited.map { |k, _v| k}
+    visited.map { |k, _v| k }
   end
 
   def shortest_path_with_bfs(graph, start_node, to_node)
@@ -375,9 +375,8 @@ def connected_max(arr)
         -1.upto(1) do |m|
           -1.upto(1) do |n|
             if (k + m) >= 0 && (k + m) < arr.length && (l + n) >= 0 && (l + n) < arr[0].length
-              unless arr[k + m][l + n] == 0 || visited["#{k + m}:#{l + n}"]
-                queue << [k + m, l + n]
-              end
+              next if arr[k + m][l + n] == 0 || visited["#{k + m}:#{l + n}"]
+              queue << [k + m, l + n]
             end
           end
         end

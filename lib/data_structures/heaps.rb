@@ -205,7 +205,7 @@ def calc_median(array)
 
   array.each_with_index do |element, i|
     i.even? ? max_store.add(element) : min_store.add(element)
-    
+
     if i == 0
       medians << max_store.store[1].to_f
       next
@@ -219,7 +219,7 @@ def calc_median(array)
       min_store.add(temp1)
     end
 
-    if i.even? 
+    if i.even?
       medians << max_store.store[1].to_f
     else
       sum = max_store.store[1].to_f + min_store.store[1].to_f
@@ -230,4 +230,4 @@ def calc_median(array)
   medians
 end
 
-puts calc_median([2,6,4,10,8,11,13,15,17,33,44,55])
+puts calc_median([2, 6, 4, 10, 8, 11, 13, 15, 17, 33, 44, 55])

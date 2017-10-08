@@ -212,7 +212,7 @@ class Dynamic
   # Only can move to the right and down.
   def right_down_grid_path(arr)
     return nil if arr.nil? || arr.empty? || arr.first.empty?
-    
+
     path = []
     return path if get_path(arr, arr.length - 1, arr.first.length - 1, path)
 

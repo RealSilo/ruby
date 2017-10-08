@@ -130,7 +130,7 @@ class AddLiquidsTask < Task
 end
 
 # composite class
-# While the MakeBatterTask class looks to the outside world like any other simple 
+# While the MakeBatterTask class looks to the outside world like any other simple
 # ask—it implements the key time_required method—it is actually built up from two
 # subtasks: AddDryIngredientsTask and AddLiquidsTask
 class MakeBatterTaskDraft < Task

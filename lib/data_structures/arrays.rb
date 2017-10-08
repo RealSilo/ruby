@@ -566,7 +566,7 @@ class Arrays
   def caesar_cipher(string)
     split_str = string.split('')
 
-    split_str.each_with_index do |char, i|
+    split_str.each_with_index do |_char, i|
       next if split_str[i] == ' '
 
       split_str[i] = split_str[i].ord + 13
