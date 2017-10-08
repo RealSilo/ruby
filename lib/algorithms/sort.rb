@@ -39,13 +39,15 @@ class Sort
   # of taking two smaller sorted lists and combining them together into a
   # single, sorted, new list.
   def merge_sort(array)
+    # we split the array into 1 element long arrays
     return array if array.length <= 1
 
     mid = array.length / 2
     left = merge_sort(array[0..mid - 1])
     right = merge_sort(array[mid..-1])
+    # once we have 1 element long arrays we start merging them
     if left.last <= right.first
-      [*left, *right]
+      left + right
     else
       merge(left, right)
     end
@@ -57,9 +59,9 @@ class Sort
     return left if right.empty?
 
     if left.first < right.first
-      [left.first] + merge(left[1..left.length - 1], right)
+      [left.first] + merge(left[1..-1], right)
     else
-      [right.first] + merge(left, right[1..right.length - 1])
+      [right.first] + merge(left, right[1..-1])
     end
   end
 
@@ -96,12 +98,11 @@ class Sort
 
     # selecting pivot value, could be random
     pivot_value = array[first]
-
     left_mark = first + 1
     right_mark = last
 
-    done = false
-
+    # looping and swappsing the elements until there are smaller values on the
+    # left and larger values on the right compared to the pivot
     loop do
       while left_mark <= right_mark && array[left_mark] <= pivot_value
         left_mark += 1
@@ -111,17 +112,16 @@ class Sort
         right_mark -= 1
       end
 
-      if right_mark < left_mark
-        done = true
-      else
-        array[left_mark], array[right_mark] = array[right_mark], array[left_mark]
-      end
-
-      break if done
+      break if right_mark < left_mark
+      
+      array[left_mark], array[right_mark] = array[right_mark], array[left_mark]
     end
 
+    # changing the pivot with the right mark => left from the right mark the
+    # vals are smaller; right from the value the vals are larger
     array[first], array[right_mark] = array[right_mark], array[first]
 
+    # right mark returned as split point, new quick sort on both sides
     right_mark
   end
 

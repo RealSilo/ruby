@@ -48,7 +48,7 @@ class Select
   end
 
   arr = [1, 4, 56, 7, 77, 32, 2, 11, 8, 19, 33, 54, 0]
-  p new.quickselect_nth(arr, 12)
+  # p new.quickselect_nth(arr, 13)
 
   # If one instead consistently chooses "good" pivots, this is avoided and one always
   # gets linear performance even in the worst case. A "good" pivot is one for which we
@@ -105,6 +105,9 @@ class Select
 
   def partition_with_median(array, nth, first, last)
     pivot_value = median_kth(array, nth)
+    pivot_index = nil
+    array.each_with_index { |e,i| pivot_index = i if pivot_value == e }
+    array[pivot_index], array[0] = array[0], array[pivot_index]
     left_mark = first + 1
     right_mark = last
 

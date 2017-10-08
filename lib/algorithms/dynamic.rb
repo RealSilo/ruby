@@ -67,7 +67,7 @@ class Dynamic
     'phone': { price: 800, space: 0.5 }
   }
 
-  p Dynamic.new.knapsack(items, 4, 0.5)
+  # p Dynamic.new.knapsack(items, 4, 0.5)
 
   # PROBLEM 2
   # Count the number of ways you can get the amount with the given coins.
@@ -87,7 +87,7 @@ class Dynamic
     coins.each do |coin|
       for i in (coin..amount)
         arr[i] += arr[i - coin]
-        p [arr, coin, i]
+        # p [arr, coin, i]
       end
     end
 
@@ -96,7 +96,7 @@ class Dynamic
   end
 
   puts Dynamic.new.possible_set_of_coins_for_sum(5, [1, 2, 5])
-  puts Dynamic.new.possible_set_of_coins_for_sum(4, [1, 2, 3])
+  # puts Dynamic.new.possible_set_of_coins_for_sum(4, [1, 2, 3])
 
   # PROBLEM3: Common longest subsequence
   # 'abcdegfgh' and 'aqcezfg' => 'acefg'
@@ -173,8 +173,8 @@ class Dynamic
     str1.slice(intersection_start..intersection_end)
   end
 
-  puts new.common_longest_subsequence('houseboat', 'computer')
-  puts new.common_longest_substring('houseboat', 'coumputer')
+  # puts new.common_longest_subsequence('houseboat', 'computer')
+  # puts new.common_longest_substring('houseboat', 'coumputer')
 
   # PROBLEM5: Calculate the Levenshtein-distance of two strings with dynamic
   # programming.
@@ -204,8 +204,8 @@ class Dynamic
     matrix.last.last
   end
 
-  p new.levenshtein_distance('greatest', 'grandest')
-  p new.levenshtein_distance('kitten', 'wkitten')
+  # p new.levenshtein_distance('greatest', 'grandest')
+  # p new.levenshtein_distance('kitten', 'wkitten')
 
   # Start from the top-left corner of a grid and find a path to the bottom-right
   # corner if exists. Some cells can be blocked (0 is free cell, 1 is blocked).
@@ -219,11 +219,10 @@ class Dynamic
     nil
   end
 
-  def get_path(arr, row, col, path, failed_points = [])
+  def get_path(arr, row, col, path, failed_points = {})
     return false if col < 0 || row < 0 || !arr[row][col] || arr[row][col] == 1
 
-    failed_points = []
-    return false if failed_points.include?([row, col])
+    return false if failed_points["#{row}#{col}"]
 
     start_point = (col == 0 && row == 0)
 
@@ -234,7 +233,7 @@ class Dynamic
       return true
     end
 
-    failed_points << [row, col]
+    failed_points["#{row}#{col}"]
     false
   end
 

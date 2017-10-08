@@ -4,7 +4,6 @@ require 'byebug'
 # each member of an array must use the same number of bytes (or
 # same number of memory addresses) so the element can be accessed as
 # start + cellsize * index with O(1) where cellsize is the number of
-
 # memory addresses used => to make this happen array implementations
 # only store just references to objects
 

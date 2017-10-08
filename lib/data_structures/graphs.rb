@@ -103,11 +103,11 @@ class Graphs
 
     routes[root] = { weight: 0, parent: root }
 
-    visited = []
+    visited = {}
     current = root
 
     while current
-      visited << current
+      visited[current] = 1
 
       graph.vertex(current).connections.each do |connected_vertex, weight_value|
         # If it is cheaper to get to this connected vertex by going thru
@@ -126,7 +126,7 @@ class Graphs
       cheapest_route_from_current = Float::INFINITY
 
       routes.each do |key, value|
-        unless value[:weight] >= cheapest_route_from_current || visited.include?(key)
+        unless value[:weight] >= cheapest_route_from_current || visited[key]
           cheapest_route_from_current = value[:weight]
           current = key
         end
@@ -169,60 +169,60 @@ class Graphs
 
   # Implementation with the Graph/Vertex above
   def dfs(graph, start_node)
-    visited = []
+    visited = {}
     stack = [start_node]
 
     until stack.empty?
       vertex = stack.pop
 
-      next if visited.include?(vertex)
+      next if visited[vertex]
 
-      visited << vertex
+      visited[vertex] = 1
 
       graph.vertex(vertex).connections.each do |key, _weight|
-        stack << key unless visited.include?(key)
+        stack << key unless visited[key]
       end
     end
 
-    visited
+    visited.map { |k, v| k }
   end
 
   def simple_dfs(graph, start_node)
-    visited = []
+    visited = {}
     stack = [start_node]
 
     while stack.any?
       vertex = stack.pop
 
-      next if visited.include?(vertex)
+      next if visited[vertex]
 
-      visited << vertex
+      visited[vertex] = 1
 
       graph[vertex].each do |node|
-        stack << node unless visited.include?(node)
+        stack << node unless visited[node]
       end
     end
 
-    visited
+    visited.map { |k, _v| k }
   end
 
-  @@dfs_visited = [].to_set
+  @@dfs_visited = {}
   def dfs_with_recursion(graph, start_node)
     dfs_helper(graph, start_node)
     @@dfs_visited
   end
 
   def dfs_helper(graph, vertex)
-    @@dfs_visited.add(vertex)
+    @@dfs_visited[vertex] = 1
 
     graph[vertex].each do |node|
-      dfs_helper(graph, node) unless @@dfs_visited.include?(node)
+      dfs_helper(graph, node) unless @@dfs_visited[node]
     end
   end
 
   # Topological sort
   # It uses modified DFS to find a topological order.
-  @@tvisited = []
+  @@tvisited = {}
   @@tsorted = []
   def topological_sort(graph, root)
     topological_helper(graph, root)
@@ -230,10 +230,10 @@ class Graphs
   end
 
   def topological_helper(graph, vertex)
-    @@tvisited << vertex
+    @@tvisited[vertex] = 1
 
     graph[vertex].each do |node|
-      topological_helper(graph, node) unless @@tvisited.include?(node)
+      topological_helper(graph, node) unless @@tvisited[node]
     end
 
     # When we are coming back from the last vertex of the recursive call stack
@@ -250,57 +250,56 @@ class Graphs
   # Greedy algorithm
   # time complexity: O(V+E)
   def bfs(graph, start_node)
-    visited = []
+    visited = {}
     queue = [start_node]
 
     while queue.any?
       vertex = queue.shift
 
-      next if visited.include?(vertex)
-
-      visited << vertex
+      next if visited[vertex]
+      visited[vertex] = 1
 
       graph.vertex(vertex).connections.each do |key, _weight|
-        queue << key unless visited.include?(key)
+        queue << key unless visited[key]
       end
     end
 
-    visited
+    visited.map { |k, _v| k }
   end
 
   def simple_bfs(graph, start_node)
-    visited = []
+    visited = {}
     queue = [start_node]
 
     while queue.any?
       vertex = queue.shift
 
-      next if visited.include?(vertex)
+      next if visited[vertex]
       # an if else statement could be added here if we look
       # for some property that should stop the algorithm e.g.
       # shortest path to this node
 
-      visited << vertex
+      visited[vertex] = 1
 
       graph[vertex].each do |node|
-        queue << node unless visited.include?(node)
+        queue << node unless visited[node]
       end
     end
 
-    visited
+    visited.map { |k, _v| k}
   end
 
   def shortest_path_with_bfs(graph, start_node, to_node)
     queue = [[start_node]]
-    visited = []
+    visited = {}
 
     while queue.any?
       path = queue.shift
       vertex = path[-1]
 
       return path if vertex == to_node
-      next if visited.include?(vertex)
-      visited << vertex
+      next if visited[vertex]
+      visited[vertex] = 1
 
       graph[vertex].each do |node|
         new_path = Array.new(path)
@@ -353,30 +352,30 @@ end
 # 0 0 1 0
 # 1 0 0 0
 def connected_max(arr)
-  visited = []
+  visited = {}
   largest = 0
 
   arr.each_with_index do |row, i|
     row.each_with_index do |_col, j|
       next if arr[i][j] == 0
-      next if visited.include?([i, j])
+      next if visited["#{i}#{j}"]
 
       queue = [[i, j]]
       current = 0
 
       while queue.any?
         element = queue.shift
-        next if visited.include?(element)
-        visited << element
-        current += 1
 
         k = element[0]
         l = element[1]
+        next if visited["#{k}#{l}"]
+        visited["#{k}#{l}"] = 1
+        current += 1
 
         -1.upto(1) do |m|
           -1.upto(1) do |n|
             if (k + m) >= 0 && (k + m) < arr.length && (l + n) >= 0 && (l + n) < arr[0].length
-              unless arr[k + m][l + n] == 0 || visited.include?([k + m, l + n])
+              unless arr[k + m][l + n] == 0 || visited["#{k + m}#{l + n}"]
                 queue << [k + m, l + n]
               end
             end

@@ -550,3 +550,63 @@ contacts('find', 'ssss')
 contacts('find', 'sssss')
 contacts('find', 'ssssss')
 # contacts('find', 'hak')
+
+
+# def bubble_sort(a)
+#     n = a.length - 1
+#     swaps = 0
+    
+#     n.downto(0) do |i|
+#         i.times do |j|
+#             if a[j] > a[j + 1]
+#                 a[j], a[j + 1] = a[j + 1], a[j]
+#                 swaps += 1
+#             end 
+#         end
+#     end
+    
+#     ["Array is sorted in #{swaps} swaps.", "First Element: #{a.first}", "Last Element: #{a.last}"]
+# end
+
+# puts bubble_sort([3,2,1])
+
+def largest_reg(grid)
+    visited = {}
+    largest_region = 0
+    
+    grid.each_with_index do |row, i|
+        row.each_with_index do |cell, j|
+            next if grid[i][j] == 0
+            current_region = 0
+            queue = []
+            queue << [i, j]
+            
+            while queue.any?
+                element = queue.shift
+                i, j = element
+ 
+                next if visited["#{i}#{j}"]
+                current_region += 1
+                visited["#{i}#{j}"] = 1
+
+                -1.upto(1) do |m|
+                    -1.upto(1) do |n|
+                        unless m == 0 && n == 0
+                            p [i,j,m,n]
+                            if (i + m) >= 0 && (j + n) >= 0 && grid[i + m] && grid[i + m][j + n]
+                                if grid[i + m][j + n] == 1
+                                    queue << [i + m, j + n]
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            largest_region = [current_region, largest_region].max
+        end
+    end
+    largest_region
+end
+
+grid = [[1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 0], [1, 0, 0, 0]]
+p largest_reg(grid)

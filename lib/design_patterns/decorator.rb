@@ -5,6 +5,10 @@
 
 # DECORATOR PATTERN
 
+# Decorators allow us to add behavior to objects without affecting other objects
+# of the same class. The decorator pattern is a useful alternative to creating
+# subclasses.
+
 # Decorator pattern enables you to easily add an enhancement to an existing
 # object. The Decorator pattern also allows you to layer features atop one
 # another so that you can construct objects that have exactly the right set
