@@ -82,37 +82,11 @@ class Trie
 
   def find_with_str(term = '', node = @root)
     words = []
-    collect_with_str(node, term.length, '', term, words)
+    collect_with_str(node, term, '', words)
     words
   end
 
   private
-
-  def collect_with_str(node, term_length, string, term = '', words)
-    if node && node.children.any?
-      if term.empty?
-        node.children.each_key do |letter|
-          new_string = string.clone + letter
-          collect_with_str(node.children[letter], term_length, new_string, words)
-        end
-      else
-        new_string = string + term[0]
-        collect_with_str(node.children[term[0]], term_length, new_string, term[1..-1], words)
-      end
-
-      # when it comes back from the recursion middle words get added
-      # if it's an end node and the term is shorter
-      if node.end_node && string.length >= term_length
-        words.push("#{string}": node.data)
-      end
-    elsif node
-      # we know it's an endpoint since it's a leaf, but we have tocheck if it's
-      # not root or it's not shorter than the term
-      unless string.empty? || string.length < term_length
-        words.push("#{string}": node.data)
-      end
-    end
-  end
 
   def collect(node, string, words)
     if node.children.any?
@@ -126,6 +100,45 @@ class Trie
       words << string unless string.empty?
     end
   end
+
+  def collect_with_str(node, term, string, words)
+    return nil unless node
+
+    if term.empty?
+      collect(node, string, words)
+    elsif node.children.keys.include?(term[0])
+      new_string = string.clone + term[0]
+      collect_with_str(node.children[term[0]], term[1..-1], new_string, words)
+    end
+
+    words
+  end
+
+  # def collect_with_str(node, term_length, string, term = '', words)
+  #   if node && node.children.any?
+  #     if term.empty?
+  #       node.children.each_key do |letter|
+  #         new_string = string.clone + letter
+  #         collect_with_str(node.children[letter], term_length, new_string, words)
+  #       end
+  #     else
+  #       new_string = string + term[0]
+  #       collect_with_str(node.children[term[0]], term_length, new_string, term[1..-1], words)
+  #     end
+
+  #     # when it comes back from the recursion middle words get added
+  #     # if it's an end node and the term is shorter
+  #     if node.end_node && string.length >= term_length
+  #       words.push("#{string}": node.data)
+  #     end
+  #   elsif node
+  #     # we know it's an endpoint since it's a leaf, but we have tocheck if it's
+  #     # not root or it's not shorter than the term
+  #     unless string.empty? || string.length < term_length
+  #       words.push("#{string}": node.data)
+  #     end
+  #   end
+  # end
 end
 
 ttrie = Trie.new
