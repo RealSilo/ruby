@@ -17,10 +17,10 @@ require 'byebug'
 # Y is a child of MAN, rather than starting from the root each time.
 
 class Node
-  attr_accessor :hash, :end_node, :data
+  attr_accessor :children, :end_node, :data
 
   def initialize
-    @hash = {}
+    @children = {}
     @end_node = false
     @data = data
   end
@@ -35,95 +35,95 @@ class Trie
 
   def initialize
     @root = Node.new
-    @words = []
   end
 
   def add(input, data, node = @root)
     if input.empty?
       node.data = data
       node.end_node = true
-    elsif node.hash.keys.include?(input[0])
-      add(input[1..-1], data, node.hash[input[0]])
+    elsif node.children.keys.include?(input[0])
+      add(input[1..-1], data, node.children[input[0]])
     else
-      node.hash[input[0]] = Node.new
-      add(input[1..-1], data, node.hash[input[0]])
+      node.children[input[0]] = Node.new
+      add(input[1..-1], data, node.children[input[0]])
     end
   end
 
-  def find(input, node = @root)
+  def find(term, node = @root)
     return nil unless node
 
-    if input.empty? && node.end_node?
+    if term.empty? && node.end_node?
       return node.data
-    elsif input.empty?
+    elsif term.empty?
       return nil
     end
 
-    find(input[1..-1], node.hash[input[0]])
+    find(term[1..-1], node.children[term[0]])
   end
 
-  def word?(input)
+  def word?(term)
     node = @root
 
-    until input.length == 1
-      return false unless node.hash.keys.include?(input[0])
-      node = node.hash[input[0]]
-      input = input[1..-1]
+    until term.length == 1
+      return false unless node.children.keys.include?(term[0])
+      node = node.children[term[0]]
+      term = term[1..-1]
     end
 
-    return true if node.hash.keys.include?(input[0]) && node.hash[input[0]].end_node?
+    return true if node.children.keys.include?(term[0]) && node.children[term[0]].end_node?
     false
   end
 
-  def print_all(node = @root)
-    collect(node, '')
-    @words
+  def find_all(node = @root)
+    words = []
+    collect(node, '', words)
+    words
   end
 
   def find_with_str(term = '', node = @root)
-    @words = []
-    collect_with_str(node, term.length, '', term)
-    @words
+    words = []
+    collect_with_str(node, term.length, '', term, words)
+    words
   end
 
   private
 
-  def collect_with_str(node, term_length, string, term = '')
-    if node && node.hash.any?
+  def collect_with_str(node, term_length, string, term = '', words)
+    if node && node.children.any?
       if term.empty?
-        node.hash.each_key do |letter|
+        node.children.each_key do |letter|
           new_string = string.clone + letter
-          collect_with_str(node.hash[letter], term_length, new_string)
+          collect_with_str(node.children[letter], term_length, new_string, words)
         end
       else
         new_string = string + term[0]
-        collect_with_str(node.hash[term[0]], term_length, new_string, term[1..-1])
+        collect_with_str(node.children[term[0]], term_length, new_string, term[1..-1], words)
       end
 
       # when it comes back from the recursion middle words get added
       # if it's an end node and the term is shorter
       if node.end_node && string.length >= term_length
-        @words.push("#{string}": node.data)
+        words.push("#{string}": node.data)
       end
     elsif node
       # we know it's an endpoint since it's a leaf, but we have tocheck if it's
       # not root or it's not shorter than the term
       unless string.empty? || string.length < term_length
-        @words.push("#{string}": node.data)
+        words.push("#{string}": node.data)
       end
     end
   end
 
-  def collect(node, string)
-    if node.hash.empty?
-      string.empty? ? nil : @words << string
-    else
-      node.hash.each_key do |letter|
+  def collect(node, string, words)
+    if node.children.any?
+      node.children.each_key do |letter|
         new_string = string.clone + letter
-        collect(node.hash[letter], new_string)
+        collect(node.children[letter], new_string, words)
       end
 
-      @words << string if node.end_node?
+      words << string if node.end_node?
+    else
+      words << string unless string.empty?
     end
   end
 end
@@ -135,11 +135,12 @@ ttrie.add('danny', date: '1998-04-21')
 ttrie.add('jane', date: '1985-05-08')
 ttrie.add('jack', date: '1994-11-04')
 ttrie.add('pete', date: '1977-12-18')
+# p ttrie.find_all
 p ttrie.find_with_str('hack')
 p ttrie.find_with_str('hak')
 p ttrie.find_with_str('hacker')
 p ttrie.find_with_str('he')
-p ttrie.print_all
+# p ttrie.find_all
 
 birth_data_date = {
   '1985': [
@@ -199,3 +200,112 @@ end
 
 p trie.find_with_str('Peter')
 p trie.find_with_str('Pet')
+
+# PROBLEM 1
+# You are given a list of unique words. Find if two words can be joined to-gather
+# to form a palindrome. eg Consider a list {bat, tab, cat} Then bat and tab can be
+# joined to gather to form a palindrome. 
+# Expecting a O(nk) solution where n = number of works and k is length
+class PalindromeNode
+  attr_accessor :children, :data, :endpoint
+
+  def initialize(data = nil)
+    @children = {}
+    @data = data
+    @endpoint = false
+  end
+end
+
+class PalindromeTrie
+  attr_reader :root
+  def initialize
+    @root = PalindromeNode.new
+    @nodes = []
+  end
+
+  def add(string, data, node = @root)
+    if string.empty?
+      node.data = data
+      node.endpoint = true
+    elsif node.children.keys.include?(string[-1])
+      add(string[0..-2], data, node.children[string[-1]])
+    else
+      node.children[string[-1]] = PalindromeNode.new
+      add(string[0..-2], data, node.children[string[-1]])
+    end
+  end
+
+  def find(string, current_length = 0, node = @root)
+    if string.empty? && node.endpoint
+      { status: 'found' }
+    elsif string.empty?
+      words = find_all(node)
+      { status: 'word shorter', words: words }
+    elsif node.endpoint
+      { status: 'word longer', length: current_length }
+    elsif node.children.keys.include?(string[0])
+      find(string[1..-1], current_length + 1, node.children[string[0]])
+    else
+      { status: nil }
+    end
+  end
+end
+
+def palindrome?(string)
+  return true if string.empty?
+
+  string[0] == string[-1] && palindrome?(string[1..-2])
+end
+
+def find_all(node = @root, words = [])
+  collect(node, '', words)
+  words
+end
+
+def collect(node, string, words)
+  if node.children.empty?
+    string.empty? ? nil : words << string
+  else
+    node.children.each_key do |letter|
+      new_string = string.clone + letter
+      collect(node.children[letter], new_string, words)
+    end
+
+    words << string if node.endpoint
+  end
+end
+
+# pt = PalindromeTrie.new
+# pt.add('haha', 1)
+# p pt
+
+def palindrome_pairs(*words)
+  pt = PalindromeTrie.new
+  pairs = 0
+
+  words.each do |word|
+    result = pt.find(word)
+    puts result
+    if result[:status] == 'found'
+      pairs += 1
+    elsif result[:status] == 'word shorter'
+      if result[:words].any? { |w| palindrome?(w) }
+        pairs += 1
+      else
+        pt.add(word, nil)
+      end
+    elsif result[:status] == 'word longer'
+      if palindrome?(word[result[:length]..-1])
+        pairs += 1
+      else
+        pt.add(word, nil)
+      end
+    else
+      pt.add(word, nil)
+    end
+  end
+
+  [pairs, pt.root.children.keys]
+end
+
+# p palindrome_pairs('baba', 'abab', 'hfhf', 'fhf', 'cac', 'cacd')

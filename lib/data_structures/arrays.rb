@@ -319,15 +319,18 @@ class Arrays
   end
 
   # PROBLEM 8: Check if string is a palindrome (space can be removed)
-
   def palindrome_without_recursion?(string)
     string = string.downcase.tr(' ', '')
     return true if string.length <= 1
-    reversed_string = ''
 
-    (string.length - 1).downto(0) { |i| reversed_string << string[i] }
+    i = 0
+    j = string.length - 1
 
-    (string.length - 1).times { |i| return false unless string[i] == reversed_string[i] }
+    while i < j
+      return false unless string[i] == string[j]
+      i += 1
+      j -= 1
+    end
 
     true
   end
@@ -335,7 +338,7 @@ class Arrays
   def palindrome?(string)
     string = string.downcase.tr(' ', '')
 
-    return true if string.empty?
+    return true if string.length <= 1
 
     string[0] == string[-1] && palindrome?(string[1..-2])
   end
@@ -618,7 +621,7 @@ class Arrays
     result
   end
 
-  # PROBLEM: Flatten an array
+  # PROBLEM20: Flatten an array
   # [[3, 4], 5, [[4, 8], 9], 10] => [3, 4, 5, 4, 8, 9, 10]
   @@flattened_arr = []
   def my_flatten(arr)
