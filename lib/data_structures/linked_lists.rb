@@ -72,6 +72,17 @@ class LinkedLists
       node
     end
 
+    def find(value)
+      current = head
+
+      until current.value == value
+        return nil if current.next_node.nil?
+        current = current.next_node
+      end
+
+      current
+    end
+
     def remove(value) # removing element
       current = head
 
@@ -79,7 +90,7 @@ class LinkedLists
         self.head = head.next_node
       else
         until current.value == value
-          return 'No such element' if current.next_node.nil?
+          return nil if current.next_node.nil?
           previous_node = current
           current = current.next_node
         end
@@ -142,6 +153,7 @@ class LinkedLists
   list = LinkedList.new('dog')
   list.add('cat')
   list.add('horse')
+  puts list.find('horsey').inspect
   puts list.head.inspect
   list.remove('cat')
   puts list.head.inspect
