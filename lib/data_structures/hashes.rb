@@ -177,7 +177,6 @@ class HashWithLinkedList
     current = storage[index].head
 
     if current.key == key
-
       if current.next_node
         storage[index].head = current.next_node
       else
@@ -188,6 +187,7 @@ class HashWithLinkedList
     end
 
     prev = nil
+    
     while current
       if current.key == key
         prev&.next_node = current.next_node

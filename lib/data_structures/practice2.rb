@@ -295,11 +295,26 @@ class HashMap
     if current.key == key
       if current.next_node
         storage[i].head = current.next_node
-        return current.data
       else
+        storage[i] = nil
       end
-    else
+
+      return current.data
     end
+
+    prev = nil
+
+    while current
+      if current.key == key
+        prev&.next_node = current.next_node
+        return current.value
+      end
+
+      prev = current
+      current = current.next_node
+    end
+
+    nil
   end
 end
 
