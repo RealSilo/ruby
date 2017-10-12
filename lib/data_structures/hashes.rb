@@ -126,7 +126,7 @@ class HashWithLinkedList
     hash_value % storage_limit
   end
 
-  def add(key, value)
+  def []=(key, value)
     index = hash(key)
 
     if storage[index]
@@ -154,7 +154,7 @@ class HashWithLinkedList
     end
   end
 
-  def find(key)
+  def [](key)
     index = hash(key)
 
     return nil unless storage[index]
@@ -187,7 +187,7 @@ class HashWithLinkedList
     end
 
     prev = nil
-    
+
     while current
       if current.key == key
         prev&.next_node = current.next_node
@@ -202,14 +202,14 @@ class HashWithLinkedList
 end
 
 h = HashWithLinkedList.new
-h.add('Eterp', 4)
-h.add('Peter', 5)
-h.add('Retep', 3)
-h.add('John', 2)
+h['Eterp'] = 4
+h['Peter'] = 5
+h['Retep'] = 3
+h['John'] = 2
 h.remove('John')
-h.add('John', 1)
-puts h.find('John')
-puts h.find('Peter')
+h['John'] = 1
+puts h['John']
+puts h['Peter']
 h.remove('Peter')
-puts h.find('Peter')
+puts h['Peter']
 p h.storage
