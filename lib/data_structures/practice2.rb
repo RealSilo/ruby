@@ -206,3 +206,101 @@
 # ttrie.add('pete', date: '1977-12-18')
 # p ttrie.find_all
 # p ttrie.find_all_with_term('ja')
+
+class LinkNode
+  attr_reader :key, :value
+
+  def initialize(key, value, next_node = nil)
+    @key = key
+    @value = value
+    @next_node = next_node
+  end
+end
+
+class LinkedList
+  attr_reader :head
+
+  def initialize(value)
+    @head = LinkNode.new(key, value)
+  end
+end
+
+class HashMap
+  attr_reader :storage, :storage_limit
+
+  def initialize(storage_limit = 10)
+    @storage = Array.new(storage_limit)
+    @storage_limit = storage_limit
+  end
+
+  def hash(key)
+    hash_value = 0
+
+    key.each_char { |char| hash_value += char.ord }
+
+    hash_value % storage_limit
+  end
+
+  def add(key, val)
+    i = hash(key)
+
+    if storage[i]
+      current = storage[i].head
+
+      while current.next_node
+        if current.key == key
+          current.value = value
+          return current.value
+        end
+
+        current = current.next_node
+      end
+
+      if current.key == key
+        current.value = value
+        return current.value
+      end
+
+      current.next_node = LinkNode.new(key, value)
+      return current.next_node.value
+    else
+      storage[i] = LinkedList.new(key, value)
+      storage[i].head
+    end
+  end
+
+  def find(key)
+    i = hash(key)
+
+    return nil unless storage[i]
+
+    current = storage[i].head
+
+    while current
+      return current.value if current.key == key
+        
+      current = current.next_node
+    end
+
+    nil
+  end
+
+  def remove(key)
+    i = hash(key)
+
+    return nil unless storage[index]
+
+    current = storage[i].head
+
+    if current.key == key
+      if current.next_node
+        storage[i].head = current.next_node
+        return current.data
+      else
+      end
+    else
+    end
+  end
+end
+
+p HashMap.new.hash('aa')

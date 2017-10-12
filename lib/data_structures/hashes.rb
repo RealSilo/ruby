@@ -18,7 +18,7 @@ class Hashes
   attr_reader :storage_limit
 
   def initialize(storage_limit = 10)
-    @storage = []
+    @storage = Array.new(storage_limit)
     @storage_limit = storage_limit
   end
 
@@ -177,20 +177,18 @@ class HashWithLinkedList
     current = storage[index].head
 
     if current.key == key
-      value = storage[index].head.value
 
       if current.next_node
-        storage[index].head = storage[index].head.next_node
+        storage[index].head = current.next_node
       else
         storage[index] = nil
       end
 
-      return value
+      return current.value
     end
 
+    prev = nil
     while current
-      prev = nil
-
       if current.key == key
         prev&.next_node = current.next_node
         return current.value
@@ -214,3 +212,4 @@ puts h.find('John')
 puts h.find('Peter')
 h.remove('Peter')
 puts h.find('Peter')
+p h.storage
