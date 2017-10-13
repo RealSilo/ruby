@@ -222,24 +222,22 @@ class Graphs
 
   # Topological sort
   # It uses modified DFS to find a topological order.
-  @@tvisited = {}
-  @@tsorted = []
-  def topological_sort(graph, root)
-    topological_helper(graph, root)
-    @@tsorted
+  def topological_sort(graph, root, tsorted = [])
+    topological_helper(graph, root, tsorted)
+    tsorted
   end
 
-  def topological_helper(graph, vertex)
-    @@tvisited[vertex] = 1
+  def topological_helper(graph, vertex, tsorted, visited = {})
+    visited[vertex] = 1
 
     graph[vertex].each do |node|
-      topological_helper(graph, node) unless @@tvisited[node]
+      topological_helper(graph, node, tsorted, visited) unless visited[node]
     end
 
     # When we are coming back from the last vertex of the recursive call stack
     # we add it to the array since there is no way an other element could come
     # after it as this is the last invocation in the stack.
-    @@tsorted.unshift(vertex) unless @@tsorted.include?(vertex)
+    tsorted.unshift(vertex) unless tsorted.include?(vertex)
   end
 
   # Breadth-first search (BFS)

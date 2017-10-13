@@ -69,12 +69,11 @@ class Recursion
   # the permutations of that string
   # With 'abc' as arg would return ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
   # Duplicates are fine => 'xxx' would return [ 'xxx' * 6]
-  RESULT = []
-  def string_permutation(string, output = '')
+  def string_permutation(string, output = '', result = [])
     return if string.empty?
 
     if string.length == 1
-      RESULT << output + string[0]
+      result << output + string[0]
       return
     end
 
@@ -84,9 +83,9 @@ class Recursion
       else
         new_string = string[1..-1]
       end
-      string_permutation(new_string, output + string[i])
+      string_permutation(new_string, output + string[i], result)
     end
-    RESULT
+    result
   end
 
   # PROBLEM 6: Implement Fibonacci sequence with and without memoization
@@ -105,15 +104,14 @@ class Recursion
     memo[n] ||=  fibonacci_with_memo(n - 1, memo) + fibonacci_with_memo(n - 2, memo)
   end
 
-  @@memo = {}
-  def fibonacci_with_memo_detailed(n)
+  def fibonacci_with_memo_detailed(n, memo = {})
     return n if n == 0
     return n if n == 1
 
-    return @@memo[n] if @@memo[n]
+    return memo[n] if memo[n]
 
-    @@memo[n] = fibonacci_with_memo(n - 1) + fibonacci_with_memo(n - 2)
-    @@memo[n]
+    memo[n] = fibonacci_with_memo(n - 1, memo) + fibonacci_with_memo(n - 2, memo)
+    memo[n]
   end
 
   def fibonacci_iteratively(n)

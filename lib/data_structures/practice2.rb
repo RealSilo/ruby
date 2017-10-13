@@ -207,115 +207,260 @@
 # p ttrie.find_all
 # p ttrie.find_all_with_term('ja')
 
-class LinkNode
-  attr_reader :key, :value
+# class LinkNode
+#   attr_reader :key, :value
 
-  def initialize(key, value, next_node = nil)
-    @key = key
-    @value = value
-    @next_node = next_node
-  end
-end
+#   def initialize(key, value, next_node = nil)
+#     @key = key
+#     @value = value
+#     @next_node = next_node
+#   end
+# end
 
-class LinkedList
-  attr_reader :head
+# class LinkedList
+#   attr_reader :head
 
-  def initialize(value)
-    @head = LinkNode.new(key, value)
-  end
-end
+#   def initialize(value)
+#     @head = LinkNode.new(key, value)
+#   end
+# end
 
-class HashMap
-  attr_reader :storage, :storage_limit
+# class HashMap
+#   attr_reader :storage, :storage_limit
 
-  def initialize(storage_limit = 10)
-    @storage = Array.new(storage_limit)
-    @storage_limit = storage_limit
-  end
+#   def initialize(storage_limit = 10)
+#     @storage = Array.new(storage_limit)
+#     @storage_limit = storage_limit
+#   end
 
-  def hash(key)
-    hash_value = 0
+#   def hash(key)
+#     hash_value = 0
 
-    key.each_char { |char| hash_value += char.ord }
+#     key.each_char { |char| hash_value += char.ord }
 
-    hash_value % storage_limit
-  end
+#     hash_value % storage_limit
+#   end
 
-  def add(key, val)
-    i = hash(key)
+#   def add(key, val)
+#     i = hash(key)
 
-    if storage[i]
-      current = storage[i].head
+#     if storage[i]
+#       current = storage[i].head
 
-      while current.next_node
-        if current.key == key
-          current.value = value
-          return current.value
-        end
+#       while current.next_node
+#         if current.key == key
+#           current.value = value
+#           return current.value
+#         end
 
-        current = current.next_node
-      end
+#         current = current.next_node
+#       end
 
-      if current.key == key
-        current.value = value
-        return current.value
-      end
+#       if current.key == key
+#         current.value = value
+#         return current.value
+#       end
 
-      current.next_node = LinkNode.new(key, value)
-      return current.next_node.value
-    else
-      storage[i] = LinkedList.new(key, value)
-      storage[i].head
-    end
-  end
+#       current.next_node = LinkNode.new(key, value)
+#       return current.next_node.value
+#     else
+#       storage[i] = LinkedList.new(key, value)
+#       storage[i].head
+#     end
+#   end
 
-  def find(key)
-    i = hash(key)
+#   def find(key)
+#     i = hash(key)
 
-    return nil unless storage[i]
+#     return nil unless storage[i]
 
-    current = storage[i].head
+#     current = storage[i].head
 
-    while current
-      return current.value if current.key == key
-        
-      current = current.next_node
-    end
+#     while current
+#       return current.value if current.key == key
 
-    nil
-  end
+#       current = current.next_node
+#     end
 
-  def remove(key)
-    i = hash(key)
+#     nil
+#   end
 
-    return nil unless storage[index]
+#   def remove(key)
+#     i = hash(key)
 
-    current = storage[i].head
+#     return nil unless storage[index]
 
-    if current.key == key
-      if current.next_node
-        storage[i].head = current.next_node
-      else
-        storage[i] = nil
-      end
+#     current = storage[i].head
 
-      return current.data
-    end
+#     if current.key == key
+#       if current.next_node
+#         storage[i].head = current.next_node
+#       else
+#         storage[i] = nil
+#       end
 
-    prev = nil
+#       return current.data
+#     end
 
-    while current
-      if current.key == key
-        prev&.next_node = current.next_node
-        return current.value
-      end
+#     prev = nil
 
-      prev = current
-      current = current.next_node
-    end
+#     while current
+#       if current.key == key
+#         prev&.next_node = current.next_node
+#         return current.value
+#       end
 
-    nil
-  end
-end
+#       prev = current
+#       current = current.next_node
+#     end
 
-p HashMap.new.hash('aa')
+#     nil
+#   end
+# end
+
+# p HashMap.new.hash('aa')
+
+# class BSTNode
+#   attr_accessor :data, :left, :right
+
+#   def initialize(data, parent = nil, left = nil, right = nil)
+#     @data = data
+#     @parent = parent
+#     @left = left
+#     @right = right
+#   end
+
+#   def leaf?
+#     left.nil? && right.nil?
+#   end
+
+#   def any_children?
+#     left || right
+#   end
+
+#   def both_children?
+#     left && right ? true : false
+#   end
+# end
+
+# class BST
+#   attr_accessor :root, :size
+
+#   def initialize(root = nil)
+#     @root = root
+#     @size = 0
+#   end
+
+#   def insert(data, node = root)
+#     if @root
+#       add(data, node)
+#     else
+#       self.root = BSTNode.new(data)
+#     end
+#     @size += 1
+#   end
+
+#   def find(data, node = root)
+#     return nil unless node
+
+#     if data < node.data
+#       find_place(data, node.left)
+#     elsif data > node.data
+#       find_place(data, node.right)
+#     else
+#       return node
+#     end
+#   end
+
+#   def remove(data, node = root, parent = nil)
+#     return nil unless node
+
+#     if data < node.data
+#       remove(data, node.left, node)
+#     elsif data > node.data
+#       remove(data, node.right, node)
+#     else
+#       if node.left && node.right
+#         node.data = find_min(node.right)
+#         node.right = remove(node.data, node.right, node)
+#       else
+#         if node == root
+#           node = node.left || node.right
+#           self.root = node
+#         else
+#           node = node.left || node.right
+#           if parent.left.data == data
+#             parent.left = node
+#           else
+#             parent.right = node
+#           end
+#         end
+#       end
+#     end
+
+#     node
+#   end
+
+#   def find_min(data, node = root)
+#     return nil unless node
+
+#     node = node.left while node.left
+
+#     node.data
+#   end
+
+#   def find_max(data, node = root)
+#     return nil unless node
+
+#     node = node.right while node.right
+
+#     node.data
+#   end
+
+#   def inorderf(node = @root, nodes = [])
+#     if node
+#       inorderf(node.left, nodes)
+#       nodes << node.data
+#       inorderf(node.right, nodes)
+#     end
+#     nodes
+#   end
+
+#   private
+
+#   def add(data, node, parent = nil)
+#     if data < node.data
+#       if node.left
+#         add(data, node.left, node)
+#       else
+#         node.left = BSTNode.new(data, parent)
+#       end
+#     else
+#       if node.right
+#         add(data, node.right, node)
+#       else
+#         node.right = BSTNode.new(data, parent)
+#       end
+#     end
+#   end
+# end
+
+# bst = BST.new
+# bst.insert(20)
+# bst.insert(10)
+# bst.insert(30)
+# bst.insert(25)
+# bst.insert(40)
+# bst.insert(35)
+# bst.insert(50)
+# # bst.find(50)
+# p bst.root.data
+# p bst.root.left.data
+# p bst.root.right.data
+# p bst.root.data
+# p bst.inorderf
+# puts 'hihi'
+# p bst.root.data
+# bst.remove(20)
+# puts 'haha'
+# # p bst.inorderf

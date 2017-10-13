@@ -217,7 +217,7 @@ p trie.find_with_str('Pet')
 # PROBLEM 1
 # You are given a list of unique words. Find if two words can be joined to-gather
 # to form a palindrome. eg Consider a list {bat, tab, cat} Then bat and tab can be
-# joined to gather to form a palindrome. 
+# joined to gather to form a palindrome.
 # Expecting a O(nk) solution where n = number of works and k is length
 class PalindromeNode
   attr_accessor :children, :data, :endpoint

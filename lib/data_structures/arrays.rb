@@ -623,15 +623,14 @@ class Arrays
 
   # PROBLEM20: Flatten an array
   # [[3, 4], 5, [[4, 8], 9], 10] => [3, 4, 5, 4, 8, 9, 10]
-  @@flattened_arr = []
-  def my_flatten(arr)
+  def my_flatten(arr, flattened_arr = [])
     arr.each do |element|
       if element.is_a? Array
-        my_flatten(element)
+        my_flatten(element, flattened_arr)
       else
-        @@flattened_arr << element
+        flattened_arr << element
       end
     end
-    @@flattened_arr
+    flattened_arr
   end
 end

@@ -71,6 +71,29 @@ class Trees
     end
   end
 
+  class TreeNode
+    attr_accessor :data, :parent, :left, :right
+
+    def initialize(data, parent = nil, left = nil, right = nil)
+      @data = data
+      @parent = parent
+      @left = left
+      @right = right
+    end
+
+    def leaf?
+      left.nil? && right.nil?
+    end
+
+    def has_both_children?
+      left && right
+    end
+
+    def has_any_children?
+      left || right
+    end
+  end
+
   class BinarySearchTree
     # keys that are less than the parent can be found in the left subtree, and
     # keys that are greater can be found in the right one
@@ -91,7 +114,7 @@ class Trees
     # BSTs are a powerful node-based data structure that provides order
     # maintenance, while also offering fast search, insertion, and deletion.
 
-    attr_reader :size, :root
+    attr_accessor :size, :root
 
     def initialize(root = nil)
       @root = root
@@ -108,9 +131,16 @@ class Trees
       @size += 1
     end
 
-    def find(data)
-      return nil unless @root
-      find_place(data, @root)
+    def find(data, node = root)
+      return nil unless node
+
+      if node.data == data
+        node
+      elsif node.data > data
+        find_place(data, node.left)
+      elsif node.data < data
+        find_place(data, node.right)
+      end
     end
 
     def delete(data)
@@ -180,58 +210,50 @@ class Trees
 
     private
 
-    def find_place(data, node)
-      return nil unless node
-
-      if node.data == data
-        node
-      elsif node.data > data
-        find_place(data, node.left)
-      elsif node.data < data
-        find_place(data, node.right)
-      end
-    end
-
-    def insert_place(data, node)
+    def insert_place(data, node, parent = nil)
       if data < node.data
         if node.left
-          insert_place(data, node.left)
+          insert_place(data, node.left, node)
         else
-          node.left = TreeNode.new(data)
+          node.left = TreeNode.new(data, parent)
         end
       else
         if node.right
-          insert_place(data, node.right)
+          insert_place(data, node.right, node)
         else
-          node.right = TreeNode.new(data)
+          node.right = TreeNode.new(data, parent)
         end
       end
     end
 
-    def delete_place(data, node)
-      return nil if node.nil?
+    def delete_place(data, node = @root, parent = nil)
+      return nil unless node
 
-      if data < node.data && node.left
-        node.left = delete_place(data, node.left)
-      elsif data > node.data && node.right
-        node.right = delete_place(data, node.right)
-      elsif data == node.data
+      if data < node.data
+        delete_place(data, node.left, node)
+      elsif data > node.data
+        delete_place(data, node.right, node)
+      else
         if node.left && node.right
           # if there are both left and right children the data is replaced with the
           # min value of the right branch then the node with that value is deleted
           node.data = find_min(node.right)
-          node.right = delete_place(node.data, node.right)
-        else
+          delete_place(node.data, node.right, node)
+        elsif node == root
           # if there is only left child => node removed and replaced with node.left
           # if there is only right child => node removed and replaced with node.right
           # it's good because the reference to the parent is untouched
           # if there is no left/right child it's simply set to null
           node = node.left || node.right
-          @size -= 1
+          self.root = node
+        else
+          node = node.left || node.right
+          # Since when you reassign a variable in Ruby the reference gets lost, so
+          # the parent's children has to be set manually
+          parent.left.data == data ? parent.left = node : parent.right = node
         end
-      else
-        # if the value is not found in the tree we null is returned
-        return nil
+
+        @size -= 1
       end
       # We have to return the node to be able to handle the references.
       # When calling the function recursively the last call (which doesn't call
@@ -240,41 +262,6 @@ class Trees
       node
     end
   end
-
-  class TreeNode
-    attr_accessor :data, :left, :right
-
-    def initialize(data, left = nil, right = nil)
-      @data = data
-      @left = left
-      @right = right
-    end
-
-    def leaf?
-      left.nil? && right.nil?
-    end
-
-    def has_both_children?
-      left.present? && right.present?
-    end
-
-    def has_any_children?
-      left.present? || right.present?
-    end
-  end
-
-  btn = BinaryTree.new(TreeNode.new(20))
-  ln = btn.insert_left(btn.root, 10)
-  rn = btn.insert_right(btn.root, 30)
-  # puts ln
-  # puts rn
-  btn.insert_left(ln, 5)
-  btn.insert_right(rn, 40)
-  btn.inorder
-  btn.preorder
-  btn.postorder
-  # print btn.levelorder
-  # puts btn.inspect
 
   bst = BinarySearchTree.new
   bst.insert(20)
@@ -285,27 +272,26 @@ class Trees
   bst.insert(35)
   bst.insert(50)
   # bst.find(50)
-  # bst.delete(30)
-  # puts bst.inspect
-  # puts bst.min_height
-  # puts bst.max_height
-  # puts bst.balanced?
-  # print bst.levelorder
+  bst.delete(10)
+  p bst.root
+  p bst.root.left
+  p bst.root.right
+  bst.delete(20)
+  p bst.root
 
   # PROBLEM 1:
   # Given a binary tree check if it's binary search tree
 
   # Traversal is O(n) complexity
-  TREE_VALS = []
   # this only works with no duplicates
-  def self.inorder_for_check(node)
+  def self.inorder_for_check(node, nodes = [])
     if node
-      inorder_for_check(node.left)
-      TREE_VALS << node.data
-      raise 'not in order' unless TREE_VALS[TREE_VALS.length - 2] <= TREE_VALS[TREE_VALS.length - 1]
-      inorder_for_check(node.right)
+      inorder_for_check(node.left, nodes)
+      nodes << node.data
+      raise 'not in order' unless nodes[nodes.length - 2] <= nodes[nodes.length - 1]
+      inorder_for_check(node.right, nodes)
     end
-    TREE_VALS
+    nodes
   end
 
   p inorder_for_check(bst.root)
