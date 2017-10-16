@@ -82,6 +82,7 @@ lru.set('b', 5)
 lru.set('c', 3)
 lru.get('a')
 lru.set('d', 4)
+lru.set('a', 2)
 # p lru.store
 # p lru.tail.data
 # p lru.tail.prev_node.data

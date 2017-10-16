@@ -207,260 +207,181 @@
 # p ttrie.find_all
 # p ttrie.find_all_with_term('ja')
 
-# class LinkNode
-#   attr_reader :key, :value
+# class Car
+#   def top_speed
+#     100
+#   end
 
-#   def initialize(key, value, next_node = nil)
-#     @key = key
-#     @value = value
-#     @next_node = next_node
+#   def haha
+#     'hihi'
 #   end
 # end
 
-# class LinkedList
-#   attr_reader :head
+# class CarDecorator
+#   attr_reader :component
 
-#   def initialize(value)
-#     @head = LinkNode.new(key, value)
+#   def initialize(component)
+#     @component = component
+#   end
+
+#   def haha
+#     component.haha
 #   end
 # end
 
-# class HashMap
-#   attr_reader :storage, :storage_limit
+# class Nitro < CarDecorator
+#   attr_reader :component
 
-#   def initialize(storage_limit = 10)
-#     @storage = Array.new(storage_limit)
-#     @storage_limit = storage_limit
+#   def initialize(component)
+#     super(component)
 #   end
 
-#   def hash(key)
-#     hash_value = 0
-
-#     key.each_char { |char| hash_value += char.ord }
-
-#     hash_value % storage_limit
-#   end
-
-#   def add(key, val)
-#     i = hash(key)
-
-#     if storage[i]
-#       current = storage[i].head
-
-#       while current.next_node
-#         if current.key == key
-#           current.value = value
-#           return current.value
-#         end
-
-#         current = current.next_node
-#       end
-
-#       if current.key == key
-#         current.value = value
-#         return current.value
-#       end
-
-#       current.next_node = LinkNode.new(key, value)
-#       return current.next_node.value
-#     else
-#       storage[i] = LinkedList.new(key, value)
-#       storage[i].head
-#     end
-#   end
-
-#   def find(key)
-#     i = hash(key)
-
-#     return nil unless storage[i]
-
-#     current = storage[i].head
-
-#     while current
-#       return current.value if current.key == key
-
-#       current = current.next_node
-#     end
-
-#     nil
-#   end
-
-#   def remove(key)
-#     i = hash(key)
-
-#     return nil unless storage[index]
-
-#     current = storage[i].head
-
-#     if current.key == key
-#       if current.next_node
-#         storage[i].head = current.next_node
-#       else
-#         storage[i] = nil
-#       end
-
-#       return current.data
-#     end
-
-#     prev = nil
-
-#     while current
-#       if current.key == key
-#         prev&.next_node = current.next_node
-#         return current.value
-#       end
-
-#       prev = current
-#       current = current.next_node
-#     end
-
-#     nil
+#   def top_speed
+#     component.top_speed + 10
 #   end
 # end
 
-# p HashMap.new.hash('aa')
+# class Boost < CarDecorator
+#   attr_reader :component
 
-# class BSTNode
-#   attr_accessor :data, :left, :right
-
-#   def initialize(data, parent = nil, left = nil, right = nil)
-#     @data = data
-#     @parent = parent
-#     @left = left
-#     @right = right
+#   def initialize(component)
+#     super(component)
 #   end
 
-#   def leaf?
-#     left.nil? && right.nil?
-#   end
-
-#   def any_children?
-#     left || right
-#   end
-
-#   def both_children?
-#     left && right ? true : false
+#   def top_speed
+#     component.top_speed + 30
 #   end
 # end
 
-# class BST
-#   attr_accessor :root, :size
+# p Nitro.new(Boost.new(Car.new)).haha
 
-#   def initialize(root = nil)
-#     @root = root
-#     @size = 0
-#   end
+# def sort_by_frequency(arr)
+#   store = {}
+#   max = 0
 
-#   def insert(data, node = root)
-#     if @root
-#       add(data, node)
+#   arr.each do |element|
+#     if store[element]
+#       store[element] += 1
+#       max = [store[element], max].max
 #     else
-#       self.root = BSTNode.new(data)
-#     end
-#     @size += 1
-#   end
-
-#   def find(data, node = root)
-#     return nil unless node
-
-#     if data < node.data
-#       find_place(data, node.left)
-#     elsif data > node.data
-#       find_place(data, node.right)
-#     else
-#       return node
+#       store[element] = 1
+#       max = 1
 #     end
 #   end
 
-#   def remove(data, node = root, parent = nil)
-#     return nil unless node
+#   bucket = Array.new(max) { [] }
 
-#     if data < node.data
-#       remove(data, node.left, node)
-#     elsif data > node.data
-#       remove(data, node.right, node)
-#     else
-#       if node.left && node.right
-#         node.data = find_min(node.right)
-#         node.right = remove(node.data, node.right, node)
-#       else
-#         if node == root
-#           node = node.left || node.right
-#           self.root = node
-#         else
-#           node = node.left || node.right
-#           if parent.left.data == data
-#             parent.left = node
-#           else
-#             parent.right = node
-#           end
-#         end
-#       end
-#     end
-
-#     node
+#   store.each do |key, value|
+#     bucket[max - value].push([key, value.to_s])
 #   end
 
-#   def find_min(data, node = root)
-#     return nil unless node
-
-#     node = node.left while node.left
-
-#     node.data
-#   end
-
-#   def find_max(data, node = root)
-#     return nil unless node
-
-#     node = node.right while node.right
-
-#     node.data
-#   end
-
-#   def inorderf(node = @root, nodes = [])
-#     if node
-#       inorderf(node.left, nodes)
-#       nodes << node.data
-#       inorderf(node.right, nodes)
-#     end
-#     nodes
-#   end
-
-#   private
-
-#   def add(data, node, parent = nil)
-#     if data < node.data
-#       if node.left
-#         add(data, node.left, node)
-#       else
-#         node.left = BSTNode.new(data, parent)
-#       end
-#     else
-#       if node.right
-#         add(data, node.right, node)
-#       else
-#         node.right = BSTNode.new(data, parent)
-#       end
-#     end
-#   end
+#   bucket.flatten(1)
 # end
 
-# bst = BST.new
-# bst.insert(20)
-# bst.insert(10)
-# bst.insert(30)
-# bst.insert(25)
-# bst.insert(40)
-# bst.insert(35)
-# bst.insert(50)
-# # bst.find(50)
-# p bst.root.data
-# p bst.root.left.data
-# p bst.root.right.data
-# p bst.root.data
-# p bst.inorderf
-# puts 'hihi'
-# p bst.root.data
-# bst.remove(20)
-# puts 'haha'
-# # p bst.inorderf
+# p sort_by_frequency(['b', 'c', 'a', 'b', 'a', 'a', 'd', 'b'])
+
+class Node
+  def initialize(key, data)
+    @key = key
+    @data = data
+    @prev = nil
+    @next = nil
+  end
+end
+
+class LRU
+  def initialize(max_items = 5)
+    @max_items = max_items
+    @head = nil
+    @tail = nil
+    @size += 1
+    @store = {}
+  end
+
+  def set(key, data)
+    if @store[key]
+      node = @store[key]
+      node.data = data
+
+      if node.prev_node && node.next_node
+        node.prev_node.next_node = node.next_node.prev_node
+        node.next_node.prev_node = node.prev_node.next_node
+      elsif node.prev_node
+        node.prev_node.next_node = nil
+      elsif node.next_node
+        node.next_node.prev_node = nil
+      end
+    else
+      @size += 1
+      node = Node.new(key, data)
+      @store[key] = node
+    end
+
+    if @size == 1
+      @store[key] = node
+      @head = node
+      @tail = node
+      return node
+    end
+
+    if @size > max_items
+      oldest_key = @tail.key
+      @tail = @tail.prev_node
+      @tail.next_node = nil
+      @store.delete(oldest_key)
+      @size -= 1
+    end
+
+    @head.prev_node = node
+    node.next_node = @head
+
+    @head = node
+  end
+
+  def get(key)
+  end
+end
+
+# post, bar, eat, rab, opts, tops, tea
+# post => 'post', 'opts'
+
+# def anagram_group(arr)
+
+# end
+
+# clone a connected not directed graph
+
+graph = {
+  'A': ['B', 'C'],
+  'B': ['A', 'D'],
+  'C': ['A', 'D'],
+  'D': ['B', 'C']
+}
+
+def clone_graph(graph, start_node)
+  new_graph = {}
+
+  visited = {}
+  queue = [start_node]
+
+  while queue.any?
+    node = queue.shift
+
+    next if visited[node]
+    visited[node] = 1
+
+    graph[node.to_sym].each do |neighbor|
+      if new_graph[node.to_sym]
+        new_graph[node.to_sym].push(neighbor)
+      else
+        new_graph[node.to_sym] = [neighbor]
+      end
+      queue.push(neighbor)
+    end
+  end
+
+  new_graph
+end
+
+p graph
+p clone_graph(graph, 'A')
