@@ -439,4 +439,31 @@ describe Arrays do
       expect(subject.my_flatten(array)).to eq [3, 4, 5, 4, 8, 9, 10]
     end
   end
+
+
+  describe '#perm_of_palin?' do
+    context 'if permutation of palindrome' do
+      it 'returns true' do
+        string = 'ciivc'
+        expect(subject.perm_of_palin?(string)).to eq true
+      end
+
+      it 'returns true' do
+        string = 'civic'
+        expect(subject.perm_of_palin?(string)).to eq true
+      end
+    end
+
+    context 'if not permutation of palindrome' do
+      it 'returns false' do
+        string = 'ciivca'
+        expect(subject.perm_of_palin?(string)).to eq false
+      end
+
+      it 'returns false' do
+        string = 'ccca'
+        expect(subject.perm_of_palin?(string)).to eq false
+      end
+    end
+  end
 end

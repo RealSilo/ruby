@@ -633,4 +633,32 @@ class Arrays
     end
     flattened_arr
   end
+
+  # PROBLEM21: Check if the word is a permutation of a palindrome
+  # "civic", "ivicc" => true
+  # "civil", "livci" => false
+  def perm_of_palin?(string)
+    return true if string.length <= 1
+
+    store = {}
+
+    string.each_char do |char|
+      if store[char]
+        store[char] += 1
+      else
+        store[char] = 1
+      end
+    end
+
+    odds = 0
+
+    store.each do |char, num|
+      if num.odd?
+        odds += 1
+        return false if odds > 1
+      end
+    end
+
+    true
+  end
 end
