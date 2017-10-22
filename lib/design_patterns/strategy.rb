@@ -201,3 +201,39 @@ class PlainTextFormatterImproved
     end
   end
 end
+
+# Ruby also gives the opportunity to use blocks instead of classes
+
+class ReportWithBlock
+  attr_reader :name, :text
+  attr_accessor :formatter
+
+  def initialize(formatter)
+    @name = 'Weekly Report'
+    @text = ['Things', 'are', 'going', 'well.']
+    @formatter = formatter
+  end
+
+  def generate_report(&block)
+    retrieve_financial_data
+    block.call(name, text)
+    send_report
+  end
+
+  private
+
+  def retrieve_financial_data
+    # Grab relevant data from our database
+  end
+
+  def send_report
+    # email this report to interested parties
+  end
+end
+
+ReportWithBlock.new.generate_report do |name, text|
+  puts "<h1>#{name}</h1>"
+  text.each do |line|
+    puts "<p>#{line}<p>"
+  end
+end
