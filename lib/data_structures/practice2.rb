@@ -280,67 +280,67 @@
 
 # p sort_by_frequency(['b', 'c', 'a', 'b', 'a', 'a', 'd', 'b'])
 
-class Node
-  def initialize(key, data)
-    @key = key
-    @data = data
-    @prev = nil
-    @next = nil
-  end
-end
+# class Node
+#   def initialize(key, data)
+#     @key = key
+#     @data = data
+#     @prev = nil
+#     @next = nil
+#   end
+# end
 
-class LRU
-  def initialize(max_items = 5)
-    @max_items = max_items
-    @head = nil
-    @tail = nil
-    @size += 1
-    @store = {}
-  end
+# class LRU
+#   def initialize(max_items = 5)
+#     @max_items = max_items
+#     @head = nil
+#     @tail = nil
+#     @size += 1
+#     @store = {}
+#   end
 
-  def set(key, data)
-    if @store[key]
-      node = @store[key]
-      node.data = data
+#   def set(key, data)
+#     if @store[key]
+#       node = @store[key]
+#       node.data = data
 
-      if node.prev_node && node.next_node
-        node.prev_node.next_node = node.next_node.prev_node
-        node.next_node.prev_node = node.prev_node.next_node
-      elsif node.prev_node
-        node.prev_node.next_node = nil
-      elsif node.next_node
-        node.next_node.prev_node = nil
-      end
-    else
-      @size += 1
-      node = Node.new(key, data)
-      @store[key] = node
-    end
+#       if node.prev_node && node.next_node
+#         node.prev_node.next_node = node.next_node.prev_node
+#         node.next_node.prev_node = node.prev_node.next_node
+#       elsif node.prev_node
+#         node.prev_node.next_node = nil
+#       elsif node.next_node
+#         node.next_node.prev_node = nil
+#       end
+#     else
+#       @size += 1
+#       node = Node.new(key, data)
+#       @store[key] = node
+#     end
 
-    if @size == 1
-      @store[key] = node
-      @head = node
-      @tail = node
-      return node
-    end
+#     if @size == 1
+#       @store[key] = node
+#       @head = node
+#       @tail = node
+#       return node
+#     end
 
-    if @size > max_items
-      oldest_key = @tail.key
-      @tail = @tail.prev_node
-      @tail.next_node = nil
-      @store.delete(oldest_key)
-      @size -= 1
-    end
+#     if @size > max_items
+#       oldest_key = @tail.key
+#       @tail = @tail.prev_node
+#       @tail.next_node = nil
+#       @store.delete(oldest_key)
+#       @size -= 1
+#     end
 
-    @head.prev_node = node
-    node.next_node = @head
+#     @head.prev_node = node
+#     node.next_node = @head
 
-    @head = node
-  end
+#     @head = node
+#   end
 
-  def get(key)
-  end
-end
+#   def get(key)
+#   end
+# end
 
 # post, bar, eat, rab, opts, tops, tea
 # post => 'post', 'opts'
@@ -351,37 +351,82 @@ end
 
 # clone a connected not directed graph
 
-graph = {
-  'A': ['B', 'C'],
-  'B': ['A', 'D'],
-  'C': ['A', 'D'],
-  'D': ['B', 'C']
-}
+# graph = {
+#   'A': ['B', 'C'],
+#   'B': ['A', 'D'],
+#   'C': ['A', 'D'],
+#   'D': ['B', 'C']
+# }
 
-def clone_graph(graph, start_node)
-  new_graph = {}
+# def clone_graph(graph, start_node)
+#   new_graph = {}
 
-  visited = {}
-  queue = [start_node]
+#   visited = {}
+#   queue = [start_node]
 
-  while queue.any?
-    node = queue.shift
+#   while queue.any?
+#     node = queue.shift
 
-    next if visited[node]
-    visited[node] = 1
+#     next if visited[node]
+#     visited[node] = 1
 
-    graph[node.to_sym].each do |neighbor|
-      if new_graph[node.to_sym]
-        new_graph[node.to_sym].push(neighbor)
-      else
-        new_graph[node.to_sym] = [neighbor]
-      end
-      queue.push(neighbor)
-    end
-  end
+#     graph[node.to_sym].each do |neighbor|
+#       if new_graph[node.to_sym]
+#         new_graph[node.to_sym].push(neighbor)
+#       else
+#         new_graph[node.to_sym] = [neighbor]
+#       end
+#       queue.push(neighbor)
+#     end
+#   end
 
-  new_graph
-end
+#   new_graph
+# end
 
-p graph
-p clone_graph(graph, 'A')
+# p graph
+# p clone_graph(graph, 'A')
+
+# class Array
+#   def my_filter(&block)
+#     result = []
+#     self.each do |element|
+#       result << element if block.call(element)
+#     end
+#     result
+#   end
+# end
+
+# def pos_odd_by7_by19(n)
+#   return true if n > 0 && n.odd? && n % 7 == 0 && n % 19 == 0
+#   false
+# end
+
+# lam_pos_odd_by7_by19 = -> (n) { n > 0 && n.odd? && n % 7 == 0 && n % 19 == 0 }
+
+# c = [2, 133, 931].my_filter { |i| lam_pos_odd_by7_by19.call(i) }
+# b = [2, 133, 931].my_filter(&lam_pos_odd_by7_by19)
+# a = [2, 133, 931].my_filter { |i| pos_odd_by7_by19(i) }
+
+# p a
+# p b
+# p c
+
+# class Array
+#   def my_filter2(condition)
+#     result = []
+#     self.each do |element|
+#       result << element if condition.call(element)
+#     end
+#     result
+#   end
+# end
+
+# first_check = 7
+# second_check = 19
+
+# lam_pos_odd_by_first_by_second = -> (n) do
+#   n > 0 && n.odd? && n % first_check == 0 && n % second_check == 0
+# end
+
+# d = [2, 133, 931].my_filter2(lam_pos_odd_by_first_by_second)
+# p d
