@@ -386,47 +386,9 @@
 # p graph
 # p clone_graph(graph, 'A')
 
-# class Array
-#   def my_filter(&block)
-#     result = []
-#     self.each do |element|
-#       result << element if block.call(element)
-#     end
-#     result
-#   end
-# end
-
-# def pos_odd_by7_by19(n)
-#   return true if n > 0 && n.odd? && n % 7 == 0 && n % 19 == 0
-#   false
-# end
-
-# lam_pos_odd_by7_by19 = -> (n) { n > 0 && n.odd? && n % 7 == 0 && n % 19 == 0 }
-
-# c = [2, 133, 931].my_filter { |i| lam_pos_odd_by7_by19.call(i) }
-# b = [2, 133, 931].my_filter(&lam_pos_odd_by7_by19)
-# a = [2, 133, 931].my_filter { |i| pos_odd_by7_by19(i) }
-
-# p a
-# p b
-# p c
-
-# class Array
-#   def my_filter2(condition)
-#     result = []
-#     self.each do |element|
-#       result << element if condition.call(element)
-#     end
-#     result
-#   end
-# end
-
-# first_check = 7
-# second_check = 19
-
-# lam_pos_odd_by_first_by_second = -> (n) do
-#   n > 0 && n.odd? && n % first_check == 0 && n % second_check == 0
-# end
-
-# d = [2, 133, 931].my_filter2(lam_pos_odd_by_first_by_second)
-# p d
+1.upto(100).each do |el|
+  str = ''
+  str << 'fizz' if el % 3 == 0
+  str << 'buzz' if el % 5 == 0
+  puts str unless str.empty?
+end

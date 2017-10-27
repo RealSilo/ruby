@@ -528,11 +528,11 @@ end
 
 # People tend to think about the domain model as a hierarchy.
 
-# Inheritance advantages:
-# Composition advantages:
+# Use inheritance only when there are clearly related reusable pieces of code that fit
+# under a single common concept or if you have to because of something you’re using.
 
-# When to use inheritance/modules:
-# There are clearly related reusable pieces of code that fit under a single common concept.
+# Use composition to package up code into modules that are used in many different
+# unrelated places and situations.
 
 # DELEGATE, DELEGATE, DELEGATE
 
