@@ -75,16 +75,12 @@ class Arrays
     private
 
     def resize
-      doubled_capacity = 2 * capacity
+      self.capacity *= 2
+      doubled_array = Array.new(capacity)
 
-      doubled_array = Array.new(doubled_capacity)
-
-      length.times do |i|
-        doubled_array[i] = array[i]
-      end
+      length.times { |i| doubled_array[i] = array[i] }
 
       self.array = doubled_array
-      self.capacity = doubled_capacity
     end
   end
 
