@@ -178,6 +178,12 @@ class ReportImproved
     @formatter = formatter
   end
 
+  def generate_report
+    retrieve_financial_data
+    output_report(name, text)
+    send_report
+  end
+
   def output_report
     # Here we are passing the object instead of name and text.
     formatter.output_report(self)
@@ -208,10 +214,9 @@ class ReportWithBlock
   attr_reader :name, :text
   attr_accessor :formatter
 
-  def initialize(formatter)
+  def initialize
     @name = 'Weekly Report'
     @text = ['Things', 'are', 'going', 'well.']
-    @formatter = formatter
   end
 
   def generate_report(&block)

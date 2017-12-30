@@ -610,3 +610,13 @@ end
 
 grid = [[1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 0], [1, 0, 0, 0]]
 p largest_reg(grid)
+
+
+hsh = {
+  config: {
+    var: 5
+  },
+  f1: lambda { |n|  0 < n && n < 3 }
+}
+
+puts hsh[:f1].call(3)
