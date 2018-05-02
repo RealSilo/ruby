@@ -386,9 +386,9 @@
 # p graph
 # p clone_graph(graph, 'A')
 
-1.upto(100).each do |el|
-  str = ''
-  str << 'fizz' if el % 3 == 0
-  str << 'buzz' if el % 5 == 0
-  puts str unless str.empty?
-end
+# 1.upto(100).each do |el|
+#   str = ''
+#   str << 'fizz' if el % 3 == 0
+#   str << 'buzz' if el % 5 == 0
+#   puts str unless str.empty?
+# end
