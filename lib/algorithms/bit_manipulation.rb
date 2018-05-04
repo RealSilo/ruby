@@ -8,20 +8,25 @@ def flip_bit(integer)
   max = 0
   current = 0
   prev = 0
+  gap = 0
 
   binary.each_char do |char|
     if char == '1'
       current += 1
+      gap = 0
     elsif char == '0'
-      prev = current
+      prev = current unless gap > 1
       current = 0
+      gap += 1
     end
     max = [prev + current + 1, max].max
   end
+
   max
 end
 
-flip_bit(1775)
+p flip_bit(1775)
+p flip_bit(1767)
 
 # PROBLEM2: Next Number
 # Given a positive integer, print the next smallest and the next largest number

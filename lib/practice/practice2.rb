@@ -424,13 +424,13 @@ def flat_hash(h, k=[])
   new_hash
 end
 
-print flat_hash({
-    :a => {
-       :b => {:c => 1, :d => 2},
-       :e => 3,
-    },
-    :f => 4,
-})
+# print flat_hash({
+#     :a => {
+#        :b => {:c => 1, :d => 2},
+#        :e => 3,
+#     },
+#     :f => 4,
+# })
 
 # Find k largest element in an unsorted array
 
@@ -448,7 +448,7 @@ def k_largest_with_bubble_sort(array, k)
   array[array.length - k..-1]
 end
 
-print k_largest_with_bubble_sort([8,5,3,9,1,4,7,0,11,2], 3)
+# print k_largest_with_bubble_sort([8,5,3,9,1,4,7,0,11,2], 3)
 
 # 2. Temporary array
 def k_largest_with_temp_array(array, k)
@@ -468,7 +468,7 @@ def k_largest_with_temp_array(array, k)
   temp
 end
 
-print k_largest_with_temp_array([8,5,3,11,1,4,7,0,9,2], 3)
+# print k_largest_with_temp_array([8,5,3,11,1,4,7,0,9,2], 3)
 
 # 3. Sorting algorithms
 
@@ -547,7 +547,7 @@ def k_largest_with_max_heap(array, k)
   k_largest
 end
 
-print k_largest_with_max_heap([8,5,3,11,1,4,7,0,9,2], 3)
+# print k_largest_with_max_heap([8,5,3,11,1,4,7,0,9,2], 3)
 
 # create a dynamic array
 
@@ -761,4 +761,117 @@ class LRUCache
 end
 
 
+# 8 queens
 
+class Board
+  DEFAULT_SIZE = 4
+  attr_accessor :board
+
+  def initialize
+    @board = Array.new(DEFAULT_SIZE) { Array.new(DEFAULT_SIZE, 0) }
+  end
+
+  def safe?(row, col)
+    safe_horizontally?(row) && 
+    safe_vertically?(col) &&
+    safe_diagonally?(col, row)
+  end
+
+  private
+
+  def safe_horizontally?(row)
+    @board[row].none? { |val| val == 1 }
+  end
+
+  def safe_vertically?(col)
+    @board.each do |row|
+      return false if row[col] == 1
+    end
+
+    true
+  end
+
+  def safe_diagonally?(row, col)
+    @board.each_with_index do |r, r_index|
+      r.each do |c|
+        return false if (@board[r_index][c] == 1 && (r_index - row).abs == (c - col).abs) 
+      end
+    end
+
+    return true
+  end
+end
+
+def eight_queens
+  board = Board.new
+  solution_found = false
+  place_queen_in_col(board, 0, solution_found)
+  # print board.board
+end
+
+def place_queen_in_col(board, row, solution_found)
+  Board::DEFAULT_SIZE.times do |col|
+    if board.safe?(row, col)
+      board.board[row][col] = 1
+      if row == Board::DEFAULT_SIZE - 1
+        print 'solved'
+        solution_found = true
+      else
+        place_queen_in_col(board, row + 1, solution_found)
+      end
+    end
+    # print board.board
+    break if solution_found
+    board.board[row][col] = 0
+  end
+end
+
+eight_queens
+
+
+# Problem 1
+# You have the daily prices of gold for a interval of time. You want
+# to find two days in this interval such that if you had bought then
+# sold gold at those dates, you’d have made the maximum possible profit.
+
+def max_profit(prices)
+  return 0 if prices.length == 1
+  mid = prices.length / 2
+  former = prices[0..(mid-1)]
+  latter = prices[mid..-1]
+  diff = latter.max - former.min
+
+  [diff, max_profit(former), max_profit(latter)].max
+end
+
+prices = [5,1,20,2,4,19]
+
+p max_profit(prices)
+
+# 1775 (or: 11011101111) => 8
+def flip_bit(integer)
+  binary = integer.to_s(2)
+
+  max = 0
+  current = 0
+  prev = 0
+  gap = 0
+
+  binary.each_char do |char|
+    if char == '1'
+      current += 1
+      gap = 0
+    else char == '0'
+      prev = current unless gap > 1
+      gap += 1
+      current = 0
+    end
+
+    max = [max, prev + 1 + current].max
+  end
+
+  max
+end
+
+p flip_bit(1775)
+p flip_bit(1767)
