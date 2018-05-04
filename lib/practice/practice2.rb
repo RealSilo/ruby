@@ -814,7 +814,6 @@ def place_queen_in_col(board, row, solution_found)
     if board.safe?(row, col)
       board.board[row][col] = 1
       if row == Board::DEFAULT_SIZE - 1
-        print 'solved'
         solution_found = true
       else
         place_queen_in_col(board, row + 1, solution_found)
@@ -844,9 +843,46 @@ def max_profit(prices)
   [diff, max_profit(former), max_profit(latter)].max
 end
 
-prices = [5,1,20,2,4,19]
+def max_profit_2(arr)
+  min = arr.first
+  diff = 0
+
+  arr.each do |element|
+    diff = [element - min, diff].max
+    min = [element, min].min
+  end
+
+  diff
+end
+
+def max_profit_sell_more_times(prices)
+  local_diff = 0
+  local_min = prices.first
+  local_max = prices.first
+
+  prices.each do |price|
+    if price > local_max
+      local_max = price
+    end
+
+    if price < local_max
+      local_diff += (local_max - local_min) if local_max - local_min > 0
+      local_max = price
+      local_min = price
+    end
+  end
+
+  local_diff += (local_max - local_min) if local_max - local_min > 0
+
+  local_diff
+end
+
+
+prices = [5,1,20,15,2,4,19]
 
 p max_profit(prices)
+p max_profit_2(prices)
+p max_profit_sell_more_times(prices)
 
 # 1775 (or: 11011101111) => 8
 def flip_bit(integer)
@@ -875,3 +911,45 @@ end
 
 p flip_bit(1775)
 p flip_bit(1767)
+
+states = ['AZ', 'CA', 'CO', 'ID', 'NM', 'NV', 'OR', 'UT', 'WA', 'WY']
+stations = {
+  'station1': ['CA', 'NV'],
+  'station2': ['CA', 'ID', 'OR', 'WA'],
+  'station3': ['AZ', 'NM'],
+  'station4': ['AZ', 'NV', 'UT'],
+  'station5': ['ID', 'MT', 'WY'],
+  'station6': ['CO', 'UT', 'WY'],
+  'station7': ['ID', 'NV', 'UT']
+}
+
+def cover_states(stations, states)
+  states_to_cover = states
+  # print states_to_cover
+  remaining_stations = stations
+  picked_station_names = []
+
+  while states_to_cover.any?
+    strongest_station_name = nil
+    max_covered_states = 0
+
+    remaining_stations.each do |station_name, covered_stats_by_station|
+      covered_states =  covered_stats_by_station & states_to_cover
+
+      if covered_states.length > max_covered_states
+        max_covered_states = covered_states.length
+        strongest_station_name = station_name
+      end
+    end
+
+    return false unless strongest_station_name
+    picked_station_names.push(strongest_station_name)
+    states_to_cover -= stations[strongest_station_name]
+    remaining_stations.delete(strongest_station_name)
+  end
+
+  picked_station_names
+end
+
+cover_states(stations, states)
+

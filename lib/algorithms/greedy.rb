@@ -142,6 +142,7 @@ class Greedy
       max_covered_states = 0
 
       stations.each do |station|
+        # & is used for set intersection
         covered_states = station[:covered_states] & states_to_cover
 
         if covered_states.length > max_covered_states
