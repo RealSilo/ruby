@@ -953,3 +953,367 @@ end
 
 cover_states(stations, states)
 
+rectangle = {
+  left_x: 1,
+  bottom_y: 1,
+  width: 6,
+  height: 3,
+}
+
+rectangle2 = {
+  left_x: 5,
+  bottom_y: 2,
+  width: 3,
+  height: 6,
+}
+
+rectangle3 = {
+  left_x: -5,
+  bottom_y: -5,
+  width: 2,
+  height: 2,
+}
+
+# Find a method to find the rectangular intersection of two given love rectangles.
+def intersection(rectangle, rectangle2)
+  x_range = (rectangle[:left_x]..(rectangle[:left_x] + rectangle[:width])).to_a
+  y_range = (rectangle[:bottom_y]..(rectangle[:bottom_y] + rectangle[:height])).to_a
+  x_range_2 = (rectangle2[:left_x]..(rectangle2[:left_x] + rectangle2[:width])).to_a
+  y_range_2 = (rectangle2[:bottom_y]..(rectangle2[:bottom_y] + rectangle2[:height])).to_a
+
+  x_intersection = x_range & x_range_2
+  y_intersection = y_range & y_range_2
+
+  return 'No intersection' if x_intersection.length <= 1 || y_intersection.length <= 1
+
+  {
+    left_x: x_intersection[0],
+    bottom_y: y_intersection[0],
+    width: x_intersection[-1] - x_intersection[0],
+    height: y_intersection[-1] - y_intersection[0],
+  }
+end
+
+p intersection(rectangle, rectangle2)
+
+def intersection2(rectangle, rectangle2)
+  if rectangle[:left_x] < rectangle2[:left_x]
+    intersection_left = rectangle2[:left_x]
+  else
+    intersection_left = rectangle[:left_x]
+  end
+
+  if rectangle[:left_x] + rectangle[:width] < rectangle2[:left_x] + rectangle2[:width]
+    intersection_right = rectangle[:left_x] + rectangle[:width]
+  else
+    intersection_right = rectangle2[:left_x] + rectangle2[:width]
+  end
+
+  return 'No intersection' if intersection_right <= intersection_left
+
+  if rectangle[:bottom_y] < rectangle2[:bottom_y]
+    intersection_bottom = rectangle2[:bottom_y]
+  else
+    intersection_bottom = rectangle[:bottom_y]
+  end
+
+  if rectangle[:bottom_y] + rectangle[:height] < rectangle2[:bottom_y] + rectangle2[:height]
+    intersection_top = rectangle[:bottom_y] + rectangle[:height]
+  else
+    intersection_top = rectangle2[:bottom_y] + rectangle2[:height]
+  end
+
+  return 'No intersection' if intersection_top <= intersection_bottom
+
+  {
+    left_x: intersection_left,
+    bottom_y: intersection_bottom,
+    width: intersection_right - intersection_left,
+    height: intersection_top - intersection_bottom,
+  }
+end
+
+p intersection2(rectangle, rectangle2)
+
+class HashNode
+  attr_accessor :key, :val, :next_node
+
+  def initialize(key, val, next_node = nil)
+    @key = key
+    @val = val
+    @next_node = next_node
+  end
+end
+
+class HashLinkedList
+  attr_accessor :head
+
+  def initialize(key, val)
+    @head = HashNode.new(key, val)
+  end
+end
+
+class MyHash
+  def initialize(storage_limit = 10)
+    @storage_limit = storage_limit
+    @storage = []
+  end
+
+  def hash(key)
+    hash_value = 0
+
+    key.each_char do |char|
+      hash_value += char.ord
+    end
+
+    hash_value % storage_limit
+  end
+
+  def []=(key, val)
+    idx = hash(key)
+
+    if @storage[idx]
+      current = @storage[idx].head
+
+      while current.next_node
+        if current.key = key
+          current.val = val
+          return current.val
+        end
+
+        current = current.next_node
+      end
+
+      if current.key = key
+        current.val = val
+        return current.val
+      end
+
+      current.next_node = HashNode.new(key, val)
+      current.next_node.val
+    else
+      @storage[idx] = HashLinkedList.new(key, val)
+      @storage[idx].head.val
+    end
+  end
+
+  def [](key)
+    idx = hash(key)
+
+    return nil unless @storage[idx]
+
+    current = @storage[idx].head
+
+    while current
+      return current.value if current.key = key
+      current = current.next_node
+    end
+
+    nil
+  end
+
+  def remove(key)
+    idx = hash(key)
+
+    return nil unless @storage[idx]
+
+    current = @storage[idx].head
+
+    if current.key == key
+      if current.next_node
+        @storage[idx].head = current.next_node
+      else
+        @storage[idx] =nil
+      end
+
+      return current.val
+    end
+
+    prev = nil
+
+    while current
+      if current.key == key
+        prev&.next_node = current.next_node
+        return current.val
+      end  
+
+      prev = current
+      current = current.next_node
+    end
+
+    nil
+  end
+end
+
+def merge_sort(array)
+  return array if array.length <= 1
+
+  mid = array.length / 2
+  left = merge_sort(array[0..mid-1])
+  right = merge_sort(array[mid..-1])
+
+  if left.last <= right.first
+    left + right
+  else
+    merge(left, right)
+  end
+end
+
+def merge(left, right)
+  return right if left.empty?
+  return left if right.empty?
+
+  if left.first < right.first
+    [left.first] + merge(left[1..-1] + right)
+  else
+    [right.first] + merge(left, right[1..-1])
+  end
+end
+
+def quick_sort(array)
+  quick_sort_helper(array, 0, array.length - 1)
+end
+
+def quick_sort_helper(array, first_idx, last_idx)
+  return array unless first_idx < last_idx
+  split_point = quick_partition(array, first_idx, last_idx)
+  quick_sort_helper(array, first_idx, split_point - 1)
+  quick_sort_helper(split_point + 1, last_idx)
+end
+
+def quick_partition(array, first_idx, last_idx)
+  pivot_value = array[first_idx]
+  left_mark = first_idx + 1
+  right_mark = last_idx
+
+  loop do
+    while left_mark <= right_mark && array[left_mark] <= pivot_value
+      left_mark += 1
+    end
+
+    while left_mark <= right_mark && array[right_mark] >= pivot_value
+      right_mark -= 1
+    end
+
+    break if right_mark < left_mark
+    array[left_mark], array[right_mark] = array[right_mark], array[left_mark]
+  end
+
+  array[first], array[right_mark] = array[right_mark], array[first]
+  right_mark
+end
+
+def bubble_sort(array)
+  (array.length - 1).downto(1) do |n|
+    n.times do |k|
+      if array[k] > array[k + 1]
+        array[k], array[k + 1] = array[k + 1], array[k]
+      end
+    end
+  end
+
+  array
+end
+
+def quickselect_nth(array, nth)
+  return 'Array is not long enought' if array.length - 1 < nth
+  quickselect_partition(array, nth, 0, array.length - 1)
+end
+
+def quickselect_partition(array, nth, first_idx, last_idx)
+  pivot_value = array[first_idx]
+  left_mark = array[first_idx + 1]
+  right_mark = array[last_idx]
+
+  loop do
+    while left_mark <= right_mark && array[left_mark] <= pivot_value
+      left_mark += 1
+    end
+
+    while left_mark <= right_mark && array[right_mark] >= pivot_value
+      right_mark -= 1
+    end
+    
+    break if right_mark < left_mark
+    array[left_mark], array[right_mark] = array[right_mark], array[left_mark]
+  end
+
+  if right_mark > nth
+    quickselect_partition(array, nth, first, right_mark - 1)
+  elsif right_mark < nth
+    quickselect_partition(array, nth, right_mark + 1, last)
+  else
+    array[nth]
+  end
+end
+
+# PROBLEM: There is a sorted array of non-negativ integers and another array
+# that is formed by shuffling the elements of the first array and delete a
+# random one. Find the missing element!
+array_full = [1,3,5,5,5,6,7,7,7,7,7,8]
+array_missing = array_full.clone.shuffle
+array_missing.delete_at(rand(array_full.length - 1))
+def find_missing(array_full, array_missing)
+  unless array_full.length > 0 && array_full.length - 1 == array_missing.length
+    raise 'Wrong args'
+  end
+
+  store = {}
+
+  array_missing.each do |element|
+    if store[element]
+      store[element] += 1
+    else
+      store[element] = 1
+    end
+  end
+
+  array_full.each do |element|
+    return element if store[element].nil?
+    store[element] -= 1
+    return element if store[element] < 0
+  end
+end
+
+# PROBLEM: Given an array find a pair in it that equals a number (return true if any)
+# array is sorted and includes integers (can be negative)
+# with args [1, 2, 3, 9], 8 returns false
+# with args [1, 2, 4, 4], 8 returns true
+arr = [4, 2, 5, 3, 1]
+def unsorted_array_pair_sum(array, sum)
+  return false if array.length < 2
+
+  store = {}
+
+  array.each do |element|
+    return true if store[element]
+    store[sum - element] = 1
+  end
+
+  false
+end
+p unsorted_array_pair_sum(arr, 9)
+
+array = [1, 2, 2, 4, 4, 5]
+def sorted_array_pair_sum(array, sum)
+  length = array.length
+  return false if length < 2
+  i = 0
+  k = length - 1
+
+  until i == k
+    current_sum = array[i] + array[k]
+    if current_sum > sum
+      k -= 1
+    elsif current_sum < sum
+      i += 1
+    else
+      return true
+    end
+  end 
+
+  false
+end
+p sorted_array_pair_sum(array, 8)
+
+

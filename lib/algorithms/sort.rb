@@ -141,6 +141,7 @@ class Sort
   # in memory. However, when the data set is huge and is stored on external
   # devices such as a hard drive, merge sort is the clear winner in terms of speed.
   # It minimizes the expensive reads of the external drive.
+  # For disk quicksort would have to seek and read every item it wants to compare.
 
   # Quicksort is fast when the data fits into memory and can be addressed directly.
   # Mergesort is faster when data won't fit into memory or when it's expensive to get
@@ -151,6 +152,10 @@ class Sort
   # the array values in-place while mergesort moves the data to new arrays.
 
   # Quicksort is not stable unlike mergesort.
+
+  # Merge sort is often preferred for sorting a linked list. The slow random-access
+  # performance of a linked list makes some other algorithms (such as quicksort)
+  # perform poorly, and others (such as heapsort) completely impossible.
 
   # HEAP SORT
   # In-place sorting algorithm with N * log(N) worst case time complexity

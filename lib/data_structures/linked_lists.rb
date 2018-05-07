@@ -354,6 +354,7 @@ class LinkedLists
       prev&.next_node = node
     else
       node = DoublyLinkedNode.new(value)
+      head = node
       node
     end
   end

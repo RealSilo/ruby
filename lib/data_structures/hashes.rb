@@ -163,7 +163,7 @@ class HashWithLinkedList
 
     while current
       return current.value if current.key == key
-      current = current.next_node
+      current = current.next_node.val
     end
 
     nil
