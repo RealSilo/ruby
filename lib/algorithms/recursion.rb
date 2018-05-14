@@ -187,4 +187,10 @@ class Recursion
   end
 
   p new.recursive_multiply(30, 30)
+
+  # PROBLEM11: Write a base10 to base2 recursively
+  def base10_to_base2(num)
+    return num.to_s if num == 1 || num == 2
+    base10_to_base2(num / 2) + (num % 2).to_s
+  end
 end

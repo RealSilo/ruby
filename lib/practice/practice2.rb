@@ -1316,4 +1316,381 @@ def sorted_array_pair_sum(array, sum)
 end
 p sorted_array_pair_sum(array, 8)
 
+graph_for_simple_dfs_and_bfs = {
+  'A' => ['B', 'C'],
+  'B' => ['A', 'D', 'E'],
+  'C' => ['A', 'F'],
+  'D' => ['B'],
+  'E' => ['F'],
+  'F' => []
+}
+
+def simple_bfs(graph, start_node)
+  visited = {}
+  queue = [start_node]
+
+  while queue.any?
+    vertex = queue.shift
+    next if visited[vertex]
+    visited[vertex] = 1
+
+    graph[vertex].each do |node|
+      queue.push(node) unless visited[node]
+    end
+  end
+
+  visited.map { |k, _v| k }
+end
+p simple_bfs(graph_for_simple_dfs_and_bfs, 'A')
+
+def simple_bfs_is_there_a_path(graph, start_node, end_node)
+  visited = {}
+  queue = [start_node]
+
+  while queue.any?
+    vertex = queue.shift
+    next if visited[vertex]
+    visited[vertex] = 1
+
+    graph[vertex].each do |node|
+      return true if node == end_node
+      queue.push(node) unless visited[node]
+    end
+  end
+
+  false
+end
+p simple_bfs_is_there_a_path(graph_for_simple_dfs_and_bfs, 'A', 'F')
+
+def simple_bfs_shortest_path(graph, start_node, end_node)
+  visited = {}
+  queue = [[start_node]]
+
+  while queue.any?
+    path = queue.shift
+    vertex = path[-1]
+    visited[vertex] = 1
+
+    graph[vertex].each do |node|
+      next if visited[node]
+      new_path = Array.new(path)
+      new_path << node
+      return new_path if node == end_node
+      queue << new_path
+    end
+  end
+
+  false
+end
+p simple_bfs_shortest_path(graph_for_simple_dfs_and_bfs, 'A', 'F')
+
+def simple_dfs(graph, start_node)
+  visited = {}
+  stack = [start_node]
+
+  while stack.any?
+    vertex = stack.pop
+    visited[vertex] = 1
+
+    graph[vertex].each do |node|
+      next if visited[node]
+      stack.push(node)
+    end
+  end
+
+  visited.map { |k, _v| k }
+end
+p simple_dfs(graph_for_simple_dfs_and_bfs, 'A')
+
+def simple_dfs_with_recursion(graph, start_node, visited = {})
+  dfs_helper(graph, start_node, visited)
+  visited.map { |k, _v| k }
+end
+
+def dfs_helper(graph, vertex, visited)
+  visited[vertex] = 1
+
+  graph[vertex].each do |node|
+    dfs_helper(graph, node, visited) unless visited[node]
+  end
+end
+p simple_dfs_with_recursion(graph_for_simple_dfs_and_bfs, 'A')
+
+graph_for_topological = {
+  'A' => ['B', 'C'],
+  'B' => ['D'],
+  'C' => ['D'],
+  'D' => ['E', 'F'],
+  'E' => ['G'],
+  'F' => ['G'],
+  'G' => []
+}
+
+# TOPOLOGICAL_VISITED = {}
+def topological_sort(graph, start_node, sorted = [])
+  topological_sort_helper(graph, start_node, sorted)
+  sorted
+end
+
+def topological_sort_helper(graph, vertex, sorted, visited = {})
+  visited[vertex] = 1
+
+  graph[vertex].each do |node|
+    topological_sort_helper(graph, node, sorted, visited) unless visited[node]
+  end
+
+  sorted.unshift(vertex) unless sorted.include?(vertex)  
+end
+p topological_sort(graph_for_simple_dfs_and_bfs, 'A')
+
+class BSTNode
+  attr_accessor :data, :parent, :left, :right
+
+  def initialize(data, parent = nil, left = nil, right = nil)
+    @data = data
+    @parent = parent
+    @left = left
+    @right = right
+  end
+
+  def leaf?
+    left.nil? && right.nil?
+  end
+
+  def has_any_children?
+    left || right
+  end
+end
+
+class BST
+  def initialize(root = nil)
+    @root = root
+    @size = size
+  end
+
+  def insert(data, node = @root)
+    if @root
+      insert_place(data, node)
+    else
+      @root = BSTNode.new(data)
+    end
+  end
+
+  def find(data, node = @root)
+    return nil unless node
+
+    if node.data > data
+      find(data, node.left)
+    elsif node.data < data
+      find(data, node.right)
+    else
+      return node
+    end
+  end
+
+  private
+
+  def insert_place(data, node)
+    if data < node.data
+      if node.left
+        insert_place(data, node.left)
+      else
+        node.left = BSTNode.new(data, node)
+      end
+    else
+      if node.right
+        insert_place(data, node.right)
+      else
+        node.right = BSTNode.new(data, node)
+      end
+    end
+    @size += 1
+  end
+end
+
+# Write an efficient algorithm that searches for a value in an m x n matrix.
+# This matrix has the following properties:
+
+# Integers in each row are sorted from left to right.
+# The first integer of each row is greater than the last integer of the previous row.
+#Example 1:
+
+#Input:
+matrix1 = [
+  [1, 3, 5, 7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 50]
+]
+#target = 3
+#Output: true
+#Example 2:
+
+#Input:
+matrix2 = [
+  [1, 3, 5, 7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 50]
+]
+#target = 13
+#Output: false
+def find_in_nested_matrix(matrix, target)
+  matrix_length = matrix.length
+  from = 0
+  to = matrix_length - 1
+
+  while from <= to
+    mid = (from + to) / 2
+    row = matrix[mid]
+    row_min = row[0]
+    row_max = row[-1]
+
+    return true if row_min == target
+    return true if row_max == target
+
+    if row_min < target && target < row_max
+      bsearch_result = row.bsearch do |x|
+        target <=> x
+      end
+      return  bsearch_result ? true : false
+    elsif target < row_min
+      to = mid -1
+    elsif target > row_max
+      from = mid + 1
+    end
+  end
+
+  false
+end
+p find_in_nested_matrix(matrix2, 55)
+
+def bsearch_rec(arr, value, from = 0, to = nil)
+  to = arr.length - 1 unless to
+
+  return false if from > to
+
+  mid = (from + to) / 2
+
+  if value < arr[mid]
+    return bsearch_rec(arr, value, from, mid - 1)
+  elsif value > arr[mid]
+    return bsearch_rec(arr, value, mid + 1, to)
+  else
+    return true
+  end
+end
+
+def find_in_nested_matrix_recursion(matrix, value, from = 0, to = nil)
+  to = matrix.length - 1 unless to
+
+  return false if from > to
+
+  mid = (from + to) / 2
+  row = matrix[mid]
+  row_min = row[0]
+  row_max = row[-1]
+
+  return true if row_min == value
+  return true if row_max == value
+
+  if value < row_min
+    return find_in_nested_matrix_recursion(matrix, value, from, mid - 1)
+  elsif value > row_max
+    return find_in_nested_matrix_recursion(matrix, value, mid + 1, to)
+  else
+    bsearch_rec(row, value)
+  end
+end
+p find_in_nested_matrix_recursion(matrix2, 50)
+
+def to_binary(number)
+  return number.to_s if number == 0 || number == 1
+  to_binary(number / 2) + (number % 2).to_s
+end
+
+p to_binary(11)
+
+def base10_to_base2(num)
+  rtn = ''
+
+  31.downto(0) do |i|
+    v = ((1 << i) & num);
+    # puts v
+    rtn << (v != 0 ? '1' : '0')
+  end
+
+  rtn
+end
+
+p base10_to_base2(11)
+
+def new_simple_bfs_shortest_path(graph, start_node, end_node)
+  visited = {}
+  queue = [[start_node]]
+
+  while queue.any?
+    path = queue.shift
+    vertex = path[-1]
+    visited[vertex] = 1
+
+    graph[vertex].each do |node|
+      next if visited[node]
+      new_path = Array.new(path)
+      new_path << node
+      return array if node == end_node
+      queue << array
+    end
+  end
+end
+p simple_bfs_shortest_path(graph_for_simple_dfs_and_bfs, 'A', 'F')
+
+def new_bfs(graph, start_node)
+  visited = {}
+  queue = [start_node]
+
+  while queue.any?
+    vertex = queue.shift
+    visited[vertex] = 1
+
+    graph[vertex].each do |node|
+      queue.push(node) unless visited[node]
+    end
+  end
+
+  visited.map { |k, _v| k }
+end
+
+def new_dfs(graph, start_node)
+  visited = {}
+  stack = [start_node]
+
+  while stack.any?
+    vertex = stack.pop
+    visited[vertex] = 1
+
+    graph[vertex].each do |node|
+      stack.push(node) unless visited[node]
+    end
+  end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

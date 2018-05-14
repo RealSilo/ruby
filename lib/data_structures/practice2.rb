@@ -392,3 +392,9 @@
 #   str << 'buzz' if el % 5 == 0
 #   puts str unless str.empty?
 # end
+
+# Flatten nested hashes and compare them.
+# Find top values
+
+# Find k largest element in an unsorted array
+

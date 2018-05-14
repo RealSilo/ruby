@@ -137,9 +137,9 @@ class Trees
       if node.data == data
         node
       elsif node.data > data
-        find_place(data, node.left)
+        find(data, node.left)
       elsif node.data < data
-        find_place(data, node.right)
+        find(data, node.right)
       end
     end
 
@@ -215,13 +215,13 @@ class Trees
         if node.left
           insert_place(data, node.left, node)
         else
-          node.left = TreeNode.new(data, parent)
+          node.left = TreeNode.new(data, node)
         end
       else
         if node.right
           insert_place(data, node.right, node)
         else
-          node.right = TreeNode.new(data, parent)
+          node.right = TreeNode.new(data, node)
         end
       end
     end

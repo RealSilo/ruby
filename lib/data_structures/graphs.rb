@@ -300,6 +300,7 @@ class Graphs
       visited[vertex] = 1
 
       graph[vertex].each do |node|
+        next if visited[node]
         new_path = Array.new(path)
         new_path << node
         queue << new_path
