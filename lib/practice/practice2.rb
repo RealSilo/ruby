@@ -1076,7 +1076,7 @@ class MyHash
       current = @storage[idx].head
 
       while current.next_node
-        if current.key = key
+        if current.key == key
           current.val = val
           return current.val
         end
@@ -1084,7 +1084,7 @@ class MyHash
         current = current.next_node
       end
 
-      if current.key = key
+      if current.key == key
         current.val = val
         return current.val
       end
@@ -1673,21 +1673,102 @@ def new_dfs(graph, start_node)
   end
 end
 
+def new_dfs_recursion(graph, start_node, visited = {})
+  new_dfs_helper(graph, start_node, visited)
+  visited.map { |k, v| k }
+end
+
+def new_dfs_helper(graph, vertex, visited)
+  visited[vertex] = 1
+
+  graph[vertex].each do |vertex|
+    new_dfs_helper(graph, vertex, visited) unless visited[vertex]
+  end
+end
+
+def new_merge_sort(array)
+  return array if array.length == 1
+
+  mid = array.length / 2 
+  first_half = new_merge_sort(array[0..mid-1])
+  second_half = new_merge_sort(array[mid..-1])
+
+  if first_half.last < second_half.first
+    first_half + second_half
+  else
+    merge(first_half, second_half)
+  end
+end
+
+def merge(array1, array2)
+  return array1 if array2.empty?
+  return array2 if array1.empty?
+
+  if array1[0] < array2[0]
+    [array1[0]] + merge(array1[1..-1], array2)
+  else
+    [array2[0]] + merge(array1, array2[1..-1])
+  end
+end
+
+def new_quicksort(array)
+  new_quicksort_helper(array, 0, array.length - 1)
+end
+
+def new_quicksort_helper(array, first_idx, last_idx)
+  return array unless first_idx < last_idx
+  splitpoint = new_quicksort_partition(first_idx, last_idx)
+  new_quicksort_helper(array, first_idx, splitpoint - 1)
+  new_quicksort_helper(array, last_idx, splitpoint + 1)
+end
+
+def new_quicksort_partition(array, first_idx, last_idx)
+  pivot_value = array[first_idx]
+  left_mark = array[first_idx + 1]
+  right_mark = array[last_idx]
+
+  loop do
+    while left_mark <= right_mark && array[left_mark] < pivot_value
+      left_mark += 1
+    end
+
+    while left_mark <= right_mark && array[right_mark > pivot_value
+      right_mark -= 1
+    end
+
+    break if right_mark < left_mark
+    array[left_mark], array[right_mark] = array[right_mark], array[left_mark]
+  end
+
+  array[first_idx], array[right_mark] = array[right_mark], array[first_idx]
+  right_mark
+end
+
+def new_bubble_sort(array)
+  (array.length - 1).downto(0) do|i|
+    0.upto(i) do |j|
+      if j + 1 < array.length && array[j] > array[j + 1]
+        array[j], array[j + 1] = array[j + 1], array[j]
+      end
+    end
+  end
+  array
+end
+p new_bubble_sort([1,5,9,4,2,11])
 
 
+def new_insertion_sort(array)
+  0.upto(array.length - 1) do |i|
+    j = i
+    while j - 1 > 0 && array[j - 1] > array[j]
+      array[j], array[j - 1] = array[j - 1], array[j]
+      j -= 1
+    end
+  end
 
-
-
-
-
-
-
-
-
-
-
-
-
+  array
+end
+p new_insertion_sort([1,5,9,4,2,11])
 
 
 
