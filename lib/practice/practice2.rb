@@ -1732,7 +1732,7 @@ def new_quicksort_partition(array, first_idx, last_idx)
       left_mark += 1
     end
 
-    while left_mark <= right_mark && array[right_mark > pivot_value
+    while left_mark <= right_mark && array[right_mark] > pivot_value
       right_mark -= 1
     end
 
@@ -1770,7 +1770,49 @@ def new_insertion_sort(array)
 end
 p new_insertion_sort([1,5,9,4,2,11])
 
+# def permutations(string, l, r)
+#   if l == r
+#     return string
+#   else
+#     (l).upto(r) do |i|
+#       string[l], string[i] = string[i], string[l]
+#       permutations(string, l + 1, r)
+#       string[l], string[i] = string[i], string[l]
+#     end
+#   end
+# end
 
+# p permutations('abc', 0, 2)
+
+# assuming no duplication
+def permutations_with_recursion(string, concatenated = '', output = {})
+  raise 'Invalid input, pls provide a string' unless string.is_a?(String)
+  return [] if string.length == 0
+  permutations_with_recursion_helper(string, concatenated, output)
+  output.map { |k, _v| k }
+end
+
+def permutations_with_recursion_helper(string, concatenated, output)
+  if string.length == 1
+    if output[concatenated + string]
+      output[concatenated + string] += 1
+    else
+      output[concatenated + string] = 1
+    end
+    return
+  end
+
+  string.each_char.with_index do |_c, i|
+    new_concatenated = concatenated.clone
+    new_concatenated << string[i]
+
+    new_string = string.clone
+    new_string = new_string.tap {|s| s.slice!(i) }
+
+    permutations_with_recursion_helper(new_string, new_concatenated, output)
+  end
+end
+p permutations_with_recursion('abc')
 
 
 

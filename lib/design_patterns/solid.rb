@@ -88,6 +88,7 @@ module OpenClosed
 end
 
 # LISKOV SUBSTITUION PRINCIPLE
+# Subclasses should add to base class's behavior, not replace it.
 
 # Example1
 # While a Bike technically is a vehicle, the Vehicle class makes the assumption
@@ -152,6 +153,78 @@ module Example2
   vehicles = [vehicle, car]
 
   # vehicles.each {|v| p v.details[:weight] }
+end
+
+module Example3
+  class Bird
+    def walk
+      puts 'walk'
+    end
+
+    def fly
+      puts 'fly'
+    end
+  end
+
+  class Eagle < Bird
+  end
+
+  class Cardinal < Bird
+  end
+
+  class Penguing < Bird
+    # penguin cannot fly
+  end
+
+  # bird.fly
+
+  # solution 1
+  class Bird
+    def walk
+      puts 'walk'
+    end
+  end
+
+  class FlyingBird < Bird
+    def fly
+      puts 'fly'
+    end
+  end
+
+  class Eagle < FlyingBird
+  end
+
+  class Cardinal < FlyingBird
+  end
+
+  class Penguin < Bird
+  end
+
+  # flying_bird.fly
+
+  # solution 2 => module
+  class Bird
+    def walk
+      puts 'walk'
+    end
+  end
+
+  module Flying
+    def fly
+      puts 'fly'
+    end
+  end
+
+  class Eagle < Bird
+    include Flying
+  end
+
+  class Cardinal < Bird
+    include Flying
+  end
+
+  class Penguin < Bird
+  end
 end
 
 # DEPENDENCY INVERSION PRINCIPLE
