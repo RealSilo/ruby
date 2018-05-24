@@ -1814,6 +1814,44 @@ def permutations_with_recursion_helper(string, concatenated, output)
 end
 p permutations_with_recursion('abc')
 
+def string_compressor(str)
+  new_str = ''
+  current_char = str[0]
+  length = 1
 
+  str.each_char.with_index do |char, i|
+    if str[i] == str[i + 1]
+      length += 1
+    else
+      new_str << "#{char}#{length}"
+      length = 1
+      current_char = char
+    end
+  end
 
+  new_str
+end
 
+p string_compressor('aabccccaaa')
+
+def is_rotation(str1, str2)
+  return false unless str1.length == str2.length
+
+  start_index = nil
+
+  concatenated_str1 = str1 + str1
+  
+  concatenated_str1.each_char.with_index do |char, i|
+    if char == str2[0]
+      str2.each_char.with_index do |ch, j|
+        break unless str2[j] == str1[i + j]
+      end
+      return true
+    end
+  end
+
+  false
+end
+
+p is_rotation('waterbottle', 'erbottlewat')
+p is_rotation('waterbottle', 'erbottlewa')
