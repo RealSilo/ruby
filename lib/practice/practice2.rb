@@ -1855,3 +1855,46 @@ end
 
 p is_rotation('waterbottle', 'erbottlewat')
 p is_rotation('waterbottle', 'erbottlewa')
+
+
+def subsets(arr)
+  sets = []
+
+  arr.each_with_index do |element, i|
+    sets2 = Marshal.load(Marshal.dump(sets.clone))
+    sets2.each do |set|
+      set << element
+    end
+    sets2 << [element]
+    sets.concat(sets2)
+  end
+
+  sets << []
+  sets
+end
+p 'haha'
+p subsets([1, 2, 3, 4])
+
+def balanced_parantheses?(str)
+  openings = ['{', '(', '[']
+  matches = [['{', '}'], ['(', ')'], ['[', ']']]
+
+  stack = []
+
+  str.each_char do |char|
+    if openings.include?(char)
+      stack.push(char)
+      next
+    end
+
+    return false if openings.empty?
+
+    opening = stack.pop
+
+    return false unless matches.include?([opening, char])
+  end
+
+  true
+end
+
+p balanced_parantheses?('{[()]{}}}')

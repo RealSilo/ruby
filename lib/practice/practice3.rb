@@ -136,7 +136,25 @@ class BST
     end
   end
 
+  def symmetric?(node = @root)
+    equal?(reverse(node.left), node.right)
+  end
+
   private
+
+  def equal?(node1, node2)
+    return true if node1.nil? && node2.nil?
+    return false node1.nil? || node2.nil?
+    equal?(node1.left, node2.left) && equal?(node1.right, node2.right)
+  end
+
+  def reverse(node)
+    return if node.nil?
+
+    node.left, node.right = reverse(node.right), reverse(node.left)
+
+    node
+  end
 
   def insert_helper(value, node)
     if value < node.value
@@ -155,4 +173,3 @@ class BST
     @size += 1
   end
 end
-
