@@ -67,7 +67,6 @@ end
 
 ac = AutoComplete.new
 ac.insert('acbd');
-byebug
 p ac
 # p ac.root
 
@@ -144,7 +143,7 @@ class BST
 
   def equal?(node1, node2)
     return true if node1.nil? && node2.nil?
-    return false node1.nil? || node2.nil?
+    return false if node1.nil? || node2.nil?
     equal?(node1.left, node2.left) && equal?(node1.right, node2.right)
   end
 
@@ -172,4 +171,103 @@ class BST
     end
     @size += 1
   end
+end
+
+class EightQueen
+  SIZE = 8
+
+  attr_accessor :board
+
+  def initialize
+    @board = Array.new(SIZE) { Array.new(SIZE, 0) }
+    @solution_found = false
+  end
+
+  def place_queens
+    place_queen_in_col(0)
+  end
+
+  private
+
+  def place_queen_in_col(row)
+    SIZE.times do |col|
+      if safe?(row, col)
+        @board[row][col] = 1
+        if row == SIZE - 1
+          @solution_found = true
+        else
+          place_queen_in_col(row + 1)
+        end
+      end
+
+      break if @solution_found
+      @board[row][col] = 0
+    end
+  end
+
+  def safe?(row, col)
+    safe_horizontally?(row) &&
+    safe_vertically?(col) &&
+    safe_diagonally?(row, col)
+  end
+
+  def safe_horizontally?(row)
+    @board[row].all? { |val| val == 0 }
+  end
+
+  def safe_vertically?(col)
+    @board.each do |row|
+      return false unless row[col] == 0
+    end
+    true
+  end
+
+  def safe_diagonally?(row, col)
+    @board.each_with_index do |r, row_index|
+      r.each_with_index do |cell_val, col_index|
+        if cell_val == 1 && (row_index - row).abs == (col_index - col).abs
+          return false
+        end
+      end
+    end
+    true
+  end
+end
+
+def eight_queens
+  board = EightQueen.new.board
+  solution_found = false
+  place_queen_in_col(board, 0, solution_found)
+  # print board.board
+end
+
+eq = EightQueen.new
+eq.place_queens
+eq.board.each do |row|
+  p row
+end
+
+# 0,0 is the middle -> [[1, 2], [-1, 2], [-3, -4]]
+def k_closest_points(arr, k)
+  temp = []
+  
+  arr[0..k-1].each do |coords|
+    temp << Math.sqrt((coords[0] ** 2 + coords[1] ** 2))
+  end
+
+  arr[k..-1].each do |coords|
+    distance = Math.sqrt((coords[0] ** 2 + coords[1] ** 2))
+
+    max_idx = 0
+    temp.each_with_index { |temp_dist, i| max_idx = i if temp_dist > temp[max_idx] }
+
+    temp[max_idx] = distance if distance < temp[max_idx]
+  end
+
+  temp
+end
+
+p k_closest_points([[1, 2], [6, -6], [-1, 2], [-3, -4]], 3)
+
+def lowest_common_ancestor
 end
