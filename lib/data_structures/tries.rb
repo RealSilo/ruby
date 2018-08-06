@@ -322,3 +322,25 @@ def palindrome_pairs(*words)
 end
 
 # p palindrome_pairs('baba', 'abab', 'hfhf', 'fhf', 'cac', 'cacd')
+
+def build_trie(*words)
+  trie = {}
+
+  words.each do |word|
+    chars = ''
+    last_hash = trie
+    word_length = word.length
+    word.each_char.with_index do |char, i|
+      chars << char
+      if last_hash[chars]
+        last_hash = last_hash[chars]
+        next
+      elsif i == word_length - 1
+        last_hash[chars] = nil
+      else
+        last_hash[chars] = {}
+        last_hash = last_hash[chars]
+      end
+    end
+  end
+end
