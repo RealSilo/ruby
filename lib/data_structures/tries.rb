@@ -323,6 +323,8 @@ end
 
 # p palindrome_pairs('baba', 'abab', 'hfhf', 'fhf', 'cac', 'cacd')
 
+# simple trie example
+
 def build_trie(*words)
   trie = {}
 
