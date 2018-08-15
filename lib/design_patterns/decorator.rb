@@ -243,5 +243,5 @@ p combined_writer.write_line('Hello out there')
 
 # The Decorator pattern lets you start with some basic functionality and layer
 # on extra features, one decorator at a time. Because the Decorator pattern builds
-# these lay- ers at runtime, you are free to construct whatever combination you
+# these layers at runtime, you are free to construct whatever combination you
 # need, at runtime.
