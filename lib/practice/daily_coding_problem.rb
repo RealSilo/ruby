@@ -323,19 +323,253 @@ def max_of_sub_array(arr, k)
   maxes
 end
 
-p max_of_sub_array([10, 5, 2, 7, 8, 7], 3)
+# p max_of_sub_array([10, 5, 2, 7, 8, 7], 3)
 
 # 4.4. Given [0, 1, 2, ..., N] jumbled reconstruct the array in O(n) time
 # and space based on the info if the prev element was smaller or bigger.
 # [nil, +, +, -, +] => [0, 1, 3, 2, 4]
 def reconstruct(arr)
-  length = arr.length
+  answer = []
+  stack = []
 
-  arr.each do |element|
-    if element == '+'
+  arr.each_with_index do |_element, i|
+    if arr[i + 1] == '-'
+      stack.push(i)
+    else
+      answer.push(i)
+      answer.push(stack.pop) while stack.any?
+    end
+  end
 
-    elsif element == '-'
-      
+  answer.push(stack.pop) while stack.any?
+
+  answer
+end
+
+# p reconstruct([nil, '+', '+', '-', '+'])
+
+# 5.1. Implement LRU cache
+class LruNode
+  attr_accessor :key, :value, :prev_node, :next_node
+  def initialize(key, value, prev_node = nil, next_node = nil)
+    @key = key                   
+    @value = value
+    @prev_node = prev_node
+    @next_node = next_node
+  end
+end
+
+class LruCache
+  attr_reader :limit, :store, :head, :tail, :size
+  def initialize(limit)
+    @limit = limit
+    @size = 0
+    @store = {}
+    @head = nil
+    @tail = nil
+    @head = nil
+  end
+
+  def get(key)
+    node = store[key]
+    return nil unless node
+    return if head == node # node.prev_node.nil?
+
+    if node.next_node
+      prev_node = node.prev_node
+      next_node = node.next_node
+      prev_node.next_node = next_node
+      next_node.prev_node = prev_node
+    else
+      @tail = node.prev_node
+      tail.next_node = nil
+    end
+
+    node.next_node = head
+    node.prev_node = nil
+    head.prev_node = node
+    @head = node
+
+    node.value
+  end
+
+  def set(key, value)
+    exisiting_node = store[key]
+    if exisiting_node
+      exisiting_node.value = value
+      return self.get(key)
+    end
+
+    @size += 1
+    node = LruNode.new(key, value)
+    store[key] = node
+
+    if size == 1
+      @head = node
+      @tail = node
+      return node
+    end
+
+    if size > limit
+      oldest_key = tail.key
+      @tail = tail.prev_node
+      tail.next_node = nil
+      @size -= 1
+      store.delete(oldest_key)
+    end
+
+    head.prev_node = node
+    node.next_node = head
+    @head = node
+
+    node.value
+  end
+end
+
+lru = LruCache.new(4)
+lru.set('A', 3)
+lru.set('B', 4)
+lru.set('A', 5)
+lru.set('C', 6)
+lru.get('C')
+lru.get('A')
+
+# 6.1. Count unival trees
+# Unival tree is a tree where all nodes under it have the same value.
+
+class TreeNode
+  attr_accessor :value, :left, :right
+  def initialize(value, left = nil, right = nil)
+    @value = value
+    @left = left
+    @right = right
+  end
+end
+
+def unival_helper(root)
+  return [0, true] unless root
+
+  left_count, is_left_unival = unival_helper(root.left)
+  right_count, is_right_unival = unival_helper(root.right)
+  count = left_count + right_count
+
+  if is_left_unival && is_right_unival
+    return [count, false] if root.left && root.value != root.left.value
+    return [count, false] if root.right && root.value != root.right.value
+    return [count + 1, true]
+  end
+
+  return [count, false]
+end
+
+def count_unival_trees(root)
+  count, _ = unival_helper(root)
+  count
+end
+
+tree_node1 = TreeNode.new('b', nil, nil)
+tree_node2 = TreeNode.new('b', nil, nil)
+tree_node3 = TreeNode.new('b', nil, tree_node1)
+tree_node4 = TreeNode.new('c', nil, nil)
+tree_node5 = TreeNode.new('b', tree_node2, tree_node3)
+root = TreeNode.new('a', tree_node4, tree_node5)
+
+# p count_unival_trees(root)
+
+# 6.2. Reconstruct the tree from pre-order and in-order travelsals:
+# pre-order: [a, b, d, e, c, f, g]
+# in-order: [d, b, e, a, f, c, g]
+def reconstruct_tree(preorder, inorder)
+  return nil unless preorder.any? || inorder.any?
+  return preorder[0] if preorder.length == 1 && inorder.length == 1
+
+  root = preorder[0]
+  root_i = inorder.find_index(root)
+  root.left = reconstruct_tree(preorder[1..root_i], inorder[0...root_i])
+  root.right = reconstruct_tree(preorder[root_i + 1..-1], inorder[root_i + 1..-1])
+
+  root
+end
+
+# a = TreeNode.new('a')
+# b = TreeNode.new('b')
+# c = TreeNode.new('c')
+# d = TreeNode.new('d')
+# e = TreeNode.new('e')
+# f = TreeNode.new('f')
+# g = TreeNode.new('g')
+
+# p reconstruct_tree([a, b ,d , e, c, f, g], [d, b ,e ,a, f, c, g])
+
+# 7. Write a BST with insert, find and delete operations.
+
+class BST
+  def initialize(root = nil)
+    @root = root
+  end
+
+  def insert(value)
+    if @root
+      insert_helper(value, @root)
+    else
+      @root = TreeNode.new(value)
+    end
+  end
+
+  def find(value, node = @root)
+    return nil unless root
+
+    if node.value == value
+      node
+    elsif node.value > value
+      find(value, node.left)
+    elsif node.value < value
+      find(value, node.right)
+    end
+  end
+
+  def find_min(node = @root)
+    current = node
+    current = current.left while current.left
+    curren.value
+  end
+
+  def delete(value, node = @root, parent = nil)
+    return nil unless root
+
+    if node.value > value
+      delete(value, node.left, node)
+    elsif node.value < value
+      delete(value, node.right, node)
+    else
+      if @root == node 
+        node = node.left || node.right
+        @root = node
+      elsif node.left && node.right
+        value = find_min(node)
+        node.value = value
+        delete(value, node.right, node)
+      else
+        node = node.left || node.right
+      end
+    end
+  end
+
+  private
+
+  def insert_helper(value, root)
+    if root.value > value
+      if root.left
+        insert_helper(value, root.left)
+      else
+        root.left = TreeNode.new(value)
+      end
+    else
+      if root.right
+        insert_helper(value, root.right)
+      else
+        root.right = TreeNode.new(value)
+      end
     end
   end
 end
