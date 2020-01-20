@@ -543,14 +543,19 @@ class BST
       delete(value, node.right, node)
     else
       if @root == node 
-        node = node.left || node.right
-        @root = node
+        current_node = node.left || node.right
+        @root = current_node
       elsif node.left && node.right
         value = find_min(node)
         node.value = value
         delete(value, node.right, node)
       else
-        node = node.left || node.right
+        current_node = node.left || node.right
+        if parent.left.value == value
+          parent.left = current_node
+        else
+          parent.right = current_node
+        end
       end
     end
   end
