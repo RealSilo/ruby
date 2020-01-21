@@ -578,3 +578,133 @@ class BST
     end
   end
 end
+
+# 7.1. Find floor and ceiling for a given integer in BST
+def find_floor_and_ceiling(node, x, floor = nil, ceiling = nil)
+  return [floor, ceiling] unless root
+
+  if x == node.data
+    return [x, x]
+  elsif x > node.data
+    find_floor_and_ceiling(node.right, x, node.value, ceiling)
+  elsif x < node.data
+    find_floor_and_ceiling(node.left, x, floor, node.value)
+  end
+
+  [floor, ceiling]
+end
+
+# 7.2. Convert a sorted array to BST
+# O(n) time and space
+def make_bst_from_array(arr)
+  return nil unless arr.any?
+
+  mid = arr[arr.length / 2]
+
+  root = TreeNode.new(arr[mid])
+  root.left = arr[0..arr.length / 2  - 1]
+  root.right = arr[arr.length / 2  + 1..-1]
+  root
+end
+
+# 7.3. Construct all possible BSTs with n nodes from [1...N]
+# O(n x 2expn) time and space complexity
+preorder_results = []
+def preorder(node = nil)
+  preorder_results << node.value
+  preorder(node.left)
+  preorder(node.right)
+end
+
+def make_trees(low, high)
+  trees = []
+
+  if low > high
+    trees.push(nil)
+    return trees
+  end
+
+  (low..high).each do |i|
+    left = make_trees(low..i - 1)
+    right = make_trees(i + 1..high)
+
+    left.each do |left_element|
+      right.each do |right_element|
+        node = TreeNode.new(i, left_element, right_element)
+        tree_nodes.push(node)
+      end
+    end
+  end
+
+  trees
+end
+
+def construct_bsts(n)
+  trees = make_trees(1, n)
+  trees.each do |tree|
+    p(preorder(tree))
+  end
+end
+
+# 8. Tries
+# Can be implemented with nodes/hash
+
+class HashTrie
+  END_SIGN = '#'
+  attr_reader :store
+
+  def initialize
+    @store = {}
+  end
+
+  def find(str)
+    trie = store.clone
+    str.each_char do |char|
+      if trie[char]
+        trie = trie[char]
+      else
+        return []
+      end
+    end
+    elements(str, trie)
+  end
+
+  def elements(str, trie, result = [])
+    trie.each do |k, v|
+      if k == END_SIGN
+        result.push(str)
+      else
+        new_string = str.clone + k
+        elements(new_string, v, result)
+      end
+    end
+    result
+  end
+
+  def insert(word)
+    trie = store
+    word.each_char.with_index do |char, i|
+      trie[char] = {} unless trie[char]
+      trie = trie[char]
+    end
+    trie['#'] = true
+  end
+end
+
+ht = HashTrie.new
+ht.insert('ba')
+ht.insert('bac')
+ht.insert('bae')
+p ht
+p ht.find('ba')
+
+# class NodeTrie
+# end
+
+# 8.2. Create PrefixMapSum class
+# 8.3. Find Max XOR of element pairs
+
+# 9. Heaps
+
+
+
