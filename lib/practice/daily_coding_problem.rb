@@ -706,5 +706,127 @@ p ht.find('ba')
 
 # 9. Heaps
 
+# Min Heap
 
+class MinHeap
+  attr_reader :store
 
+  def initialize
+    @store = [nil]
+  end
+
+  def add(value)
+    store.push(value)
+    return if store.length < 3
+
+    i = store.length - 1
+
+    while i > 1 && store[i] < store[i / 2]
+      store[i], store[i / 2] = store[i / 2], store[i]
+      i /= 2
+    end
+  end
+
+  def delete_min
+    return nil if store.length <= 1
+    return store.pop if store.length == 2
+
+    smallest = store[1]
+    store[1] = store.pop
+    
+    return smallest if store.length == 3
+
+    i = 1
+    left = i * 2
+    right = i * 2 + 1
+
+    while store[i] > store[left] || store[i] > store[right]
+      if store[left] < store[right]
+        store[i], store[left] = store[left], store[i]
+        i *= 2
+      else
+        store[i], store[right] = store[right], store[i]
+        i = i * 2 + 1
+      end
+
+      left = i * 2
+      right = i * 2 + 1
+
+      break unless store[left] && store[right]
+    end
+  
+    smallest
+  end
+
+  def heap_sort
+    result = []
+
+    result.push << store.pop while store.length > 1
+
+    result
+  end
+end
+
+class MaxHeap
+  attr_reader :store
+
+  def initialize
+    @store = [nil]
+  end
+
+  def add(value)
+    store.push(value)
+
+    return if store.length < 3
+
+    i = store.length - 1
+
+    while i > 1 && store[i] > store[i / 2]
+      store[i], store[i / 2] = store[i / 2], store[i]
+      i /= 2
+    end
+  end
+
+  def delete_max
+    return nil if store.length <= 1
+    return store.pop if store.length == 2
+
+    largest = store[1]
+    store[1] = store.pop
+
+    if store.length == 3
+      store[1], store[2] = store[2], store[1] if store[1] < store[2]
+      return largest
+    end
+
+    i = 1
+    left = i * 2
+    right = i * 2 + 1
+
+    while store[i] < store[left] || store[i] < store[right]
+      if store[left] < store[right]
+        store[right], store[i], store[i], store[right]
+      else
+        store[left], store[i], store[i], store[left]
+      end  
+
+      i *= 2
+      left = i * 2
+      right = i * 2 + 1
+
+      break unless store[left] && store[right]
+    end
+
+    largest
+  end
+
+  def heap_sort
+    result = []
+
+    result.push(store.pop) while store.length > 1
+
+    result
+  end
+end
+
+# 9.1. Compute the running median
