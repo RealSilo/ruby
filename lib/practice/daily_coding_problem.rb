@@ -691,12 +691,12 @@ class HashTrie
   end
 end
 
-ht = HashTrie.new
-ht.insert('ba')
-ht.insert('bac')
-ht.insert('bae')
-p ht
-p ht.find('ba')
+# ht = HashTrie.new
+# ht.insert('ba')
+# ht.insert('bac')
+# ht.insert('bae')
+# p ht
+# p ht.find('ba')
 
 # class NodeTrie
 # end
@@ -713,6 +713,14 @@ class MinHeap
 
   def initialize
     @store = [nil]
+  end
+
+  def length
+    store.length
+  end
+
+  def min
+    store[1]
   end
 
   def add(value)
@@ -734,7 +742,12 @@ class MinHeap
     smallest = store[1]
     store[1] = store.pop
     
-    return smallest if store.length == 3
+    return smallest if store.length == 2
+
+    if store.length == 3
+      store[1], store[2] = store[2], store[1] if store[2] < store[1]
+      return smallest
+    end
 
     i = 1
     left = i * 2
@@ -774,6 +787,14 @@ class MaxHeap
     @store = [nil]
   end
 
+  def length
+    store.length
+  end
+
+  def max
+    store[1]
+  end
+
   def add(value)
     store.push(value)
 
@@ -794,6 +815,8 @@ class MaxHeap
     largest = store[1]
     store[1] = store.pop
 
+    return smallest if store.length == 2
+
     if store.length == 3
       store[1], store[2] = store[2], store[1] if store[1] < store[2]
       return largest
@@ -805,9 +828,9 @@ class MaxHeap
 
     while store[i] < store[left] || store[i] < store[right]
       if store[left] < store[right]
-        store[right], store[i], store[i], store[right]
+        store[right], store[i] = store[i], store[right]
       else
-        store[left], store[i], store[i], store[left]
+        store[left], store[i] = store[i], store[left]
       end  
 
       i *= 2
@@ -830,3 +853,50 @@ class MaxHeap
 end
 
 # 9.1. Compute the running median
+min_heap = MinHeap.new
+max_heap = MaxHeap.new
+
+def add_to_median(num, min_heap, max_heap)
+  if min_heap.length + max_heap.length
+    min_heap.add(num)
+    return
+  end
+
+  median = get_median(min_heap, max_heap)
+
+  if num > median
+    min_heap.add(num)
+  else
+    max_heap.add(num)
+  end
+end
+
+def rebalance_heaps(min_heap, max_heap)
+  if min_heap.length > max_heap.length + 1
+    max_heap.add(min_heap.delete_min)
+  end
+
+  if max_heap.length > min_heap.length + 1
+    min_heap.add(max_heap.delete_max)
+  end
+end
+
+def get_median(min_heap, max_heap)
+  if min_heap.length > max_heap.length
+    min_heap.min
+  elsif min_heap.length < max_heap.length
+    max_heap.max
+  else
+    (min_heap.min.to_f + max_heap.max.to_f) / 2
+  end
+end
+
+def running_median(arr, min_heap, max_heap)
+  arr.each do |number|
+    add_to_median(number, min_heap, max_heap)
+    rebalance_heaps(min_heap, max_heap)
+    p get_median(min_heap, max_heap)
+  end
+end
+
+running_median([1, 4, 5, 9, 22, 44], min_heap, max_heap)
