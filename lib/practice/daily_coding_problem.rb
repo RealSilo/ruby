@@ -857,7 +857,7 @@ min_heap = MinHeap.new
 max_heap = MaxHeap.new
 
 def add_to_median(num, min_heap, max_heap)
-  if min_heap.length + max_heap.length
+  if min_heap.length + max_heap.length < 1
     min_heap.add(num)
     return
   end
