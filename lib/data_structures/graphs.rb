@@ -19,6 +19,10 @@ require 'byebug'
 # neighbors of a node. In the adjacency matrix representation, you will need to
 # iterate through all the nodes to identify a node's neighbors.
 
+# In general ,the adjacency list reprsentation is more space efficient if there
+# are not that many edges (sparse graph), whereas an adjacency matrix has faster
+# lookup times to check if a given edge exists but uses more speace.
+
 class Graphs
   class Vertex
     attr_reader :id, :connections

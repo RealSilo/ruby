@@ -1,3 +1,5 @@
+require 'byebug'
+
 # 1. Get the product of all other elements with no division
 # [1, 2, 3, 4, 5] => [120, 60, 40, 30, 24]
 # Tricky solution
@@ -900,3 +902,89 @@ def running_median(arr, min_heap, max_heap)
 end
 
 running_median([1, 4, 5, 9, 22, 44], min_heap, max_heap)
+
+# 10 Graphs
+def simple_bfs(graph, root)
+  queue = [root]
+  visited = {}
+
+  while queue.any?
+    node = queue.shift
+    next if visited[node]
+
+    visited[node] = true
+
+    graph[node].each do |connection|
+      queue.push(connection) unless visited[connection]
+    end
+  end
+
+  visited.map { |k, _v| k }
+end
+
+def simple_dfs(graph, root)
+  stack = [root]
+  visited = {}
+
+  while stack.any?
+    node = stack.pop
+    next if visited[node]
+
+    visited[node] = true
+
+    graph[node].each do |connection|
+      stack.push(connection) unless visited[connection]
+    end
+  end
+
+  visited.map { |k, _v| k }
+end
+
+def dfs_helper(graph, node, visited)
+  return if visited[node]
+
+  visited[node] = true
+
+  graph[node].each do |connection|
+    dfs_helper(graph, connection, visited) unless visited[connection]
+  end
+end
+
+def dfs_with_recursion(graph, root, visited = {})
+  dfs_helper(graph, root, visited = {})
+  visited.map { |k, _v| k }
+end
+
+# 10.5 Topological sort
+
+def topological_helper(graph, node, tsorted, visited = {})
+  return if visited[node]
+
+  visited[node] = true
+
+  graph[node].each do |connection|
+    topological_helper(graph, connection, tsorted, visited) unless visited[connection]
+  end
+
+  tsorted.unshift(node) unless tsorted.include?(node)
+end
+
+def topological_sort(graph, root, tsorted = [])
+  topological_helper(graph, root, tsorted)
+  tsorted
+end
+
+graph = {
+  'a' => ['b', 'c'],
+  'b' => ['e', 'f'],
+  'c' => ['d', 'e'],
+  'd' => ['f', 'g'],
+  'e' => [],
+  'f' => [],
+  'g' => []
+}
+
+p simple_bfs(graph, 'a')
+p simple_dfs(graph, 'a')
+p dfs_with_recursion(graph, 'a')
+p topological_sort(graph, 'a')
