@@ -901,7 +901,7 @@ def running_median(arr, min_heap, max_heap)
   end
 end
 
-running_median([1, 4, 5, 9, 22, 44], min_heap, max_heap)
+# running_median([1, 4, 5, 9, 22, 44], min_heap, max_heap)
 
 # 10 Graphs
 def simple_bfs(graph, root)
@@ -984,7 +984,248 @@ graph = {
   'g' => []
 }
 
-p simple_bfs(graph, 'a')
-p simple_dfs(graph, 'a')
-p dfs_with_recursion(graph, 'a')
-p topological_sort(graph, 'a')
+# p simple_bfs(graph, 'a')
+# p simple_dfs(graph, 'a')
+# p dfs_with_recursion(graph, 'a')
+# p topological_sort(graph, 'a')
+
+# 12. Recursion
+
+# Write the factorial function recursively
+
+# 5! => 5 * 4!
+def factorial(n)
+  return n if n <= 1
+
+  n * factorial(n - 1)
+end
+
+def recursive_reverse(str)
+  return str if str.length <= 1
+
+  str[-1] + recursive_reverse(str[0..-2])
+end
+
+# Fibonacci f(n) = f(n-1) + f(n-2)
+# O(2^N) runtime, O(N) space
+def fib_no_memo(n)
+  return n if n <= 1
+
+  fib_no_memo(n - 1) + fib_no_memo(n - 2)
+end
+
+# O(N) runtimem O(N) space
+def fib_memo(n, memo = {})
+  return n if n <= 1
+
+  memo[n] ||= fib_memo(n - 1, memo) + fib_memo(n - 2, memo)
+
+  # return memo[n] if memo[n]
+
+  # memo[n] = fib_memo(n - 1, memo) + fib_memo(n - 2, memo)
+  # memo[n]
+end
+
+# p Time.now
+# p fib_no_memo(40)
+# p Time.now
+# p fib_memo(40)
+# p Time.now
+
+def tower_of_hanoi(n, a = '1', b = '2', c = '3')
+  return unless n >= 1
+
+  tower_of_hanoi(n - 1, a, c, b)
+  p "Move size #{n} from #{a} to #{c}"
+  tower_of_hanoi(n - 1, b, a, c)
+end
+
+# tower_of_hanoi(5)
+
+# Given a target amount n and a list of array of distinct coin
+# values [1,2,5,10], what is the fewest coins needed to make the change amount
+# For 10 -> 1 (1 10cents), 8 -> 3 1penny
+# This is a pretty inefficient in time/space
+
+def min_coins(target, coins)
+  min_coins = target
+  return 1 if coins.include?(target)
+
+  coins.each do |coin|
+    next unless coin <= target
+    num_coins = 1 + min_coins(target - coin, coins)
+
+    min_coins = num_coins if num_coins < min_coins
+  end
+
+  min_coins
+end
+
+# 13. Dynamic programming
+
+def coin_ways_top_down(num, coins, memo = {})
+  return 0 if num < 0
+  return memo[num] if memo[num]
+
+  memo[num] = coins.inject { |sum, coin| sum + coin_ways_top_down(num - coin, coins, memo) }
+  memo[num]
+end
+
+# p coin_ways_top_down(100, [1, 5])
+
+def coin_ways_bottom_up()
+
+end
+
+# Count the paths from top-left corner to bottom-right
+# Can step right or down.
+# 00000000
+# 00X000X0
+# 0000X000
+# X0X00X00
+# 00X00000
+# 000XX0X0
+# 0X000X00
+# 00000000
+
+$count_no_memo = 0
+def count_steps_no_memo(board, row, col)
+  $count_no_memo += 1
+  return 0 if row >= board.length
+  return 0 if col >= board.first.length
+  return 0 if board[row][col] == 'X'
+  return 1 if row == board.length - 1 && col == board.first.length - 2
+  return 1 if row == board.length - 2 && col == board.first.length - 1
+
+  count_steps_no_memo(board, row, col + 1) + count_steps_no_memo(board, row + 1, col)
+end
+
+$count_memo = 0
+def count_steps(board, row, col, memo = {})
+  $count_memo += 1
+  return 0 if row >= board.length
+  return 0 if col >= board.first.length
+  return 0 if board[row][col] == 'X'
+  return 1 if row == board.length - 1 && col == board.first.length - 2
+  return 1 if row == board.length - 2 && col == board.first.length - 1
+
+  memo["r#{row}c#{col}"] ||= count_steps(board, row, col + 1, memo) + count_steps(board, row + 1, col, memo)
+end
+
+board = [
+  ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
+  ['O', 'O', 'X', 'O', 'O', 'O', 'X', 'O'],
+  ['O', 'O', 'O', 'O', 'X', 'O', 'O', 'O'],
+  ['X', 'O', 'X', 'O', 'O', 'X', 'O', 'O'],
+  ['O', 'O', 'X', 'O', 'O', 'O', 'O', 'O'],
+  ['O', 'O', 'O', 'X', 'X', 'O', 'X', 'O'],
+  ['O', 'X', 'O', 'O', 'O', 'X', 'O', 'O'],
+  ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']
+]
+
+# p count_steps_no_memo(board, 0, 0)
+# p count_steps(board, 0, 0)
+# p $count_no_memo
+# p $count_memo
+
+# Count the number of ways climbing a stair_case (where max_step is defined)
+def number_of_ways_stair_case(n, step_sizes = [1, 2])
+  return 0 if n < 0
+  return 1 if n == 0
+
+  sum = 0
+  step_sizes.each do |step_size|
+    sum += number_of_ways_stair_case(n - step_size, step_sizes)
+  end
+  sum
+end
+
+def number_of_ways_stair_case_no_inject(n)
+  return 0 if n < 0
+  return 1 if n == 0
+  number_of_ways_stair_case_no_inject(n - 1) + number_of_ways_stair_case_no_inject(n - 2)
+end
+
+def number_of_ways_stair_case_no_inject_memo(n, memo = {})
+  return 0 if n < 0
+  return 1 if n == 0
+  memo[n] ||= number_of_ways_stair_case_no_inject_memo(n - 1, memo) + number_of_ways_stair_case_no_inject_memo(n - 2, memo)
+end
+
+def number_of_ways_stair_case_with_memo(n, step_sizes = [1, 2], memo = {})
+  return 0 if n < 0
+  return 1 if n == 0
+
+  sum = 0
+  step_sizes.each do |step_size|
+    if memo[n - step_size]
+      sum += memo[n - step_size]
+      next
+    end
+    memo[n - step_size] = number_of_ways_stair_case_with_memo(n - step_size, step_sizes, memo)
+    sum += memo[n - step_size]
+  end
+  sum
+end
+
+# p number_of_ways_stair_case(35)
+# p number_of_ways_stair_case_no_inject(35)
+# p number_of_ways_stair_case_no_inject_memo(35)
+# p number_of_ways_stair_case_with_memo(35)
+
+# 14. Backtracking
+
+# N queens problem
+
+def safe_queen_condition?(queens, row, col)
+  return false unless queens.none? { |q| q[0] == row }
+  return false unless queens.none? { |q| q[1] == col }
+  return false unless queens.none? { |q| (q[0] - row).abs == (q[1] - col).abs }
+
+  true
+end
+
+def n_queens
+  queens_left = 8
+  queens = []
+
+  row = 0
+  col = 0
+
+  while queens_left > 0
+    row.upto(7) do |current_row|
+      col.upto(7) do |current_col|
+        if safe_queen_condition?(queens, current_row, current_col)
+          queens.push([current_row, current_col])
+          row = 0
+          col = 0
+          break if queens.length > 8 - queens_left
+        end
+      end
+      break if queens.length > 8 - queens_left
+    end
+    
+    if queens.length > 8 - queens_left
+      queens_left -= 1 
+      next
+    end
+
+    removed_queen = queens.pop
+    queens_left += 1
+    if removed_queen[1] < 7
+      row = removed_queen[0]
+      col = removed_queen[1] + 1
+    else
+      row = removed_queen[0] + 1
+      col = 0
+    end
+  end
+
+  queens
+end
+
+# p n_queens
+
+
+
+

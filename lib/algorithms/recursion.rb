@@ -90,6 +90,7 @@ class Recursion
 
   # PROBLEM 6: Implement Fibonacci sequence with and without memoization
 
+  # O(2^N) runtime, O(N) space
   def fibonacci(n)
     return n if n == 0
     return n if n == 1
@@ -97,6 +98,7 @@ class Recursion
     fibonacci(n - 1) + fibonacci(n - 2)
   end
 
+  # O(N) runtime, O(N) space
   def fibonacci_with_memo(n, memo = {})
     return n if n == 0
     return n if n == 1
