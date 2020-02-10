@@ -1065,13 +1065,14 @@ end
 
 def coin_ways_top_down(num, coins, memo = {})
   return 0 if num < 0
+  return 1 if num == 0
   return memo[num] if memo[num]
 
   memo[num] = coins.inject { |sum, coin| sum + coin_ways_top_down(num - coin, coins, memo) }
   memo[num]
 end
 
-# p coin_ways_top_down(100, [1, 5])
+p coin_ways_top_down(1, [1, 5])
 
 def coin_ways_bottom_up()
 
@@ -1226,6 +1227,256 @@ end
 
 # p n_queens
 
+# 14.2. Sudoku
+
+def current_row_condition?(num, board, current_row)
+  board[current_row].each do |box|
+    box.each do |col|
+      return false if col == num
+    end
+  end
+  true
+end
+
+def current_box_condition?(num, board, current_row, current_box)
+  box_area = current_row / 3
+
+  board.each_with_index do |row, i|
+    next unless i / 3 == box_area
+    row[current_box].each do |col|
+      return false if col == num
+    end
+  end
+
+  true
+end
+
+def current_col_condition?(num, board, current_col)
+  board.each do |row|
+    row.each do |box|
+      return false if box[current_col] == num
+    end
+  end
+  true
+end
+
+def safe_num_condition?(num, board, current_row, current_box, current_col)
+  if current_row_condition?(num, board, current_row) &&
+     current_box_condition?(num, board, current_row, current_box) &&
+     current_col_condition?(num, board, current_col)
+    return true
+  end
+  false
+end
+
+def sudoku(start_board)
+  base_remaining_nums = 81
+  start_board.each do |row|
+    row.each do |box|
+      box.each do |col|
+        base_remaining_nums -= 1 if col.is_a? Integer
+      end
+    end
+  end
+  
+
+  current_board = start_board.clone
+  added_num_and_coords = []
+
+  num = 1
+  row = 0
+  box = 0
+  col = 0
+  remaining_nums = base_remaining_nums
+
+  while remaining_nums > 0
+    p added_num_and_coords
+    row.upto(8) do |current_row|
+      box.upto(2) do |current_box|
+        col.upto(2) do |current_col|
+          if current_board[current_row][current_box][current_col].is_a? Integer
+            next
+          end
+          num.upto(9) do |current_num|
+            if safe_num_condition?(current_num, current_board, current_row, current_box, current_col)
+              current_board[current_row][current_box][current_col] = current_num
+              added_num_and_coords.push([current_num, current_row, current_box, current_col])
+              break
+            end
+          end
+          if added_num_and_coords.length == base_remaining_nums - remaining_nums
+            added_num_and_coords_last = added_num_and_coords.pop
+            current_board[added_num_and_coords_last[1]][added_num_and_coords_last[2]][added_num_and_coords_last[3]] = nil
+            num = added_num_and_coords_last[0] + 1
+            row = 0
+            box = 0
+            col = 0
+            remaining_nums += 1
+          end
+          break if added_num_and_coords.length > base_remaining_nums - remaining_nums
+        end
+        break if added_num_and_coords.length > base_remaining_nums - remaining_nums
+      end
+      break if added_num_and_coords.length > base_remaining_nums - remaining_nums
+    end
+
+    if added_num_and_coords.length > base_remaining_nums - remaining_nums
+      remaining_nums -= 1
+      next
+    end
+
+    added_num_and_coords_last = added_num_and_coords.pop
+    current_board[added_num_and_coords_last[1]][added_num_and_coords_last[2]][added_num_and_coords_last[3]] = nil
+    num = added_num_and_coords_last[0] + 1
+    row = added_num_and_coords_last[1]
+    box = added_num_and_coords_last[2]
+    col = added_num_and_coords_last[3]
+    remaining_nums += 1
+
+    # added_num_and_coords_last = added_num_and_coords.pop
+    # current_board[added_num_and_coords_last[1]][added_num_and_coords_last[2]][added_num_and_coords_last[3]] = nil
+    # remaining_nums += 1
+    # p "HAHA"
+    # p added_num_and_coords
+  end
+
+  current_board
+end
+
+start_state_sudoku = [
+  [[2, 5, nil], [nil, 3, nil], [9, nil, 1]],
+  [[nil, 1, nil], [nil, nil, 4], [nil, nil, nil]],
+  [[4, nil, 7], [nil, nil, nil], [2, nil, 8]],
+  [[nil, nil, 5], [2, nil, nil], [nil, nil, nil]],
+  [[nil, nil, nil], [nil, 9, 8], [1, nil, nil]],
+  [[nil, 4, nil], [nil, nil, 3], [nil, nil, nil]],
+  [[nil, nil, nil], [3, 6, nil], [nil, 7, 2]],
+  [[nil, 7, nil], [nil, nil, nil], [nil, nil, 3]],
+  [[9, nil, 3], [nil, nil, nil], [6, nil, 4]]
+]
+
+# sudoku(start_state_sudoku)
+
+# 15. Searching/sorting
+def binary_search(arr, num)
+  low = 0
+  high = arr.length - 1
+
+  while low <= high
+    mid = (high + low) / 2
+
+    if arr[mid] > num
+      high = mid - 1
+    elsif arr[mid] < num
+      low = mid + 1
+    else
+      return mid
+    end
+  end
+
+  nil
+end
+
+# p binary_search([1, 3, 5, 7, 9, 11], 11)
+
+# 15.1 Dutchflag problem
+# Given chars of R, G and B, segregate the values of the array
+# so Rs come first, Gs second and Bs come last.
 
 
+def dutch_flag(arr)
+  low = 0
+  mid = 0
+  high = arr.length - 1
 
+  while mid <= high
+    if arr[mid] == 'R'
+      arr[low], arr[mid] = arr[mid], arr[low]
+      low += 1
+      mid += 1
+    elsif arr[mid] == 'G'
+      mid += 1
+    elsif arr[mid] == 'B'
+      arr[high], arr[mid] = arr[mid], arr[high]
+      high -= 1
+    end
+  end
+
+  arr
+end
+
+# p dutch_flag(['R', 'G', 'B', 'G', 'B', 'R', 'R', 'B', 'G'])
+
+class Minesweeper
+  attr_reader :board
+
+  def initialize(row = 10, col = 10, bombs = 10)
+    @board = Array.new(row) { Array.new(col) { { val: 0, open: false } } }
+    @bombs = bombs
+    build_board
+  end
+
+  def click(row, col)
+    if board[row][col][:open]
+      puts 'Already revealed'
+      print_board
+      return
+    end
+
+    if board[row][col][:val] == 'X'
+      return 'You loose'
+    else
+      board[row][col][:open] = true
+      open_zero_fields(row, col) if board[row][col][:val] == 0
+    end
+    print_board
+  end
+
+  def open_zero_fields(row, fields)
+    
+  end
+
+  def print_board
+    board.each do |row|
+      row_values = []
+      row.each do |col|
+        if col[:open] == false
+          row_values << '?'
+        else
+          row_values << col[:val]
+        end
+      end
+      p row_values
+    end
+  end
+
+  private
+
+  def build_board
+    bomb_number = 0
+
+    until bomb_number == 10
+      next if board[rand(0..board.length - 1)][rand(0..board.first.length - 1)][:val] == 'X'
+      board[rand(0..board.length - 1)][rand(0..board.first.length - 1)][:val] = 'X'
+      bomb_number += 1
+    end
+
+    board.each_with_index do |row, i|
+      row.each_with_index do |col, j|
+        next unless col[:val] == 'X'
+
+        (-1).upto(1) do |k|
+          (-1).upto(1) do |l|
+            next if i + k < 0 || i + k > board.length - 1
+            next if j + l < 0 || j + l > board.first.length - 1
+            next if board[i + k][ j + l][:val] == 'X'
+            board[i + k][ j + l][:val] += 1
+          end
+        end
+      end
+    end
+  end
+end
+
+# minesweeper = Minesweeper.new
+# minesweeper.click(1, 2)

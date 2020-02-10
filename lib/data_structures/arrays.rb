@@ -271,7 +271,6 @@ class Arrays
       else
         coded_char << repetition.to_s
         compressed_string << coded_char
-        coded_char = string[i+1]
         repetition = 1
       end
     end
