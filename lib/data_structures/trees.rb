@@ -114,6 +114,14 @@ class Trees
     # BSTs are a powerful node-based data structure that provides order
     # maintenance, while also offering fast search, insertion, and deletion.
 
+    # Skip lists are more amenable to concurrent access/modification. The most
+    # frequently used implementation of a binary search tree is a red-black tree.
+    # The concurrent problems come in when the tree is modified it often needs to
+    # rebalance. The rebalance operation can affect large portions of the tree,
+    # which would require a mutex lock on many of the tree nodes. Inserting a node
+    # into a skip list is far more localized, only nodes directly linked to the
+    # affected node need to be locked.
+
     attr_accessor :size, :root
 
     def initialize(root = nil)

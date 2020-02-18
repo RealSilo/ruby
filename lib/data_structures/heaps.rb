@@ -10,6 +10,14 @@ require 'byebug'
 # and, if the last level of the tree is not complete, the nodes of that level
 # are filled from left to right
 
+# Average time insertion into a binary heap is O(1), for BST is O(log(n)).
+# This is the killer feature of heaps.
+
+# Binary heaps can be efficiently implemented on top of either dynamic arrays
+# or pointer-based trees, BST only pointer-based trees. So for the heap we can
+# choose the more space efficient array implementation, if we can afford
+# occasional resize latencies.
+
 # in order to guarantee log performance we must keep our tree balanced
 # a balanced binary tree has roughly the same number of nodes in the
 # left and the right subtrees of the root. (in definition -> fully filled, so this
