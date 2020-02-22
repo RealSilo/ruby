@@ -469,12 +469,29 @@ def count_unival_trees(root)
   count
 end
 
-tree_node1 = TreeNode.new('b', nil, nil)
-tree_node2 = TreeNode.new('b', nil, nil)
+tree_node0 = TreeNode.new('g', nil, nil)
+tree_node1 = TreeNode.new('e', nil, nil)
+tree_node2 = TreeNode.new('f', nil, nil)
 tree_node3 = TreeNode.new('b', nil, tree_node1)
-tree_node4 = TreeNode.new('c', nil, nil)
-tree_node5 = TreeNode.new('b', tree_node2, tree_node3)
+tree_node4 = TreeNode.new('c', nil, tree_node0)
+tree_node5 = TreeNode.new('d', tree_node2, tree_node3)
 root = TreeNode.new('a', tree_node4, tree_node5)
+
+def level_order(root)
+  level_order = []
+  queue = [root]
+
+  while queue.any?
+    node = queue.shift
+    queue.push << node.left if node.left
+    queue.push << node.right if node.right
+    level_order.push << node.value
+  end
+
+  level_order
+end
+
+p level_order(root)
 
 # p count_unival_trees(root)
 
